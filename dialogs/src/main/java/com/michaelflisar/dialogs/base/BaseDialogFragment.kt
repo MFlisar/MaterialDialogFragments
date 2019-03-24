@@ -2,21 +2,17 @@ package com.michaelflisar.dialogs.base
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
-
-import com.michaelflisar.dialogs.DialogSetup
-import com.michaelflisar.dialogs.events.BaseDialogEvent
-import com.michaelflisar.dialogs.helper.BaseDialogFragmentHandler
-import com.michaelflisar.dialogs.utils.DialogUtil
-
 import androidx.fragment.app.ExtendedFragment
 import androidx.fragment.app.FragmentActivity
+import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.enums.SendResultType
+import com.michaelflisar.dialogs.events.BaseDialogEvent
+import com.michaelflisar.dialogs.helper.BaseDialogFragmentHandler
 import com.michaelflisar.dialogs.interfaces.DialogFragment
+import com.michaelflisar.dialogs.utils.DialogUtil
 
-abstract class BaseBottomDialogFragment : ExtendedFragment(), BaseDialogFragmentHandler.IBaseBottomDialog, DialogFragment {
-
-    private val mHandler: BaseDialogFragmentHandler<BaseBottomDialogFragment>
+abstract class BaseDialogFragment : ExtendedFragment(), BaseDialogFragmentHandler.IBaseDialog, DialogFragment {
+    private val mHandler: BaseDialogFragmentHandler<BaseDialogFragment>
 
     // -----------------------------
     // forward functions to handler
@@ -35,13 +31,7 @@ abstract class BaseBottomDialogFragment : ExtendedFragment(), BaseDialogFragment
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dlg = mHandler.onCreateDialog(savedInstanceState)
-        onDialogCreated(dlg)
-        return dlg
-    }
-
-    protected open fun onDialogCreated(dialog: Dialog) {
-
+        return mHandler.onCreateDialog(savedInstanceState)
     }
 
     override fun onDestroy() {
@@ -58,7 +48,7 @@ abstract class BaseBottomDialogFragment : ExtendedFragment(), BaseDialogFragment
     // interfaces
     // -----------------------------
 
-    abstract override fun onHandleCreateBottomDialog(savedInstanceState: Bundle?): View
+    abstract override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog
 
     fun createExtra(): Bundle {
         mHandler.createExtra()
@@ -85,6 +75,6 @@ abstract class BaseBottomDialogFragment : ExtendedFragment(), BaseDialogFragment
     }
 
     companion object {
-        private val EXTRA_KEY = BaseBottomDialogFragment::class.java.name + "|extraData"
+        private val EXTRA_KEY = BaseDialogFragment::class.java.name + "|extraData"
     }
 }

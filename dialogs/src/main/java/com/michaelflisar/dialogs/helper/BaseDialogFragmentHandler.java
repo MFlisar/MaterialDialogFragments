@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.michaelflisar.dialogs.enums.SendResultType;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
@@ -18,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
  */
 
 public class BaseDialogFragmentHandler<T extends BaseDialogFragmentHandler.IAbstractBaseDialog> {
+    private SendResultType customSendResultType = null;
     private Bundle mExtraData = null;
     private T mParent;
 
@@ -81,6 +83,10 @@ public class BaseDialogFragmentHandler<T extends BaseDialogFragmentHandler.IAbst
     // functions
     // -----------------------------
 
+    public SendResultType getCustomSendResultType() {
+        return customSendResultType;
+    }
+
     public Bundle getExtra() {
         return mExtraData;
     }
@@ -91,11 +97,12 @@ public class BaseDialogFragmentHandler<T extends BaseDialogFragmentHandler.IAbst
         }
     }
 
-    public void show(FragmentActivity activity, DialogFragment fragment) {
-        show(activity, fragment.getClass().getName());
+    public void show(FragmentActivity activity, DialogFragment fragment, SendResultType sendResultType) {
+        show(activity, fragment.getClass().getName(), sendResultType);
     }
 
-    public void show(FragmentActivity activity, String tag) {
+    public void show(FragmentActivity activity, String tag, SendResultType sendResultType) {
+        customSendResultType = sendResultType;
         mParent.show(activity.getSupportFragmentManager(), tag);
     }
 

@@ -16,6 +16,7 @@ import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.michaelflisar.dialogs.base.BaseDialogFragment
 import com.michaelflisar.dialogs.core.R
+import com.michaelflisar.dialogs.enums.SendResultType
 import com.michaelflisar.dialogs.events.DialogInfoEvent
 import com.michaelflisar.dialogs.message
 import com.michaelflisar.dialogs.neutralButton
