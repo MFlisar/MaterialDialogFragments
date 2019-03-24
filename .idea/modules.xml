@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs/dialogs.iml" filepath="$PROJECT_DIR$/dialogs/dialogs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs-color/dialogs-color.iml" filepath="$PROJECT_DIR$/dialogs-color/dialogs-color.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs-fastadapter/dialogs-fastadapter.iml" filepath="$PROJECT_DIR$/dialogs-fastadapter/dialogs-fastadapter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/material-dialogfragments.iml" filepath="$PROJECT_DIR$/material-dialogfragments.iml" />
+    </modules>
+  </component>
+</project>

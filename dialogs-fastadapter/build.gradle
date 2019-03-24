@@ -1,0 +1,53 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion setup.compileSdk
+
+    defaultConfig {
+        minSdkVersion setup.minSdk
+        targetSdkVersion setup.targetSdk
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
+}
+
+dependencies {
+
+    // ------------------------
+    // Kotlin
+    // ------------------------
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlinVersion"
+
+    // ------------------------
+    // AndroidX
+    // ------------------------
+
+    implementation "com.google.android.material:material:${androidx.material}"
+
+    // ------------------------
+    // Library
+    // ------------------------
+
+    api project(':dialogs')
+
+    // ------------------------
+    // Others
+    // ------------------------
+
+    api "com.mikepenz:fastadapter:${versions.fastAdapter}"
+    implementation "com.mikepenz:fastadapter-commons:${versions.fastAdapter}"
+}

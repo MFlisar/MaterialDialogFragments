@@ -1,0 +1,48 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion setup.compileSdk
+
+    dataBinding.enabled = true
+
+    defaultConfig {
+        minSdkVersion setup.minSdk
+        targetSdkVersion setup.targetSdk
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    // ------------------------
+    // AndroidX
+    // ------------------------
+
+    implementation "androidx.appcompat:appcompat:${androidx.appcompat}"
+    implementation "com.google.android.material:material:${androidx.material}"
+
+    // ------------------------
+    // Library
+    // ------------------------
+
+    implementation project(':dialogs')
+
+    // optional: for the use of color dialogs
+    implementation project(':dialogs-color')
+    // optional: for the use of mike penz's fast adapter (a very functional RecyclerView Adapter library)
+    implementation project(':dialogs-fastadapter')
+}

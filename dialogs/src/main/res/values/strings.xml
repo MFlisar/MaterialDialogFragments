@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="dialogs_timer_button" translatable="false">%1$s (%2$ss)</string>
+
+    <string name="number_age_formatter" translatable="false">Age: %1$d</string>
+
+</resources>

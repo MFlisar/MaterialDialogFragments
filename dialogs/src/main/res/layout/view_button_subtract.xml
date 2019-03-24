@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tvSubtract"
+            android:background="?selectableItemBackgroundBorderless"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:minHeight="48dp"
+            android:text="-" />
+
+    </RelativeLayout>
+
+</layout>
