@@ -20,20 +20,12 @@ import androidx.fragment.app.FragmentManager;
 
 public class BaseDialogFragmentHandler<T extends BaseDialogFragmentHandler.IAbstractBaseDialog> {
     private SendResultType customSendResultType = null;
-    private Bundle mExtraData = null;
     private T mParent;
-
-    private final String mExtra;
-
-    public BaseDialogFragmentHandler(String extra, T parent) {
-        mExtra = extra;
+    public BaseDialogFragmentHandler(T parent) {
         mParent = parent;
     }
 
     public void onCreate(Bundle savedInstanceState) {
-        if (savedInstanceState != null && savedInstanceState.containsKey(mExtra)) {
-            mExtraData = savedInstanceState.getBundle(mExtra);
-        }
     }
 
     public final Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -65,9 +57,6 @@ public class BaseDialogFragmentHandler<T extends BaseDialogFragmentHandler.IAbst
     }
 
     public void onSaveInstanceState(Bundle outState) {
-        if (mExtraData != null) {
-            outState.putBundle(mExtra, mExtraData);
-        }
     }
 
     public final void onViewReady(Dialog dlg, View view) {
@@ -85,16 +74,6 @@ public class BaseDialogFragmentHandler<T extends BaseDialogFragmentHandler.IAbst
 
     public SendResultType getCustomSendResultType() {
         return customSendResultType;
-    }
-
-    public Bundle getExtra() {
-        return mExtraData;
-    }
-
-    public void createExtra() {
-        if (mExtraData == null) {
-            mExtraData = new Bundle();
-        }
     }
 
     public void show(FragmentActivity activity, DialogFragment fragment, SendResultType sendResultType) {

@@ -174,7 +174,7 @@ open class DialogInfoFragment : BaseDialogFragment() {
     }
 
     private fun onClick(which: WhichButton) {
-        sendEvent(DialogInfoEvent(extra, setup.id, which.index))
+        sendEvent(DialogInfoEvent(setup.extra, setup.id, which.index))
     }
 
     override fun onDestroyView() {

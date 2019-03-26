@@ -1,6 +1,7 @@
 package com.michaelflisar.dialogs.setups
 
 import android.graphics.Color
+import android.os.Bundle
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.fragments.DialogInfoFragment
@@ -31,6 +32,7 @@ class DialogInfo(
         override val negButton: Text? = null,
         override val neutrButton: Text?  = null,
         override val cancelable: Boolean = true,
+        override val extra: Bundle? = null,
 
         // special setup
         val textIsHtml: Boolean = false,

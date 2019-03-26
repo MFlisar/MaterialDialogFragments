@@ -22,11 +22,9 @@ abstract class BaseBottomDialogFragment : ExtendedFragment(), BaseDialogFragment
     // forward functions to handler
     // -----------------------------
 
-    val extra: Bundle?
-        get() = mHandler.extra
 
     init {
-        mHandler = BaseDialogFragmentHandler(EXTRA_KEY, this)
+        mHandler = BaseDialogFragmentHandler(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,11 +58,6 @@ abstract class BaseBottomDialogFragment : ExtendedFragment(), BaseDialogFragment
 
     abstract override fun onHandleCreateBottomDialog(savedInstanceState: Bundle?): View
 
-    fun createExtra(): Bundle {
-        mHandler.createExtra()
-        return mHandler.extra
-    }
-
     fun showAllowingStateLoss(activity: FragmentActivity) {
         mHandler.showAllowingStateLoss(activity, this)
     }
@@ -82,9 +75,5 @@ abstract class BaseBottomDialogFragment : ExtendedFragment(), BaseDialogFragment
         DialogSetup.sendResult(event)
         // send result the default way
         DialogUtil.trySendResult(event, this, mHandler.customSendResultType ?: DialogSetup.DEFAULT_SEND_RESULT_TYPE)
-    }
-
-    companion object {
-        private val EXTRA_KEY = BaseBottomDialogFragment::class.java.name + "|extraData"
     }
 }

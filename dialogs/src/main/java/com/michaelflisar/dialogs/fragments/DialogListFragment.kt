@@ -152,7 +152,7 @@ open class DialogListFragment : BaseDialogFragment() {
                 if (mAdapter != null) {
                     val indizes = mAdapter!!.selection.toList()
                     val items = indizes.map { itemArray[it] }
-                    sendEvent(DialogListEvent(extra, setup.id, indizes, items))
+                    sendEvent(DialogListEvent(setup.extra, setup.id, indizes, items))
                 }
             }
             dismiss()
@@ -170,7 +170,7 @@ open class DialogListFragment : BaseDialogFragment() {
                             items = arrayListOf(),
                             waitForPositiveButton = false,
                             selection = { _: MaterialDialog, index: Int, _: String ->
-                                sendEvent(DialogListEvent(extra, setup.id, index, itemArray[index]))
+                                sendEvent(DialogListEvent(setup.extra, setup.id, index, itemArray[index]))
                             })
         } else {
             val item = itemArray.first()
@@ -183,7 +183,7 @@ open class DialogListFragment : BaseDialogFragment() {
                                         initialSelection = setup.initialMultiSelection,
                                         allowEmptySelection = true,
                                         selection = { _: MaterialDialog, index: IntArray, item: List<String> ->
-                                            sendEvent(DialogListEvent(extra, setup.id, index.toList(), item))
+                                            sendEvent(DialogListEvent(setup.extra, setup.id, index.toList(), item))
                                             if (!setup.multiClick) {
                                                 dismiss()
                                             }
@@ -194,7 +194,7 @@ open class DialogListFragment : BaseDialogFragment() {
                                         items = itemArray as List<String>,
                                         waitForPositiveButton = false,
                                         selection = { _: MaterialDialog, index: Int, _: String ->
-                                            sendEvent(DialogListEvent(extra, setup.id, index, itemArray[index]))
+                                            sendEvent(DialogListEvent(setup.extra, setup.id, index, itemArray[index]))
                                             if (!setup.multiClick) {
                                                 dismiss()
                                             }
@@ -233,7 +233,7 @@ open class DialogListFragment : BaseDialogFragment() {
                             mAdapter!!.toggleMultiSelect(pos)
                             mAdapter!!.notifyItemChanged(pos)
                         } else {
-                            sendEvent(DialogListEvent(extra, setup.id, pos, itemArray[pos]))
+                            sendEvent(DialogListEvent(setup.extra, setup.id, pos, itemArray[pos]))
                             if (!setup.multiClick) {
                                 dismiss()
                             }

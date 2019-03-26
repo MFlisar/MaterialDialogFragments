@@ -1,5 +1,6 @@
 package com.michaelflisar.dialogs.setups
 
+import android.os.Bundle
 import android.os.Parcelable
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Text
@@ -20,6 +21,7 @@ class DialogInput(
         override val negButton: Text? = null,
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = true,
+        override val extra: Bundle? = null,
 
         // special setup
         val neutralButtonMode: NeutralButtonMode = NeutralButtonMode.SendEvent,

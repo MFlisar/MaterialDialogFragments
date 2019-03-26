@@ -106,7 +106,7 @@ class DialogInputFragment : BaseDialogFragment() {
                     .neutralButton(it) {
                         when (setup.neutralButtonMode) {
                             DialogInput.NeutralButtonMode.SendEvent -> {
-                                sendEvent(DialogInputEvent.NeutralButton(extra, id))
+                                sendEvent(DialogInputEvent.NeutralButton(setup.extra, setup.id))
                                 dismiss()
                             }
                             DialogInput.NeutralButtonMode.InsertText -> {
@@ -203,7 +203,7 @@ class DialogInputFragment : BaseDialogFragment() {
     }
 
     private fun finishAndSendEvent(materialDialog: MaterialDialog) {
-        sendEvent(DialogInputEvent.Input(extra, setup.id, inputTexts))
+        sendEvent(DialogInputEvent.Input(setup.extra, setup.id, inputTexts))
         if (activity != null) {
             KeyboardUtils.hideKeyboardWithZeroFlag(activity, materialDialog.currentFocus)
         }

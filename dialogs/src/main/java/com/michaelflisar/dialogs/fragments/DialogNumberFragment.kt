@@ -54,7 +54,7 @@ class DialogNumberFragment : BaseDialogFragment() {
                             Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        sendEvent(DialogNumberEvent(extra, setup.id, input!!))
+                        sendEvent(DialogNumberEvent(setup.extra, setup.id, input!!))
                         val activity = activity
                         KeyboardUtils.hideKeyboard(activity, it.currentFocus)
                         dismiss()

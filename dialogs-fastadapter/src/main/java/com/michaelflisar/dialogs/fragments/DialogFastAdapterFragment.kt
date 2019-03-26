@@ -103,7 +103,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
             mAdapter!!.withOnClickListener { _, _, item, position ->
                 val originalPosition = if (setup.filterable) data!!.indexOf(item) else position
                 if (isClickable(item, originalPosition)) {
-                    onHandleClick(id, item, originalPosition)
+                    onHandleClick(setup.id, item, originalPosition)
                     if (setup.dismissOnClick) {
                         dismiss()
                     }
@@ -164,7 +164,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
     }
 
     protected open fun onHandleClick(id: Int, item: IItem<*, *>, position: Int) {
-        sendEvent(DialogFastAdapterEvent(extra, id, item, position))
+        sendEvent(DialogFastAdapterEvent(setup.extra, id, item, position))
     }
 
     protected open fun onUpdateAdapter(adapter: FastItemAdapter<IItem<*, *>>) {

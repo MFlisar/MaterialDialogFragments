@@ -1,5 +1,6 @@
 package com.michaelflisar.dialogs.setups
 
+import android.os.Bundle
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.fragments.DialogProgressFragment
@@ -19,7 +20,8 @@ class DialogProgress private constructor(
         override val darkTheme: Boolean = false,
         override val negButton: Text? = null,
         override val neutrButton: Text? = null,
-        override val cancelable: Boolean = false
+        override val cancelable: Boolean = false,
+        override val extra: Bundle? = null
 ) : BaseDialogSetup {
 
     override fun create(): DialogFragment = DialogProgressFragment.create(this)

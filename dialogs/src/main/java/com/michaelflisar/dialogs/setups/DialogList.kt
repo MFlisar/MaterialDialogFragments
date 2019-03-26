@@ -1,6 +1,7 @@
 package com.michaelflisar.dialogs.setups
 
 import android.graphics.PorterDuff
+import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
@@ -23,6 +24,7 @@ class DialogList(
         override val negButton: Text? = null,
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = true,
+        override val extra: Bundle? = null,
 
         // special setup
         val multiClick: Boolean = false,
