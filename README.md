@@ -25,8 +25,6 @@ dependencies {
 
 #### State:
 
-[x] Dialogs
-
-[ ] Color Dialog - setup class is missing + demo
-
-[ ] FastAdapter Dialog - demo
+- [x] Dialogs
+- [ ] Color Dialog - setup class is missing + demo
+- [ ] FastAdapter Dialog - demo
