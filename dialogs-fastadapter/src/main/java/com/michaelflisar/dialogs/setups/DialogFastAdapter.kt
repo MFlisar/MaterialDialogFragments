@@ -25,7 +25,6 @@ abstract class DialogFastAdapter(
             // base setup
             val id: Int,
             val title: Text,
-            val text: Text,
             val posButton: Text = Text.TextRes(android.R.string.ok),
             val darkTheme: Boolean = false,
             val negButton: Text? = null,
