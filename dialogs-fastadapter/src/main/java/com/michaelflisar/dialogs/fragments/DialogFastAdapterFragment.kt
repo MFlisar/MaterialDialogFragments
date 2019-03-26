@@ -57,7 +57,6 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
 
     private lateinit var setup: DialogFastAdapter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         data = data
@@ -72,7 +71,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         setup = arguments!!.getParcelable("setup")!!
 
         val dialog = MaterialDialog(activity!!)
-                .customView(if (setup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview, scrollable = false)
+                .customView(if (setup.internalSetup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview, scrollable = false)
                 .positiveButton(setup.posButton) {
                     dismiss()
                 }
@@ -84,7 +83,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         val view = dialog.getCustomView()
 
         toolbar = null
-        if (setup.withToolbar) {
+        if (setup.internalSetup.withToolbar) {
             toolbar = view.findViewById(R.id.toolbar)
         }
         rvData = view.findViewById(R.id.rvData)
@@ -93,18 +92,18 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         tvLoading = view.findViewById(R.id.tvLoading)
         svSearch = view.findViewById(R.id.svSearch)
 
-        if (setup.withToolbar) {
+        if (setup.internalSetup.withToolbar) {
             toolbar!!.setTitle(setup.title.get(activity!!))
         }
 
         rvData!!.layoutManager = getLayoutManager()
         mAdapter = FastItemAdapter()
-        if (setup.clickable) {
+        if (setup.internalSetup.clickable) {
             mAdapter!!.withOnClickListener { _, _, item, position ->
-                val originalPosition = if (setup.filterable) data!!.indexOf(item) else position
+                val originalPosition = if (setup.internalSetup.filterable) data!!.indexOf(item) else position
                 if (isClickable(item, originalPosition)) {
                     onHandleClick(setup.id, item, originalPosition)
-                    if (setup.dismissOnClick) {
+                    if (setup.internalSetup.dismissOnClick) {
                         dismiss()
                     }
                 }
@@ -116,10 +115,10 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         data = createData()
         mAdapter!!.add(data)
 
-        updateInfo(setup.info, view)
+        updateInfo(setup.internalSetup.info, view)
         onViewCreated(view, mAdapter!!)
 
-        if (setup.filterable) {
+        if (setup.internalSetup.filterable) {
             try {
                 @Suppress("UNCHECKED_CAST")
                 mAdapter!!.itemFilter.withFilterPredicate(this as IItemAdapter.Predicate<IItem<*, *>>)
@@ -155,8 +154,8 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         if (infoText?.length ?: 0 > 0) {
             tvInfo.visibility = View.VISIBLE
             tvInfo.text = infoText
-            if (setup.infoSize != null) {
-                tvInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, setup.infoSize!!)
+            if (setup.internalSetup.infoSize != null) {
+                tvInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, setup.internalSetup.infoSize!!)
             }
         } else {
             tvInfo.visibility = View.GONE
@@ -222,7 +221,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if (setup.filterable) {
+        if (setup.internalSetup.filterable) {
             lastFilter = svSearch!!.query.toString()
             if (lastFilter != null && lastFilter!!.length > 0) {
                 outState.putString("lastFilter", lastFilter)
