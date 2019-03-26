@@ -15,11 +15,11 @@ dependencies {
 	implementation "com.github.MFlisar.material-dialogfragments:dialogs:<LATEST-VERSION>"
 	
 	// optional:
-    implementation "com.github.MFlisar.material-dialogfragments:dialogs-fastadapter:<LATEST-VERSION>"
+	implementation "com.github.MFlisar.material-dialogfragments:dialogs-fastadapter:<LATEST-VERSION>"
 	implementation "com.github.MFlisar.material-dialogfragments:dialogs-color:<LATEST-VERSION>"
-	
+
 	// alternatively, to include ALL modules at once
-    // implementation 'com.github.MFlisar:material-dialogfragments:<LATEST-VERSION>'
+	// implementation 'com.github.MFlisar:material-dialogfragments:<LATEST-VERSION>'
 }
 ```
 
