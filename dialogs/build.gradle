@@ -6,6 +6,8 @@ androidExtensions {
     experimental = true
 }
 
+group = 'com.github.MFlisar'
+
 android {
     compileSdkVersion setup.compileSdk
 

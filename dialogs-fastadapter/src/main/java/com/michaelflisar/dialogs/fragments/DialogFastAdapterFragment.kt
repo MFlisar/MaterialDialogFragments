@@ -1,4 +1,4 @@
-package com.michaelflisar.dialogs.fastadapter
+package com.michaelflisar.dialogs.fragments
 
 import android.app.Dialog
 import android.os.Bundle
@@ -15,35 +15,31 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.michaelflisar.dialogs.base.BaseDialogFragment
-import com.michaelflisar.dialogs.events.BaseDialogEvent
+import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.dialogs.events.DialogFastAdapterEvent
+import com.michaelflisar.dialogs.fastadapter.R
+import com.michaelflisar.dialogs.positiveButton
+import com.michaelflisar.dialogs.setups.DialogFastAdapter
+import com.michaelflisar.dialogs.title
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.IItemAdapter
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import java.util.*
 
-abstract class DialogFastAdapter : BaseDialogFragment() {
+abstract class DialogFastAdapterFragment : BaseDialogFragment() {
 
     companion object {
 
-        fun <T : DialogFastAdapter> initBundle(dlg: T, id: Int, title: Int, posButton: Int): Bundle {
+        fun <T : DialogFastAdapterFragment> create(setup: DialogFastAdapter, createFragment: (() -> T)): T {
+            val dlg = createFragment()
             val args = Bundle().apply {
-                putInt("id", id)
-                putInt("title", title)
-                putInt("pos", posButton)
-
-                // Standards setzen
-                putBoolean("clickable", false)
-                putBoolean("dismissOnClick", false)
-                putInt("info", -1)
-                putInt("infoSize", -1)
-                putBoolean("filterable", false)
+                putParcelable("setup", setup)
             }
             dlg.arguments = args
-            return args
+            return dlg
         }
     }
 
-    protected var mDialog: MaterialDialog? = null
     protected var toolbar: Toolbar? = null
     protected var rvData: RecyclerView? = null
     protected var llLoading: LinearLayout? = null
@@ -53,85 +49,42 @@ abstract class DialogFastAdapter : BaseDialogFragment() {
     protected var data: ArrayList<IItem<*, *>>? = null
         private set
     protected var mAdapter: FastItemAdapter<IItem<*, *>>? = null
-    private var mFilterable: Boolean = false
-    private var mLastFilter: String? = null
-    private var mInfoSize = -1
+    private var lastFilter: String? = null
 
     @Suppress("UNCHECKED_CAST")
     protected val adapter: FastItemAdapter<IItem<*, *>>
         get() = rvData!!.adapter as FastItemAdapter<IItem<*, *>>
 
-    @Suppress("UNCHECKED_CAST")
-    fun <T : DialogFastAdapter> withClickable(dismissOnClick: Boolean): T {
-        arguments!!.putBoolean("clickable", true)
-        arguments!!.putBoolean("dismissOnClick", dismissOnClick)
-        return this as T
-    }
+    private lateinit var setup: DialogFastAdapter
 
-    @Suppress("UNCHECKED_CAST")
-    fun <T : DialogFastAdapter> withDetailText(info: Int, infoSize: Int): T {
-        arguments!!.putInt("info", info)
-        arguments!!.putInt("infoSize", infoSize)
-        return this as T
-    }
-
-    /**
-     * Dialog MUST implement [com.mikepenz.fastadapter.IItemAdapter.Predicate]&lt;[IItem]&gt; for this to work!
-     *
-     * @return this
-     */
-    @Suppress("UNCHECKED_CAST")
-    fun <T : DialogFastAdapter> withFilterable(): T {
-        arguments!!.putBoolean("filterable", true)
-        return this as T
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T : DialogFastAdapter> withToolbar(): T {
-        arguments!!.putBoolean("withToolbar", true)
-        return this as T
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         data = data
 
-        mFilterable = arguments!!.getBoolean("filterable")
         if (savedInstanceState != null) {
-            mLastFilter = savedInstanceState.getString("mLastFilter")
+            lastFilter = savedInstanceState.getString("lastFilter")
         }
-
-        mInfoSize = arguments!!.getInt("infoSize")
     }
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val id = arguments!!.getInt("id")
-        val pos = arguments!!.getInt("pos")
-        val title = arguments!!.getInt("title")
-        val withToolbar = arguments!!.getBoolean("withToolbar")
-        val clickable = arguments!!.getBoolean("clickable")
-        val dismissOnClick = arguments!!.getBoolean("dismissOnClick")
-        val info = arguments!!.getInt("info")
-        val filterable = arguments!!.getBoolean("filterable")
 
-        mDialog = MaterialDialog(activity!!)
-                .customView(if (withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview, scrollable = false)
-                .positiveButton(pos) {
+        setup = arguments!!.getParcelable("setup")!!
+
+        val dialog = MaterialDialog(activity!!)
+                .customView(if (setup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview, scrollable = false)
+                .positiveButton(setup.posButton) {
                     dismiss()
                 }
                 .cancelable(true)
                 .noAutoDismiss()
 
-        if (!withToolbar && title != -1) {
-            mDialog!!.title(title)
-        }
-
-        updateBuilder(mDialog!!)
-
-        val view = mDialog!!.getCustomView()
+        dialog.title(setup.title)
+        updateBuilder(dialog)
+        val view = dialog.getCustomView()
 
         toolbar = null
-        if (withToolbar) {
+        if (setup.withToolbar) {
             toolbar = view.findViewById(R.id.toolbar)
         }
         rvData = view.findViewById(R.id.rvData)
@@ -140,18 +93,18 @@ abstract class DialogFastAdapter : BaseDialogFragment() {
         tvLoading = view.findViewById(R.id.tvLoading)
         svSearch = view.findViewById(R.id.svSearch)
 
-        if (withToolbar && title != -1) {
-            toolbar!!.setTitle(title)
+        if (setup.withToolbar) {
+            toolbar!!.setTitle(setup.title.get(activity!!))
         }
 
         rvData!!.layoutManager = getLayoutManager()
         mAdapter = FastItemAdapter()
-        if (clickable) {
+        if (setup.clickable) {
             mAdapter!!.withOnClickListener { _, _, item, position ->
-                val originalPosition = if (filterable) data!!.indexOf(item) else position
+                val originalPosition = if (setup.filterable) data!!.indexOf(item) else position
                 if (isClickable(item, originalPosition)) {
                     onHandleClick(id, item, originalPosition)
-                    if (dismissOnClick) {
+                    if (setup.dismissOnClick) {
                         dismiss()
                     }
                 }
@@ -163,10 +116,10 @@ abstract class DialogFastAdapter : BaseDialogFragment() {
         data = createData()
         mAdapter!!.add(data)
 
-        updateInfo(info, view)
+        updateInfo(setup.info, view)
         onViewCreated(view, mAdapter!!)
 
-        if (mFilterable) {
+        if (setup.filterable) {
             try {
                 @Suppress("UNCHECKED_CAST")
                 mAdapter!!.itemFilter.withFilterPredicate(this as IItemAdapter.Predicate<IItem<*, *>>)
@@ -177,40 +130,33 @@ abstract class DialogFastAdapter : BaseDialogFragment() {
             svSearch!!.visibility = View.VISIBLE
             svSearch!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    mLastFilter = query ?: ""
-                    mAdapter!!.filter(mLastFilter)
+                    lastFilter = query ?: ""
+                    mAdapter!!.filter(lastFilter)
                     return true
                 }
 
                 override fun onQueryTextChange(query: String?): Boolean {
-                    mLastFilter = query ?: ""
-                    mAdapter!!.filter(mLastFilter)
+                    lastFilter = query ?: ""
+                    mAdapter!!.filter(lastFilter)
                     return true
                 }
             })
-            if (mLastFilter != null) {
-                svSearch!!.setQuery(mLastFilter, false)
+            if (lastFilter != null) {
+                svSearch!!.setQuery(lastFilter, false)
             }
         }
 
-        return mDialog!!
+        return dialog
     }
 
-    protected fun updateInfo(info: Int, view: View) {
-        if (info == -1) {
-            updateInfo(null, view)
-        } else {
-            updateInfo(view.context.getString(info), view)
-        }
-    }
-
-    protected fun updateInfo(info: String?, view: View) {
+    protected fun updateInfo(info: Text?, view: View) {
+        val infoText = info?.get(activity!!)
         val tvInfo = view.findViewById<TextView>(R.id.tvInfo)
-        if (info != null && info.length > 0) {
+        if (infoText?.length ?: 0 > 0) {
             tvInfo.visibility = View.VISIBLE
-            tvInfo.text = info
-            if (mInfoSize != -1) {
-                tvInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, mInfoSize.toFloat())
+            tvInfo.text = infoText
+            if (setup.infoSize != null) {
+                tvInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, setup.infoSize!!)
             }
         } else {
             tvInfo.visibility = View.GONE
@@ -249,13 +195,12 @@ abstract class DialogFastAdapter : BaseDialogFragment() {
         data = items
         adapter!!.setNewList(data)
 
-        if (mLastFilter != null && mLastFilter!!.length > 0) {
-            adapter.filter(mLastFilter)
+        if (lastFilter != null && lastFilter!!.length > 0) {
+            adapter.filter(lastFilter)
         }
     }
 
     override fun onDestroyView() {
-        mDialog = null
         rvData = null
         llLoading = null
         rvData = null
@@ -277,36 +222,13 @@ abstract class DialogFastAdapter : BaseDialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if (mFilterable) {
-            mLastFilter = svSearch!!.query.toString()
-            if (mLastFilter != null && mLastFilter!!.length > 0) {
-                outState.putString("mLastFilter", mLastFilter)
+        if (setup.filterable) {
+            lastFilter = svSearch!!.query.toString()
+            if (lastFilter != null && lastFilter!!.length > 0) {
+                outState.putString("lastFilter", lastFilter)
             }
         }
     }
 
     protected abstract fun createData(): ArrayList<IItem<*, *>>
-
-    class DialogFastAdapterEvent : BaseDialogEvent {
-        private var item: IItem<*, *>? = null
-        var index: Int = 0
-
-        var neutral: Boolean = false
-
-        constructor(extra: Bundle?, id: Int, item: IItem<*, *>?, index: Int) : super(extra, id) {
-            this.item = item
-            this.index = index
-
-            neutral = false
-        }
-
-        constructor(id: Int) : super(null, id) {
-            neutral = true
-        }
-
-        @Suppress("UNCHECKED_CAST")
-        fun <T : IItem<*, *>> getItem(): T? {
-            return item as T?
-        }
-    }
 }

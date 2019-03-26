@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+group = 'com.github.MFlisar'
+
 android {
 
     compileSdkVersion setup.compileSdk
