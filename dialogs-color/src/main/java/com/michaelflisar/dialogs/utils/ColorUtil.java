@@ -3,10 +3,11 @@ package com.michaelflisar.dialogs.utils;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import androidx.core.content.ContextCompat;
 import android.view.View;
 
 import com.michaelflisar.dialogs.color.R;
+
+import androidx.core.content.ContextCompat;
 
 public class ColorUtil {
     public static final float[] COLOR_FILTER_NEGATIVE = {
@@ -18,7 +19,7 @@ public class ColorUtil {
 
     public static final double DARKNESS_FACTOR_BORDER = 0.2f;
 
-    public static GroupedColor COLORS_BW = new GroupedColor(null, R.string.black_white,
+    public static GroupedColor COLORS_BW = new GroupedColor(0, R.string.black_white,
             R.color.md_black_1000,
             R.color.md_white_1000
     );
@@ -364,7 +365,7 @@ public class ColorUtil {
         int lastUnderlineIndex = name.lastIndexOf("_");
 
         String subName = name.substring(lastUnderlineIndex + 1);
-        String group = name.substring(firstUnderlineIndex + 1, lastUnderlineIndex).replace("_", " ");
+//        String group = name.substring(firstUnderlineIndex + 1, lastUnderlineIndex).replace("_", " ");
 
         return subName;
     }
@@ -394,6 +395,9 @@ public class ColorUtil {
     }
 
     public static int getBestTextColor(int background) {
+        if (Color.alpha(background) <= 255 * 0.4f) {
+            return Color.BLACK;
+        }
         if (getDarknessFactor(background) > 0.2f) {
             return Color.WHITE;
         } else {

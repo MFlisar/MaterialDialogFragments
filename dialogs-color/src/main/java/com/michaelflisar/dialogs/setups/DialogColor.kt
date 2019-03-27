@@ -14,8 +14,8 @@ class DialogColor(
         // base setup
         override val id: Int,
         override val title: Text,
-        val selectedColorGroupIndex: Int? = null,
         val color: Int,
+        val showAlpha: Boolean = false,
         val darkTheme: Boolean? = null,
 
         override val posButton: Text = Text.TextRes(R.string.ok),

@@ -16,14 +16,14 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.tabs.TabLayout
-import com.michaelflisar.dialogs.base.BaseDialogFragment
-import com.michaelflisar.dialogs.color.R
 import com.michaelflisar.dialogs.adapter.ColorAdapter
 import com.michaelflisar.dialogs.adapter.MainColorAdapter
-import com.michaelflisar.dialogs.utils.ColorUtil
-import com.michaelflisar.dialogs.utils.RecyclerViewUtil
+import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.color.R
 import com.michaelflisar.dialogs.events.BaseDialogEvent
 import com.michaelflisar.dialogs.setups.DialogColor
+import com.michaelflisar.dialogs.utils.ColorUtil
+import com.michaelflisar.dialogs.utils.RecyclerViewUtil
 import com.rarepebble.colorpicker.ColorPickerView
 
 class DialogColorFragment : BaseDialogFragment() {
@@ -39,7 +39,7 @@ class DialogColorFragment : BaseDialogFragment() {
             return dlg
         }
     }
-    
+
     internal lateinit var pageOne: View
     internal lateinit var pageTwo: View
     internal lateinit var tvPageTwoHeader: TextView
@@ -66,12 +66,7 @@ class DialogColorFragment : BaseDialogFragment() {
         if (savedInstanceState != null)
             selectedColorGroupIndex = savedInstanceState.getInt("selectedColorGroupIndex")
         else {
-            selectedColorGroupIndex = 0
-            if (setup.selectedColorGroupIndex != null) {
-                val desiredColorGroupIndex = setup.selectedColorGroupIndex!!
-                if (desiredColorGroupIndex >= 0 && desiredColorGroupIndex < ColorUtil.COLORS.size)
-                    selectedColorGroupIndex = desiredColorGroupIndex
-            }
+            selectedColorGroupIndex = ColorUtil.getNearestColorGroup(activity!!, setup.color)
         }
 
         val dialog = MaterialDialog(activity!!)
@@ -140,7 +135,7 @@ class DialogColorFragment : BaseDialogFragment() {
         tabs.setupWithViewPager(pager)
 
         colorPicker.color = setup.color
-        colorPicker.showAlpha(false)
+        colorPicker.showAlpha(setup.showAlpha)
         colorPicker.addColorObserver { observableColor -> updateTitle(observableColor.color) }
 
         return dialog

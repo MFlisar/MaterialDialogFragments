@@ -26,5 +26,5 @@ dependencies {
 #### State:
 
 - [x] Dialogs
-- [ ] Color Dialog - demo
-- [ ] FastAdapter Dialog - demo
+- [x] Color Dialog
+- [ ] FastAdapter Dialog DEMO

@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
-import android.text.InputType
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -15,8 +14,10 @@ import com.michaelflisar.dialogs.app.databinding.ActivityMainBinding
 import com.michaelflisar.dialogs.classes.asText
 import com.michaelflisar.dialogs.enums.IconSize
 import com.michaelflisar.dialogs.events.*
+import com.michaelflisar.dialogs.fragments.DialogColorFragment
 import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
 import com.michaelflisar.dialogs.setups.*
+import com.michaelflisar.dialogs.utils.ColorUtil
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
@@ -36,6 +37,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         addListDialogItems(itemAdapter)
         addNumberDialogItems(itemAdapter)
         addProgressDialogItems(itemAdapter)
+        addFastAdapterDialogItems(itemAdapter)
+        addColorDialogItems(itemAdapter)
     }
 
     /*
@@ -58,6 +61,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                 }
             }
             is DialogListEvent -> "List dialog event\nIndizes: ${event.indizes.joinToString()}"
+            is DialogColorFragment.DialogColorEvent -> "Color dialog event\nIndizes: ${ColorUtil.getColorAsARGB(event.color)}"
             else -> null
         }
         Toast.makeText(this, "Event: ${event.id}\n$data", Toast.LENGTH_LONG).show()
@@ -289,6 +293,35 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                                 DialogProgress.close()
                         }
                     }, delay)
+                }
+        )
+    }
+
+    private fun addFastAdapterDialogItems(adapter: ItemAdapter<IItem<*, *>>) {
+
+    }
+
+    private fun addColorDialogItems(adapter: ItemAdapter<IItem<*, *>>) {
+        adapter.add(
+                HeaderItem("Color demos"),
+                DemoItem("Color demo", "Show a color dialog") {
+                    DialogColor(
+                            50,
+                            "Select color".asText(),
+                            color = Color.BLUE
+                    )
+                            .create()
+                            .show(this)
+                },
+                DemoItem("Color demo", "Show a color dialog - with possiblility to select an alpha value") {
+                    DialogColor(
+                            50,
+                            "Select color".asText(),
+                            color = ColorUtil.COLORS_RED.getMainColor(this), // returns main (500) red material color
+                            showAlpha = true
+                    )
+                            .create()
+                            .show(this)
                 }
         )
     }
