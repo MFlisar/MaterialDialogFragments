@@ -116,7 +116,6 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     DialogInput(
                             20,
                             "Insert your name".asText(),
-                            InputType.TYPE_CLASS_TEXT,
                             DialogInput.InputField("Please insert your full name".asText(), null, "E.g. Max Musterman".asText()),
                             allowEmptyText = true
                     )
@@ -127,7 +126,6 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     DialogInput(
                             21,
                             "Insert your name".asText(),
-                            InputType.TYPE_CLASS_TEXT,
                             DialogInput.InputField("First name".asText(), null, "E.g. Max".asText()),
                             additonalInputs = arrayListOf(DialogInput.InputField("Last name".asText(), null, "E.g. Musterman".asText()))
                     )
@@ -138,7 +136,6 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     DialogInput(
                             22,
                             "Insert the macro".asText(),
-                            InputType.TYPE_CLASS_TEXT,
                             DialogInput.InputField(null, null, "My name is %s".asText()),
                             neutralButtonMode = DialogInput.NeutralButtonMode.InsertText,
                             neutrButton = "Insert %s".asText(),
