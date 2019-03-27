@@ -55,8 +55,11 @@ class DialogList(
         @Parcelize
         class SimpleWithIcon(val text: String?, val icon: Int) : Item()
 
+        /*
+         if parcelable implements IParcelableTextImageProvider, interface will be used, otherwise it will be used as string items (text is retrieved via item.toString())
+         */
         @Parcelize
-        class Custom(val parcelable: IParcelableTextImageProvider) : Item()
+        class Custom(val parcelable: Parcelable) : Item()
     }
 
     companion object {

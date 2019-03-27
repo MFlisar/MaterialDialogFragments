@@ -174,33 +174,8 @@ open class DialogListFragment : BaseDialogFragment() {
                             })
         } else {
             val item = itemArray.first()
+
             when (item) {
-                is String -> {
-                    if (setup.selectionMode == DialogList.SelectionMode.Multi) {
-                        dialog
-                                .listItemsMultiChoice(
-                                        items = itemArray as List<String>,
-                                        initialSelection = setup.initialMultiSelection,
-                                        allowEmptySelection = true,
-                                        selection = { _: MaterialDialog, index: IntArray, item: List<String> ->
-                                            sendEvent(DialogListEvent(setup.extra, setup.id, index.toList(), item))
-                                            if (!setup.multiClick) {
-                                                dismiss()
-                                            }
-                                        })
-                    } else {
-                        dialog
-                                .listItems(
-                                        items = itemArray as List<String>,
-                                        waitForPositiveButton = false,
-                                        selection = { _: MaterialDialog, index: Int, _: String ->
-                                            sendEvent(DialogListEvent(setup.extra, setup.id, index, itemArray[index]))
-                                            if (!setup.multiClick) {
-                                                dismiss()
-                                            }
-                                        })
-                    }
-                }
                 is ITextImageProvider -> {
 
                     var initialSelection = HashSet<Int>()
@@ -245,7 +220,36 @@ open class DialogListFragment : BaseDialogFragment() {
                     dialog.getRecyclerView().layoutManager = lm
                 }
                 else -> {
-                    throw RuntimeException("Unexpected item received: ${item::class.java}")
+                    val stringItems = arrayListOf<String>()
+                    if (item is String)
+                        stringItems.addAll(itemArray as List<String>)
+                    else
+                        stringItems.addAll(itemArray.map { it.toString() })
+
+                    if (setup.selectionMode == DialogList.SelectionMode.Multi) {
+                        dialog
+                                .listItemsMultiChoice(
+                                        items = stringItems,
+                                        initialSelection = setup.initialMultiSelection,
+                                        allowEmptySelection = true,
+                                        selection = { _: MaterialDialog, index: IntArray, item: List<String> ->
+                                            sendEvent(DialogListEvent(setup.extra, setup.id, index.toList(), item))
+                                            if (!setup.multiClick) {
+                                                dismiss()
+                                            }
+                                        })
+                    } else {
+                        dialog
+                                .listItems(
+                                        items = stringItems,
+                                        waitForPositiveButton = false,
+                                        selection = { _: MaterialDialog, index: Int, _: String ->
+                                            sendEvent(DialogListEvent(setup.extra, setup.id, index, itemArray[index]))
+                                            if (!setup.multiClick) {
+                                                dismiss()
+                                            }
+                                        })
+                    }
                 }
             }
         }
