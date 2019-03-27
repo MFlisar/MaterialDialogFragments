@@ -1,4 +1,4 @@
-package com.michaelflisar.dialogs.color.utils;
+package com.michaelflisar.dialogs.utils;
 
 import android.content.Context;
 import android.graphics.Color;

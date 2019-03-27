@@ -1,4 +1,4 @@
-package com.michaelflisar.dialogs.color.fragments
+package com.michaelflisar.dialogs.fragments
 
 import android.app.Dialog
 import android.content.res.ColorStateList
@@ -18,15 +18,28 @@ import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.tabs.TabLayout
 import com.michaelflisar.dialogs.base.BaseDialogFragment
 import com.michaelflisar.dialogs.color.R
-import com.michaelflisar.dialogs.color.adapter.ColorAdapter
-import com.michaelflisar.dialogs.color.adapter.MainColorAdapter
-import com.michaelflisar.dialogs.color.utils.ColorUtil
-import com.michaelflisar.dialogs.color.utils.RecyclerViewUtil
+import com.michaelflisar.dialogs.adapter.ColorAdapter
+import com.michaelflisar.dialogs.adapter.MainColorAdapter
+import com.michaelflisar.dialogs.utils.ColorUtil
+import com.michaelflisar.dialogs.utils.RecyclerViewUtil
 import com.michaelflisar.dialogs.events.BaseDialogEvent
+import com.michaelflisar.dialogs.setups.DialogColor
 import com.rarepebble.colorpicker.ColorPickerView
 
-class DialogColor : BaseDialogFragment() {
+class DialogColorFragment : BaseDialogFragment() {
 
+    companion object {
+
+        fun create(setup: DialogColor): DialogColorFragment {
+            val dlg = DialogColorFragment()
+            val args = Bundle().apply {
+                putParcelable("setup", setup)
+            }
+            dlg.arguments = args
+            return dlg
+        }
+    }
+    
     internal lateinit var pageOne: View
     internal lateinit var pageTwo: View
     internal lateinit var tvPageTwoHeader: TextView
@@ -38,33 +51,34 @@ class DialogColor : BaseDialogFragment() {
     internal lateinit var rvMaterialMainColors: RecyclerView
     internal lateinit var rvMaterialColors: RecyclerView
 
-    private var mSelectedColorGroupIndex: Int = 0
+    private var selectedColorGroupIndex: Int = 0
+
+    private lateinit var setup: DialogColor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val id = arguments!!.getInt("id")
-        val darkTheme = arguments!!.getBoolean("darkTheme")
+
+        setup = getSetup()
+
         if (savedInstanceState != null)
-            mSelectedColorGroupIndex = savedInstanceState.getInt("mSelectedColorGroupIndex")
+            selectedColorGroupIndex = savedInstanceState.getInt("selectedColorGroupIndex")
         else {
-            mSelectedColorGroupIndex = 0
-            if (arguments!!.containsKey("selectedColorGroupIndex")) {
-                val selectedColorGroupIndex = arguments!!.getInt("selectedColorGroupIndex")
-                if (selectedColorGroupIndex >= 0 && selectedColorGroupIndex < ColorUtil.COLORS.size)
-                    mSelectedColorGroupIndex = selectedColorGroupIndex
+            selectedColorGroupIndex = 0
+            if (setup.selectedColorGroupIndex != null) {
+                val desiredColorGroupIndex = setup.selectedColorGroupIndex!!
+                if (desiredColorGroupIndex >= 0 && desiredColorGroupIndex < ColorUtil.COLORS.size)
+                    selectedColorGroupIndex = desiredColorGroupIndex
             }
         }
-
-        val color = arguments!!.getInt("color")
 
         val dialog = MaterialDialog(activity!!)
                 .customView(R.layout.dialog_color, scrollable = false)
                 .positiveButton(R.string.dialogs_save) {
                     val c = colorPicker.color
-                    sendEvent(DialogColorEvent(id, mSelectedColorGroupIndex, c))
+                    sendEvent(DialogColorEvent(setup, selectedColorGroupIndex, c))
                     dismiss()
                 }
                 .cancelable(true)
@@ -82,18 +96,18 @@ class DialogColor : BaseDialogFragment() {
         rvMaterialMainColors = view.findViewById(R.id.rvMaterialMainColors)
         rvMaterialColors = view.findViewById(R.id.rvMaterialColors)
 
-        updateTitle(color)
+        updateTitle(setup.color)
 
-        val colorAdapter = ColorAdapter(ColorUtil.COLORS[mSelectedColorGroupIndex], ColorAdapter.IColorClickedListener { _, _, c, _ ->
+        val colorAdapter = ColorAdapter(ColorUtil.COLORS[selectedColorGroupIndex], ColorAdapter.IColorClickedListener { _, _, c, _ ->
             colorPicker.setCurrentColor(c)
             pager.setCurrentItem(1, true)
         })
 
-        tvPageTwoHeader.text = ColorUtil.COLORS[mSelectedColorGroupIndex].getHeaderDescription(activity)
-        val mainColorAdapter = MainColorAdapter(darkTheme, ColorUtil.COLORS, mSelectedColorGroupIndex, MainColorAdapter.IMainColorClickedListener { adapter, _, c, pos ->
+        tvPageTwoHeader.text = ColorUtil.COLORS[selectedColorGroupIndex].getHeaderDescription(activity)
+        val mainColorAdapter = MainColorAdapter(setup.useDarkTheme(), ColorUtil.COLORS, selectedColorGroupIndex, MainColorAdapter.IMainColorClickedListener { adapter, _, c, pos ->
             // nicht hier speichern, das macht den Dialog etwas langsam weil das schreiben die UI blockiert
             // => nur wert updaten und später speichern
-            mSelectedColorGroupIndex = pos
+            selectedColorGroupIndex = pos
 
             adapter.setSelected(pos)
             colorAdapter.setGroupColor(c)
@@ -115,8 +129,8 @@ class DialogColor : BaseDialogFragment() {
                     @Suppress("DEPRECATION")
                     rvMaterialColors.viewTreeObserver.removeGlobalOnLayoutListener(this)
                 }
-                if (!RecyclerViewUtil.isViewVisible(rvMaterialMainColors, mSelectedColorGroupIndex))
-                    rvMaterialMainColors.scrollToPosition(mSelectedColorGroupIndex)
+                if (!RecyclerViewUtil.isViewVisible(rvMaterialMainColors, selectedColorGroupIndex))
+                    rvMaterialMainColors.scrollToPosition(selectedColorGroupIndex)
             }
         })
 
@@ -125,7 +139,7 @@ class DialogColor : BaseDialogFragment() {
         pager.offscreenPageLimit = 3
         tabs.setupWithViewPager(pager)
 
-        colorPicker.color = color
+        colorPicker.color = setup.color
         colorPicker.showAlpha(false)
         colorPicker.addColorObserver { observableColor -> updateTitle(observableColor.color) }
 
@@ -144,7 +158,7 @@ class DialogColor : BaseDialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("mSelectedColorGroupIndex", mSelectedColorGroupIndex)
+        outState.putInt("selectedColorGroupIndex", selectedColorGroupIndex)
     }
 
     internal inner class ColorPageAdapter : PagerAdapter() {
@@ -177,19 +191,5 @@ class DialogColor : BaseDialogFragment() {
         }
     }
 
-    class DialogColorEvent(id: Int, var colorGroupIndex: Int, var color: Int) : BaseDialogEvent(null, id)
-
-    companion object {
-        fun create(id: Int, darkTheme: Boolean, selectedColorGroupIndex: Int?, color: Int): DialogColor {
-            val dlg = DialogColor()
-            val bundle = Bundle()
-            bundle.putInt("id", id)
-            bundle.putBoolean("darkTheme", darkTheme)
-            if (selectedColorGroupIndex != null)
-                bundle.putInt("selectedColorGroupIndex", selectedColorGroupIndex)
-            bundle.putInt("color", color)
-            dlg.arguments = bundle
-            return dlg
-        }
-    }
+    class DialogColorEvent(setup: DialogColor, var colorGroupIndex: Int, var color: Int) : BaseDialogEvent(setup)
 }

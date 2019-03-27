@@ -1,4 +1,4 @@
-package com.michaelflisar.dialogs.color.utils
+package com.michaelflisar.dialogs.utils
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager

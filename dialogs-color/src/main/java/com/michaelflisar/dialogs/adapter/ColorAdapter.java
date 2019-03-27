@@ -1,4 +1,4 @@
-package com.michaelflisar.dialogs.color.adapter;
+package com.michaelflisar.dialogs.adapter;
 
 import android.graphics.Color;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.michaelflisar.dialogs.color.R;
-import com.michaelflisar.dialogs.color.utils.ColorUtil;
+import com.michaelflisar.dialogs.utils.ColorUtil;
 
 public class ColorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
