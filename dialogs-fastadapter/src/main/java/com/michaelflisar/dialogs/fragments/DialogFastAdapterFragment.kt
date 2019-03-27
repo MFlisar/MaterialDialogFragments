@@ -52,7 +52,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
     protected val adapter: FastItemAdapter<IItem<*, *>>
         get() = rvData!!.adapter as FastItemAdapter<IItem<*, *>>
 
-    private lateinit var setup: DialogFastAdapter
+    protected lateinit var setup: DialogFastAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

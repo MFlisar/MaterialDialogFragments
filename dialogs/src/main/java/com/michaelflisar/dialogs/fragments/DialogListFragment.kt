@@ -84,7 +84,7 @@ open class DialogListFragment : BaseDialogFragment() {
 //        }
     }
 
-    private lateinit var setup: DialogList
+    protected lateinit var setup: DialogList
 
     private var mAdapter: TextImageRVAdapter? = null
 
@@ -121,15 +121,15 @@ open class DialogListFragment : BaseDialogFragment() {
             }
         }
 
-        return internalOnCreateDialog(savedInstanceState, setup, itemArray)
+        return internalOnCreateDialog(savedInstanceState, itemArray)
     }
 
-    protected fun internalOnCreateDialog(savedInstanceState: Bundle?, setup: DialogList, itemArray: List<Any>): Dialog {
+    protected fun internalOnCreateDialog(savedInstanceState: Bundle?, itemArray: List<Any>): Dialog {
         var dialog = MaterialDialog(activity!!)
                 .cancelable(true)
                 .noAutoDismiss()
 
-        dialog = onSetCallback(savedInstanceState, setup, itemArray, dialog)
+        dialog = onSetCallback(savedInstanceState, itemArray, dialog)
 
         dialog.title(setup.title)
         dialog.positiveButton(setup.posButton)
@@ -138,7 +138,7 @@ open class DialogListFragment : BaseDialogFragment() {
             dialog.message(it)
         }
 
-        dialog = onSetAdapterOrItems(savedInstanceState, setup, itemArray, dialog)
+        dialog = onSetAdapterOrItems(savedInstanceState, itemArray, dialog)
 
         dialog.getRecyclerView().let {
             it.setVerticalScrollBarEnabled(true)
@@ -148,7 +148,7 @@ open class DialogListFragment : BaseDialogFragment() {
         return dialog
     }
 
-    protected open fun onSetCallback(savedInstanceState: Bundle?, setup: DialogList, itemArray: List<Any>, dialog: MaterialDialog): MaterialDialog {
+    protected open fun onSetCallback(savedInstanceState: Bundle?, itemArray: List<Any>, dialog: MaterialDialog): MaterialDialog {
         dialog.positiveButton {
             if (setup.selectionMode == DialogList.SelectionMode.Multi) {
                 if (mAdapter != null) {
@@ -163,7 +163,7 @@ open class DialogListFragment : BaseDialogFragment() {
     }
 
     @SuppressLint("CheckResult")
-    protected open fun onSetAdapterOrItems(savedInstanceState: Bundle?, setup: DialogList, itemArray: List<Any>, dialog: MaterialDialog): MaterialDialog {
+    protected open fun onSetAdapterOrItems(savedInstanceState: Bundle?, itemArray: List<Any>, dialog: MaterialDialog): MaterialDialog {
 
         if (itemArray.size == 0) {
             // create an empty dialog, type of list does not matter

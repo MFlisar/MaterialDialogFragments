@@ -50,7 +50,7 @@ class DialogColorFragment : BaseDialogFragment() {
 
     private var selectedColorGroupIndex: Int = 0
 
-    private lateinit var setup: DialogColor
+    protected lateinit var setup: DialogColor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

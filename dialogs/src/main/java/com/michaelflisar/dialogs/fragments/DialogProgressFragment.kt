@@ -88,7 +88,7 @@ class DialogProgressFragment : BaseDialogFragment(), IProgressDialogFragment {
     // public static updater
     // -----------------------------
 
-    private lateinit var setup: DialogProgress
+    protected lateinit var setup: DialogProgress
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 

@@ -28,7 +28,7 @@ class DialogNumberFragment : BaseDialogFragment() {
         }
     }
 
-    private lateinit var setup: DialogNumber
+    protected lateinit var setup: DialogNumber
     private var input: Int? = null
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {

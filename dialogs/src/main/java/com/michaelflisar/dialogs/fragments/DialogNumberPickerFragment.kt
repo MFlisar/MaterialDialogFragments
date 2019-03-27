@@ -40,7 +40,7 @@ open class DialogNumberPickerFragment : BaseDialogFragment(), View.OnClickListen
     protected open val rowNumberLayoutId: Int
         get() = R.layout.view_row_number
 
-    private lateinit var setup: DialogNumberPicker
+    protected lateinit var setup: DialogNumberPicker
     private var values: ArrayList<Int> = arrayListOf()
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {

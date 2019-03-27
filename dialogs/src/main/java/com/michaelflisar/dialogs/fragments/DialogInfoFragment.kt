@@ -34,7 +34,7 @@ open class DialogInfoFragment : BaseDialogFragment() {
         }
     }
 
-    private lateinit var setup: DialogInfo
+    protected lateinit var setup: DialogInfo
 
     private var posButtonText: String? = null
     private var posButton: AppCompatButton? = null

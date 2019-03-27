@@ -33,7 +33,7 @@ class DialogInputFragment : BaseDialogFragment() {
         }
     }
 
-    private lateinit var setup: DialogInput
+    protected lateinit var setup: DialogInput
 
     private var inputTexts: ArrayList<String> = arrayListOf()
 
