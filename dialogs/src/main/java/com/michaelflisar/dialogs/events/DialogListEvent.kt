@@ -10,5 +10,5 @@ class DialogListEvent(extra: Bundle?, id: Int, val indizes: List<Int>, val items
 
     fun getIndex(i: Int = 0) = indizes[i]
 
-    fun getItem(i: Int = 0) = items[i]
+    fun <T> getItem(i: Int = 0) = items[i] as T
 }
