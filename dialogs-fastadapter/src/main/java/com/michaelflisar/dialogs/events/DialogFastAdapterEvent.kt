@@ -1,9 +1,10 @@
 package com.michaelflisar.dialogs.events
 
 import android.os.Bundle
+import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.mikepenz.fastadapter.IItem
 
-class DialogFastAdapterEvent(extra: Bundle?, id: Int, private val selectedItem: IItem<*, *>?, val index: Int) : BaseDialogEvent(extra, id) {
+class DialogFastAdapterEvent(setup: BaseDialogSetup, private val selectedItem: IItem<*, *>?, val index: Int) : BaseDialogEvent(setup) {
 //    private var item: IItem<*, *>? = null
 //    var index: Int = 0
 

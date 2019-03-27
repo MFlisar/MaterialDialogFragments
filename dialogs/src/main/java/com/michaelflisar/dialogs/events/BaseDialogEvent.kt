@@ -1,12 +1,15 @@
 package com.michaelflisar.dialogs.events
 
 import android.os.Bundle
+import com.michaelflisar.dialogs.classes.BaseDialogSetup
 
 /**
  * Created by flisar on 15.11.2016.
  */
 
-open class BaseDialogEvent(val extras: Bundle?, val id: Int) {
+open class BaseDialogEvent private constructor(val extras: Bundle?, val id: Int) {
+
+    constructor(setup: BaseDialogSetup) : this(setup.extra, setup.id)
 
     fun hasExtra(key: String) = extras?.containsKey(key) ?: false
 

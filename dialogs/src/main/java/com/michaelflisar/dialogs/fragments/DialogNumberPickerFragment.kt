@@ -67,7 +67,7 @@ open class DialogNumberPickerFragment : BaseDialogFragment(), View.OnClickListen
         val dialog = MaterialDialog(activity!!)
                 .customView(layout, scrollable = values.size > 1)
                 .positiveButton {
-                    sendEvent(DialogNumberEvent(setup.extra, setup.id, getEventValues(viewDatas)))
+                    sendEvent(DialogNumberEvent(setup, getEventValues(viewDatas)))
                     dismiss()
                 }
                 .cancelable(true)

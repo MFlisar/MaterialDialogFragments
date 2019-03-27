@@ -1,10 +1,11 @@
 package com.michaelflisar.dialogs.events
 
 import android.os.Bundle
+import com.michaelflisar.dialogs.classes.BaseDialogSetup
 
-class DialogListEvent(extra: Bundle?, id: Int, val indizes: List<Int>, val items: List<Any>) : BaseDialogEvent(extra, id) {
+class DialogListEvent(setup: BaseDialogSetup, val indizes: List<Int>, val items: List<Any>) : BaseDialogEvent(setup) {
 
-    constructor(extra: Bundle?, id: Int, index: Int, item: Any) : this(extra, id, arrayListOf(index), arrayListOf(item))
+    constructor(setup: BaseDialogSetup, index: Int, item: Any) : this(setup, arrayListOf(index), arrayListOf(item))
 
     val itemCount = indizes.size
 

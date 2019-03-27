@@ -43,9 +43,9 @@ class DialogProgressFragment : BaseDialogFragment(), IProgressDialogFragment {
                         }
                         is Event.Close -> {
                             if (event.forcedByNewDialog) {
-                                sendEvent(DialogProgressEvent.Cancelled(setup.id, true))
+                                sendEvent(DialogProgressEvent.Cancelled(setup, true))
                             } else {
-                                sendEvent(DialogProgressEvent.Closed(setup.id))
+                                sendEvent(DialogProgressEvent.Closed(setup))
                             }
                             dismissAllowingStateLoss()
                         }
@@ -115,7 +115,7 @@ class DialogProgressFragment : BaseDialogFragment(), IProgressDialogFragment {
         setup.negButton?.let {
             dialog
                     .negativeButton(it) {
-                        sendEvent(DialogProgressEvent.Cancelled(setup.id, false))
+                        sendEvent(DialogProgressEvent.Cancelled(setup, false))
                         if (setup.dismissOnNegative) {
                             dismissAllowingStateLoss()
                         }

@@ -1,11 +1,12 @@
 package com.michaelflisar.dialogs.events
 
 import android.os.Bundle
+import com.michaelflisar.dialogs.classes.BaseDialogSetup
 
 
-class DialogNumberEvent(extras: Bundle?, id: Int, val values: List<Int>) : BaseDialogEvent(extras, id) {
+class DialogNumberEvent(setup: BaseDialogSetup, val values: List<Int>) : BaseDialogEvent(setup) {
 
-    constructor(extras: Bundle?, id: Int, value: Int) : this(extras, id, arrayListOf(value))
+    constructor(setup: BaseDialogSetup, value: Int) : this(setup, arrayListOf(value))
 
     val value: Int = values[0]
 
