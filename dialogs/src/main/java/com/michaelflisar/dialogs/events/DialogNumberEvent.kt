@@ -9,5 +9,5 @@ class DialogNumberEvent(extras: Bundle?, id: Int, val values: List<Int>) : BaseD
 
     val value: Int = values[0]
 
-    fun getValueAt(index: Int) = if (values.size > index) values[index] else null
+    fun getValueAt(index: Int = 0) = if (values.size > index) values[index] else null
 }

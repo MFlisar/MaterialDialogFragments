@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
             is DialogInfoEvent -> "Info dialog closed\nButton: ${event.buttonIndex}"
             is DialogInputEvent -> {
                 when (event) {
-                    is DialogInputEvent.Input -> "Input dialog closed\nInput: ${event.input} | ${event.getInputAt(1)}"
+                    is DialogInputEvent.Input -> "Input dialog closed\nInput: ${event.getInput()} | ${event.getInput(1)}"
                     is DialogInputEvent.NeutralButton -> "Input dialog closed\nClosed by neutral button click"
                 }
             }
