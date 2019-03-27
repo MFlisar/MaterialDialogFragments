@@ -12,7 +12,7 @@ import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
  */
 
 object DialogUtil {
-    fun trySendResult(event: BaseDialogEvent, fragment: Fragment, sendResultType: SendResultType) {
+    fun trySendResult(event: BaseDialogEvent, fragment: Fragment, sendResultType: SendResultType = DialogSetup.DEFAULT_SEND_RESULT_TYPE) {
 
         val callbacks: ArrayList<DialogFragmentCallback> = ArrayList()
 
