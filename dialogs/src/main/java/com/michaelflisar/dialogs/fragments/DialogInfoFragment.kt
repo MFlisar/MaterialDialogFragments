@@ -29,10 +29,7 @@ open class DialogInfoFragment : BaseDialogFragment() {
     companion object {
         fun create(setup: DialogInfo): DialogInfoFragment {
             val dlg = DialogInfoFragment()
-            val args = Bundle().apply {
-                putParcelable("setup", setup)
-            }
-            dlg.arguments = args
+            dlg.setSetupArgs(setup)
             return dlg
         }
     }

@@ -28,10 +28,7 @@ class DialogInputFragment : BaseDialogFragment() {
 
         fun create(setup: DialogInput): DialogInputFragment {
             val dlg = DialogInputFragment()
-            val args = Bundle().apply {
-                putParcelable("setup", setup)
-            }
-            dlg.arguments = args
+            dlg.setSetupArgs(setup)
             return dlg
         }
     }

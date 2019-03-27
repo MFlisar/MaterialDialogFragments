@@ -32,10 +32,7 @@ class DialogColorFragment : BaseDialogFragment() {
 
         fun create(setup: DialogColor): DialogColorFragment {
             val dlg = DialogColorFragment()
-            val args = Bundle().apply {
-                putParcelable("setup", setup)
-            }
-            dlg.arguments = args
+            dlg.setSetupArgs(setup)
             return dlg
         }
     }

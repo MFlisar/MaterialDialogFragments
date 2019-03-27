@@ -32,10 +32,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
 
         fun <T : DialogFastAdapterFragment> create(setup: DialogFastAdapter, createFragment: (() -> T)): T {
             val dlg = createFragment()
-            val args = Bundle().apply {
-                putParcelable("setup", setup)
-            }
-            dlg.arguments = args
+            dlg.setSetupArgs(setup)
             return dlg
         }
     }

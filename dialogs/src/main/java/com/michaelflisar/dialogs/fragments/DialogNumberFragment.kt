@@ -23,10 +23,7 @@ class DialogNumberFragment : BaseDialogFragment() {
 
         fun create(setup: DialogNumber): DialogNumberFragment {
             val dlg = DialogNumberFragment()
-            val args = Bundle().apply {
-                putParcelable("setup", setup)
-            }
-            dlg.arguments = args
+            dlg.setSetupArgs(setup)
             return dlg
         }
     }

@@ -62,6 +62,12 @@ abstract class BaseDialogFragment : ExtendedFragment(), BaseDialogFragmentHandle
         arguments!!.getParcelable<BaseDialogSetup>("setup")!!
     }
 
+    override fun setSetupArgs(setup: BaseDialogSetup) {
+        val args = arguments ?: Bundle()
+        args.putParcelable("setup", setup)
+        arguments = args
+    }
+
     // -----------------------------
     // Result
     // -----------------------------

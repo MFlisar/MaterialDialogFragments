@@ -27,10 +27,7 @@ open class DialogNumberPickerFragment : BaseDialogFragment(), View.OnClickListen
 
         fun create(setup: DialogNumberPicker): DialogNumberPickerFragment {
             val dlg = DialogNumberPickerFragment()
-            val args = Bundle().apply {
-                putParcelable("setup", setup)
-            }
-            dlg.arguments = args
+            dlg.setSetupArgs(setup)
             return dlg
         }
     }

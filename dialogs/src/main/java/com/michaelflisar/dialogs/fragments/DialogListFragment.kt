@@ -27,10 +27,7 @@ open class DialogListFragment : BaseDialogFragment() {
 
         fun create(setup: DialogList): DialogListFragment {
             val dlg = DialogListFragment()
-            val args = Bundle().apply {
-                putParcelable("setup", setup)
-            }
-            dlg.arguments = args
+            dlg.setSetupArgs(setup)
             return dlg
         }
 

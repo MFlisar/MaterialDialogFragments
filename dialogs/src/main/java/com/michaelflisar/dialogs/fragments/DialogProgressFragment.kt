@@ -20,10 +20,7 @@ class DialogProgressFragment : BaseDialogFragment(), IProgressDialogFragment {
     companion object {
         fun create(setup: DialogProgress): DialogProgressFragment {
             val dlg = DialogProgressFragment()
-            val args = Bundle().apply {
-                putParcelable("setup", setup)
-            }
-            dlg.arguments = args
+            dlg.setSetupArgs(setup)
             return dlg
         }
     }
