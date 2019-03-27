@@ -93,7 +93,7 @@ open class DialogListFragment : BaseDialogFragment() {
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        setup = arguments!!.getParcelable("setup")!!
+        setup = getSetup()
 
 //        val id = XXX.getInt("id")
 //        val title = XXX.getResOrString("title")

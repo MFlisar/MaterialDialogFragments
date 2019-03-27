@@ -48,7 +48,7 @@ open class DialogNumberPickerFragment : BaseDialogFragment(), View.OnClickListen
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        setup = arguments!!.getParcelable("setup")!!
+        setup = getSetup()
 
         values.clear()
         if (savedInstanceState != null) {

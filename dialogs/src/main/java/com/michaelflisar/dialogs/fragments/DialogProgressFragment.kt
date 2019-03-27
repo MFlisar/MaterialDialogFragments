@@ -95,7 +95,7 @@ class DialogProgressFragment : BaseDialogFragment(), IProgressDialogFragment {
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        setup = arguments!!.getParcelable("setup")!!
+        setup = getSetup()
 
         text = if (savedInstanceState != null && savedInstanceState.containsKey("text")) {
             savedInstanceState.getString("text")

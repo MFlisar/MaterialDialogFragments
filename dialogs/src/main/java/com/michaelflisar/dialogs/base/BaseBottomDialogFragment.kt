@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.ExtendedFragment
 import androidx.fragment.app.FragmentActivity
 import com.michaelflisar.dialogs.DialogSetup
+import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.enums.SendResultType
 import com.michaelflisar.dialogs.events.BaseDialogEvent
 import com.michaelflisar.dialogs.helper.BaseDialogFragmentHandler
@@ -63,6 +64,8 @@ abstract class BaseBottomDialogFragment : ExtendedFragment(), BaseDialogFragment
     override fun show(activity: FragmentActivity, customSendResultType: SendResultType?, tag: String) {
         mHandler.show(activity, tag, customSendResultType)
     }
+
+    override fun <T : BaseDialogSetup> getSetup(): T = arguments!!.getParcelable("setup")!!
 
     // -----------------------------
     // Result

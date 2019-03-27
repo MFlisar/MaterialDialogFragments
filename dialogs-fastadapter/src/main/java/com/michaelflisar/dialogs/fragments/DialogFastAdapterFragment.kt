@@ -68,7 +68,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        setup = arguments!!.getParcelable("setup")!!
+        setup = getSetup()
 
         val dialog = MaterialDialog(activity!!)
                 .customView(if (setup.internalSetup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview, scrollable = false)

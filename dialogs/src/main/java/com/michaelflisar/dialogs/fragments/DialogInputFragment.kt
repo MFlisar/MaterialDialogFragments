@@ -42,7 +42,7 @@ class DialogInputFragment : BaseDialogFragment() {
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        setup = arguments!!.getParcelable("setup")!!
+        setup = getSetup()
 
         val inputFields = arrayListOf(setup.input)
         inputFields.addAll(setup.additonalInputs)

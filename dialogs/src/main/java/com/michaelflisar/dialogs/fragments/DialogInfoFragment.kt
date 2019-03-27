@@ -46,7 +46,7 @@ open class DialogInfoFragment : BaseDialogFragment() {
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        setup = arguments!!.getParcelable("setup")!!
+        setup = getSetup()
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("timeLeft")) {
