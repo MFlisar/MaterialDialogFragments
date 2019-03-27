@@ -17,7 +17,6 @@ class DialogInput(
         val inputType: Int,
         val input: InputField,
         override val posButton: Text = Text.TextRes(android.R.string.ok),
-        override val darkTheme: Boolean = false,
         override val negButton: Text? = null,
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = true,

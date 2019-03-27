@@ -17,7 +17,6 @@ class DialogProgress private constructor(
         val horizontal: Boolean,
         val dismissOnNegative: Boolean,
         override val posButton: Text = Text.TextRes(android.R.string.ok),
-        override val darkTheme: Boolean = false,
         override val negButton: Text? = null,
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = false,
@@ -56,6 +55,5 @@ class DialogProgress private constructor(
             text: Text?,
             horizontal: Boolean = true,
             negButton: Text? = null,
-            dismissOnNegative: Boolean = false,
-            darkTheme: Boolean = false) : this(id, title, text, horizontal, darkTheme = darkTheme, cancelable = false, negButton = negButton, dismissOnNegative = dismissOnNegative)
+            dismissOnNegative: Boolean = false) : this(id, title, text, horizontal, cancelable = false, negButton = negButton, dismissOnNegative = dismissOnNegative)
 }

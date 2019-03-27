@@ -133,7 +133,7 @@ open class DialogInfoFragment : BaseDialogFragment() {
 
         if (setup.textIsHtml) {
             var color = ""
-            if (setup.darkTheme) {
+            if (setup.useDarkTheme()) {
                 color = " color: white;"
             }
             val wv: WebView = dialog.getCustomView().findViewById(R.id.wv)

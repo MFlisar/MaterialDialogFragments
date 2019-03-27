@@ -8,7 +8,6 @@ interface BaseDialogSetup : Parcelable {
     val id: Int
     val title: Text
     val posButton: Text
-    val darkTheme: Boolean
     val negButton: Text?
     val neutrButton: Text?
     val cancelable: Boolean

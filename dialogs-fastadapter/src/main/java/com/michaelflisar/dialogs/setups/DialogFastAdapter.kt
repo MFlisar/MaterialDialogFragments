@@ -14,7 +14,6 @@ abstract class DialogFastAdapter(
     override val id: Int = internalSetup.id
     override val title: Text = internalSetup.title
     override val posButton: Text = internalSetup.posButton
-    override val darkTheme: Boolean = internalSetup.darkTheme
     override val negButton: Text? = internalSetup.negButton
     override val neutrButton: Text? = internalSetup.neutrButton
     override val cancelable: Boolean = internalSetup.cancelable
@@ -26,7 +25,6 @@ abstract class DialogFastAdapter(
             val id: Int,
             val title: Text,
             val posButton: Text = Text.TextRes(android.R.string.ok),
-            val darkTheme: Boolean = false,
             val negButton: Text? = null,
             val neutrButton: Text? = null,
             val cancelable: Boolean = true,

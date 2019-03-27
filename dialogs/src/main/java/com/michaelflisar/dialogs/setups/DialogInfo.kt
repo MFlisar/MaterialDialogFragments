@@ -2,6 +2,7 @@ package com.michaelflisar.dialogs.setups
 
 import android.graphics.Color
 import android.os.Bundle
+import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.fragments.DialogInfoFragment
@@ -28,11 +29,11 @@ class DialogInfo(
         override val title: Text,
         val text: Text,
         override val posButton: Text = Text.TextRes(android.R.string.ok),
-        override val darkTheme: Boolean = false,
         override val negButton: Text? = null,
         override val neutrButton: Text?  = null,
         override val cancelable: Boolean = true,
         override val extra: Bundle? = null,
+        val darkTheme: Boolean? = null,
 
         // special setup
         val textIsHtml: Boolean = false,
@@ -44,5 +45,7 @@ class DialogInfo(
 ) : BaseDialogSetup {
 
     override fun create(): DialogFragment = DialogInfoFragment.create(this)
+
+    fun useDarkTheme() = darkTheme ?: DialogSetup.useDarkTheme()
 
 }

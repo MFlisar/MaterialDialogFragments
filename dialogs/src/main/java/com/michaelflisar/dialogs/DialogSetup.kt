@@ -12,6 +12,8 @@ object DialogSetup {
 
     var resultHandler: ((event: Any) -> Unit)? = null
 
+    var useDarkTheme: (() -> Boolean) = { false }
+
     fun sendResult(result: Any) {
         resultHandler?.invoke(result)
     }
