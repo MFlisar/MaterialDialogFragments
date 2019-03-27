@@ -185,11 +185,12 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             .create()
                             .show(this)
                 },
-                DemoItem("List demo 4", "Show a dialog with a list of items and icons and icon tint - no selection but with multi click enabled - each click creates a event") {
+                DemoItem("List demo 4", "Show a dialog with a list of items, icons, icon tint and some text - no selection but with multi click enabled - each click creates a event") {
                     DialogList(
                             33,
                             "Multi click".asText(),
                             DialogList.itemsString(List(50) { "Item ${it + 1}" }, List(50) { R.drawable.ic_arrow_forward_black_24dp }),
+                            text = "Some information about this dialog".asText(),
                             multiClick = true,
                             iconColorTint = Color.RED,
                             iconColorTintMode = PorterDuff.Mode.SRC_ATOP

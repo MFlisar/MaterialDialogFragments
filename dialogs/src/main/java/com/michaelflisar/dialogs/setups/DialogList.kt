@@ -18,6 +18,7 @@ class DialogList(
         override val id: Int,
         override val title: Text,
         val items: List<Item>,
+        val text: Text? = null,
         val selectionMode: SelectionMode = SelectionMode.None,
         override val posButton: Text = Text.TextRes(android.R.string.ok),
         override val darkTheme: Boolean = false,

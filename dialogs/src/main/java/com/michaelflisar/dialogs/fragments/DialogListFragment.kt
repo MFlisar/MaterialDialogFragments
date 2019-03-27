@@ -11,13 +11,14 @@ import com.afollestad.materialdialogs.list.customListAdapter
 import com.afollestad.materialdialogs.list.getRecyclerView
 import com.afollestad.materialdialogs.list.listItems
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
-import com.michaelflisar.dialogs.setups.DialogList
 import com.michaelflisar.dialogs.adapters.TextImageItem
 import com.michaelflisar.dialogs.adapters.TextImageRVAdapter
 import com.michaelflisar.dialogs.base.BaseDialogFragment
 import com.michaelflisar.dialogs.events.DialogListEvent
 import com.michaelflisar.dialogs.interfaces.ITextImageProvider
+import com.michaelflisar.dialogs.message
 import com.michaelflisar.dialogs.positiveButton
+import com.michaelflisar.dialogs.setups.DialogList
 import com.michaelflisar.dialogs.title
 
 open class DialogListFragment : BaseDialogFragment() {
@@ -135,6 +136,10 @@ open class DialogListFragment : BaseDialogFragment() {
 
         dialog.title(setup.title)
         dialog.positiveButton(setup.posButton)
+
+        setup.text?.let {
+            dialog.message(it)
+        }
 
         dialog = onSetAdapterOrItems(savedInstanceState, setup, itemArray, dialog)
 
