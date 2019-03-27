@@ -63,6 +63,13 @@ abstract class BaseDialogFragment : ExtendedFragment(), BaseDialogFragmentHandle
         // send result to any custom handler
         DialogSetup.sendResult(event)
         // send result the default way
-        DialogUtil.trySendResult(event, this, mHandler.customSendResultType ?: DialogSetup.DEFAULT_SEND_RESULT_TYPE)
+        DialogUtil.trySendResult(event, this, mHandler.customSendResultType
+                ?: DialogSetup.DEFAULT_SEND_RESULT_TYPE)
+
+        onEventSend(event)
+    }
+
+    protected open fun <X : BaseDialogEvent> onEventSend(event: X) {
+
     }
 }

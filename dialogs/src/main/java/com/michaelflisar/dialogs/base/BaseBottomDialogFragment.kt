@@ -3,16 +3,14 @@ package com.michaelflisar.dialogs.base
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-
-import com.michaelflisar.dialogs.DialogSetup
-import com.michaelflisar.dialogs.events.BaseDialogEvent
-import com.michaelflisar.dialogs.helper.BaseDialogFragmentHandler
-import com.michaelflisar.dialogs.utils.DialogUtil
-
 import androidx.fragment.app.ExtendedFragment
 import androidx.fragment.app.FragmentActivity
+import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.enums.SendResultType
+import com.michaelflisar.dialogs.events.BaseDialogEvent
+import com.michaelflisar.dialogs.helper.BaseDialogFragmentHandler
 import com.michaelflisar.dialogs.interfaces.DialogFragment
+import com.michaelflisar.dialogs.utils.DialogUtil
 
 abstract class BaseBottomDialogFragment : ExtendedFragment(), BaseDialogFragmentHandler.IBaseBottomDialog, DialogFragment {
 
@@ -74,6 +72,13 @@ abstract class BaseBottomDialogFragment : ExtendedFragment(), BaseDialogFragment
         // send result to any custom handler
         DialogSetup.sendResult(event)
         // send result the default way
-        DialogUtil.trySendResult(event, this, mHandler.customSendResultType ?: DialogSetup.DEFAULT_SEND_RESULT_TYPE)
+        DialogUtil.trySendResult(event, this, mHandler.customSendResultType
+                ?: DialogSetup.DEFAULT_SEND_RESULT_TYPE)
+
+        onEventSend(event)
+    }
+
+    protected open fun <X : BaseDialogEvent> onEventSend(event: X) {
+
     }
 }
