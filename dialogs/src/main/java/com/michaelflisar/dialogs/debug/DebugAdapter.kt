@@ -40,10 +40,12 @@ class DebugAdapter(val items: List<DebugDialog.Entry<*>>, val context: Context, 
         }
         val number = if (withNumbering) getNumber(position) else ""
 
-        holder.binding.text.text = when (item) {
-            is DebugDialog.Entry.Checkbox -> text
-            else -> "$number$text"
-        }
+//        holder.binding.text.text = when (item) {
+//            is DebugDialog.Entry.Checkbox -> text
+//            else -> "$number$text"
+//        }
+        holder.binding.text.text = "$number$text"
+
         val checked = when (item) {
             is DebugDialog.Entry.Checkbox -> DebugDialog.getBool(item)
             is DebugDialog.Entry.ListEntry -> DebugDialog.getInt(item.parent) == item.value
@@ -136,7 +138,7 @@ class DebugAdapter(val items: List<DebugDialog.Entry<*>>, val context: Context, 
             if (item is DebugDialog.SubEntryHolder<*, *>) {
                 adapter.goLevelDown(adapterPosition)
             } else {
-                val clickResult = item.onClick()
+                val clickResult = item.onClick(adapter.dialog)
                 if (clickResult.contains(DebugDialog.ClickResult.Notify)) {
                     adapter.notifyItemChanged(adapterPosition)
                 }

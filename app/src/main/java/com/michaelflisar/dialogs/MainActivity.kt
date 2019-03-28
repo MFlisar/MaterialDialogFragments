@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.michaelflisar.dialogs.app.R
 import com.michaelflisar.dialogs.app.databinding.ActivityMainBinding
 import com.michaelflisar.dialogs.classes.asText
+import com.michaelflisar.dialogs.debug.DebugDialog
 import com.michaelflisar.dialogs.enums.IconSize
 import com.michaelflisar.dialogs.events.*
 import com.michaelflisar.dialogs.fragments.DialogColorFragment
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         addProgressDialogItems(itemAdapter)
         addFastAdapterDialogItems(itemAdapter)
         addColorDialogItems(itemAdapter)
+        addDebugDialogItems(itemAdapter)
     }
 
     /*
@@ -322,6 +324,46 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     )
                             .create()
                             .show(this)
+                }
+        )
+    }
+
+    private fun addDebugDialogItems(adapter: ItemAdapter<IItem<*, *>>) {
+        adapter.add(
+                HeaderItem("DEBUGGING SETTINGS demos"),
+                DemoItem("Debug settings demo", "Show a custom debug settings dialog") {
+
+                    // should be done once only, but for the demo we do it here...
+                    DebugDialog.init(this)
+
+                    // Dialog will save it's values inside a preference file automatically
+                    val items = arrayListOf<DebugDialog.Entry<*>>()
+                    items.addAll(
+                            arrayListOf(
+                                    DebugDialog.Entry.Button("Debug button") {
+                                        Toast.makeText(this, "Debug button pressed", Toast.LENGTH_SHORT).show()
+                                    },
+                                    DebugDialog.Entry.Checkbox("Enable debug mode", "debug_bool_1", false),
+                                    DebugDialog.Entry.List("Debug color", "debug_list_1", 0)
+                                            .apply {
+                                                addEntries(
+                                                        DebugDialog.Entry.ListEntry("red", this, 0),
+                                                        DebugDialog.Entry.ListEntry("blue", this, 1),
+                                                        DebugDialog.Entry.ListEntry("green", this, 2)
+                                                )
+                                            },
+                                    DebugDialog.Entry.Button("Reset all debug settings") {
+                                        DebugDialog.reset(items, it)
+                                    }
+                            )
+                    )
+                    DebugDialog.showDialog(
+                            items,
+                            this,
+                            "Back",
+                            true,
+                            "Debug dialog"
+                    )
                 }
         )
     }

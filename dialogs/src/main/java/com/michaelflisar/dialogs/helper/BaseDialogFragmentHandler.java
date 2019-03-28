@@ -1,8 +1,6 @@
 package com.michaelflisar.dialogs.helper;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,14 +9,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.michaelflisar.dialogs.enums.SendResultType;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.ExtendedFragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 /**
  * Created by flisar on 15.11.2016.
  */
 
-public class BaseDialogFragmentHandler<T extends BaseDialogFragmentHandler.IAbstractBaseDialog> {
+public class BaseDialogFragmentHandler<T extends ExtendedFragment> {
     private SendResultType customSendResultType = null;
     private T mParent;
     public BaseDialogFragmentHandler(T parent) {
@@ -97,24 +95,11 @@ public class BaseDialogFragmentHandler<T extends BaseDialogFragmentHandler.IAbst
     // Interface
     // -----------------------------
 
-    public interface IAbstractBaseDialog {
-        FragmentActivity getActivity();
-
-        Context getContext();
-
-        int getTheme();
-
-        void show(FragmentManager fragmentManager, String tag);
-
-        void showAllowingStateLoss(FragmentManager fragmentManager, String tag);
-    }
-
-
-    public interface IBaseDialog extends IAbstractBaseDialog {
+    public interface IBaseDialog{
         Dialog onHandleCreateDialog(Bundle savedInstanceState);
     }
 
-    public interface IBaseBottomDialog extends IAbstractBaseDialog {
+    public interface IBaseBottomDialog {
         View onHandleCreateBottomDialog(Bundle savedInstanceState);
 
         boolean alwaysShowExpanded();

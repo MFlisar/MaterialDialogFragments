@@ -20,5 +20,9 @@ enum class SendResultType {
     /*
      * only the target fragment, parent fragment, fragment or activity - whatever exists
      */
-    TargetOrParentOrFragmentOrActivity
+    TargetOrParentOrFragmentOrActivity,
+    /*
+     * only the handler defined in the DialogSetup will be used
+     */
+    CustomOnly
 }

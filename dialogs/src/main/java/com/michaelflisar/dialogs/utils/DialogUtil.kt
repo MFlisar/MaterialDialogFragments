@@ -46,6 +46,9 @@ object DialogUtil {
                         ?: fragment as? DialogFragmentCallback
                         ?: fragment.activity as? DialogFragmentCallback
             }
+            SendResultType.CustomOnly -> {
+                null
+            }
         }
 
         callback?.let {

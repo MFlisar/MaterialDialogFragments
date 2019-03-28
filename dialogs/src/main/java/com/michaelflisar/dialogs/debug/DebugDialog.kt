@@ -1,5 +1,6 @@
 package com.michaelflisar.dialogs.debug
 
+import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.View
@@ -7,6 +8,8 @@ import com.michaelflisar.dialogs.core.BuildConfig
 import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.customListAdapter
+import com.afollestad.materialdialogs.list.getListAdapter
+import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.textView
 
 object DebugDialog {
@@ -41,15 +44,20 @@ object DebugDialog {
         return null
     }
 
-    fun reset(items: List<DebugDialog.Entry<*>>) {
+    fun reset(items: List<DebugDialog.Entry<*>>, dialog: Dialog?) {
 
         for (e in items) {
             if (e is EntryWithPref<*>) {
                 e.reset()
             }
             if (e is DebugDialog.SubEntryHolder<*, *>) {
-                reset(e.subEntries)
+                reset(e.subEntries, null)
             }
+        }
+
+        (dialog as? MaterialDialog)?.let {
+            val adapter = it.getListAdapter() as DebugAdapter
+            adapter.notifyDataSetChanged()
         }
     }
 
@@ -57,12 +65,12 @@ object DebugDialog {
     // Dialog
     // ------------
 
-    fun showDialog(items: List<Entry<*>>, activity: FragmentActivity, darkTheme: Boolean, backButtonText: String, withNumbering: Boolean, customTitle: String? = null) {
+    fun showDialog(items: List<Entry<*>>, activity: FragmentActivity, backButtonText: String, withNumbering: Boolean, customTitle: String? = null) {
 
         val visibleItems = items.filter { BuildConfig.DEBUG || it.visibleInRelease }
 
         val dialog = MaterialDialog(activity)
-        val adapter = DebugAdapter(visibleItems, activity, dialog, darkTheme, withNumbering)
+        val adapter = DebugAdapter(visibleItems, activity, dialog, DialogSetup.useDarkTheme(), withNumbering)
         dialog
                 .noAutoDismiss()
                 .title(text = customTitle ?: "Debug Menu")
@@ -113,9 +121,9 @@ object DebugDialog {
         internal var visibleInRelease = true
 
         class Group(name: String, override var subEntries: ArrayList<Entry<*>> = arrayListOf()) : Entry<Unit>(name), SubEntryHolder<Entry<*>, Group>
-        class Button(name: String, val function: () -> Unit) : Entry<Unit>(name) {
-            override fun onClick(): Array<ClickResult> {
-                function()
+        class Button(name: String, val function: (dialog: Dialog) -> Unit) : Entry<Unit>(name) {
+            override fun onClick(dialog: Dialog): Array<ClickResult> {
+                function(dialog)
                 return emptyArray()
             }
         }
@@ -125,7 +133,7 @@ object DebugDialog {
                 setBool(this, defaultValue)
             }
 
-            override fun onClick(): Array<ClickResult> {
+            override fun onClick(dialog: Dialog): Array<ClickResult> {
                 setBool(this, !getBool(this))
                 return arrayOf(ClickResult.Notify)
             }
@@ -137,16 +145,20 @@ object DebugDialog {
             }
 
             fun getEntryByValue(value: Int) = subEntries.find { it.value == value }!!
+
+            fun addEntries(vararg items: ListEntry) {
+                subEntries.addAll(items)
+            }
         }
 
         class ListEntry(name: String, val parent: List, val value: Int) : Entry<Int>(name) {
-            override fun onClick(): Array<ClickResult> {
+            override fun onClick(dialog: Dialog): Array<ClickResult> {
                 setInt(parent, value)
                 return arrayOf(ClickResult.GoUp)
             }
         }
 
-        open fun onClick(): Array<ClickResult> {
+        open fun onClick(dialog: Dialog): Array<ClickResult> {
             return emptyArray()
         }
 
