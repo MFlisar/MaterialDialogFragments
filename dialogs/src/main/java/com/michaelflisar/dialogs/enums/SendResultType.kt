@@ -18,7 +18,7 @@ enum class SendResultType {
      */
     ActivityOnly,
     /*
-     * only the target fragment, parent fragment or activity - whatever exists
+     * only the target fragment, parent fragment, fragment or activity - whatever exists
      */
-    TargetOrParentOrActivity
+    TargetOrParentOrFragmentOrActivity
 }

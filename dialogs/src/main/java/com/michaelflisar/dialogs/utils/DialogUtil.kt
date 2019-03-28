@@ -12,7 +12,7 @@ import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
  */
 
 object DialogUtil {
-    fun trySendResult(event: BaseDialogEvent, fragment: Fragment, sendResultType: SendResultType = DialogSetup.DEFAULT_SEND_RESULT_TYPE) {
+    fun trySendResult(event: BaseDialogEvent, fragment: Fragment, sendResultType: SendResultType = DialogSetup.DEFAULT_SEND_RESULT_TYPE, caller: Any? = null) {
 
         val callbacks: ArrayList<DialogFragmentCallback> = ArrayList()
 
@@ -38,15 +38,13 @@ object DialogUtil {
                 fragment.targetFragment as? DialogFragmentCallback
             }
             SendResultType.ActivityOnly -> {
-                fragment.activity  as? DialogFragmentCallback
+                fragment.activity as? DialogFragmentCallback
             }
-            SendResultType.TargetOrParentOrActivity -> {
-                if (fragment.targetFragment != null)
-                    fragment.targetFragment as? DialogFragmentCallback
-                else if (fragment.parentFragment != null)
-                    fragment.parentFragment as? DialogFragmentCallback
-                else
-                    fragment.activity as? DialogFragmentCallback
+            SendResultType.TargetOrParentOrFragmentOrActivity -> {
+                fragment.targetFragment as? DialogFragmentCallback
+                        ?: fragment.parentFragment as? DialogFragmentCallback
+                        ?: fragment as? DialogFragmentCallback
+                        ?: fragment.activity as? DialogFragmentCallback
             }
         }
 
@@ -55,7 +53,9 @@ object DialogUtil {
         }
 
         for (c in callbacks) {
-            c.onDialogResultAvailable(event)
+            if (c != caller) {
+                c.onDialogResultAvailable(event)
+            }
         }
     }
 

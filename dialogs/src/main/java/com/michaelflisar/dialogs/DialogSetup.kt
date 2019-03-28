@@ -8,7 +8,7 @@ import com.michaelflisar.dialogs.enums.SendResultType
 
 object DialogSetup {
 
-    var DEFAULT_SEND_RESULT_TYPE = SendResultType.TargetOrParentOrActivity
+    var DEFAULT_SEND_RESULT_TYPE = SendResultType.TargetOrParentOrFragmentOrActivity
 
     var resultHandler: ((event: Any) -> Unit)? = null
 
