@@ -30,101 +30,43 @@ open class DialogListFragment : BaseDialogFragment() {
             dlg.setSetupArgs(setup)
             return dlg
         }
-
-//        fun createString(id: Int, title: Any, text: Any?, posButton: Any, multiClick: Boolean, items: ArrayList<String>): DialogListFragment {
-//            val dlg = DialogListFragment()
-//            val args = Bundle().apply {
-//                putInt("id", id)
-//                putInt("type", Type.String.ordinal)
-//                putResOrString("title", title)
-//                putResOrString("label", text)
-//                putResOrString("posButton", posButton)
-//                putBoolean("multiClick", multiClick)
-//                putStringArrayList("items", items)
-//                putInt("iconSize", IconSize.Small.ordinal)
-//                putBoolean("multiSelect", false)
-//            }
-//            dlg.arguments = args
-//            return dlg
-//        }
-//
-//        fun createString(id: Int, title: Any, text: Any?, posButton: Any, multiClick: Boolean, items: ArrayList<String>, icons: ArrayList<Int>): DialogListFragment {
-//            val dlg = DialogListFragment()
-//            val args = Bundle().apply {
-//                putInt("id", id)
-//                putInt("type", Type.StringWithImage.ordinal)
-//                putResOrString("title", title)
-//                putResOrString("label", text)
-//                putResOrString("posButton", posButton)
-//                putBoolean("multiClick", multiClick)
-//                putStringArrayList("items", items)
-//                putIntegerArrayList("icons", icons)
-//                putInt("iconSize", IconSize.Small.ordinal)
-//                putBoolean("multiSelect", false)
-//            }
-//            dlg.arguments = args
-//            return dlg
-//        }
-//
-//        fun <T : Parcelable> createParcelable(id: Int, title: Any, text: Any?, posButton: Any, multiClick: Boolean, items: ArrayList<T>): DialogListFragment {
-//            val dlg = DialogListFragment()
-//            val args = Bundle().apply {
-//                putInt("id", id)
-//                putInt("type", Type.Parcelable.ordinal)
-//                putResOrString("title", title)
-//                putResOrString("label", text)
-//                putResOrString("posButton", posButton)
-//                putBoolean("multiClick", multiClick)
-//                putParcelableArrayList("items", items)
-//                putInt("iconSize", IconSize.Small.ordinal)
-//                putBoolean("multiSelect", false)
-//            }
-//            dlg.arguments = args
-//            return dlg
-//        }
     }
 
     protected lateinit var setup: DialogList
 
     private var mAdapter: TextImageRVAdapter? = null
 
-    override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
+    final override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         setup = getSetup()
 
-//        val id = XXX.getInt("id")
-//        val title = XXX.getResOrString("title")
-//        val text = XXX.getResOrString("label")
-//        val posButton = XXX.getResOrString("posButton")
-//        val multiClick = XXX.getBoolean("multiClick")
-//        val type = Type.values()[XXX.getInt("type")]
-//        val multiSelect = XXX.getBoolean("multiSelect")
-//        val checkMark = if (XXX.containsKey("checkMark")) XXX.getInt("checkMark") else null
-//        val singleSelected = if (XXX.containsKey("singleSelected")) XXX.getInt("singleSelected") else null
-//        val onlyShowIconIfSelected = if (XXX.containsKey("onlyShowIconIfSelected")) XXX.getBoolean("onlyShowIconIfSelected") else null
-//        val hideDefaultCheckMark = if (XXX.containsKey("hideDefaultCheckMark")) XXX.getBoolean("hideDefaultCheckMark") else null
-//        val initialMultiSelection = if (XXX.containsKey("initialMultiSelection")) XXX.getIntegerArrayList("initialMultiSelection") else null
-//        val noImageVisibilityGone = if (XXX.containsKey("noImageVisibilityGone")) XXX.getBoolean("noImageVisibilityGone") else null
+        val items = createItems()
+        val dialog = internalOnCreateDialog(savedInstanceState, items)
+        onUpdateDialog(dialog)
+        return dialog
+    }
 
-        // prepare item array
-        val itemArray: List<Any> = setup.items.map {
+    protected open fun onUpdateDialog(dialog: Dialog) {
+        // empty...
+    }
+
+    protected fun createItems(): List<Any> {
+        return setup.items.map {
             when (it) {
                 is DialogList.Item.Simple -> {
                     it.text ?: ""
                 }
                 is DialogList.Item.SimpleWithIcon -> {
-                    TextImageItem(it.icon ?: 0, it.text ?: "")
+                    TextImageItem(it.icon, it.text ?: "")
                 }
                 is DialogList.Item.Custom -> {
                     it.parcelable
                 }
             }
         }
-
-        return internalOnCreateDialog(savedInstanceState, itemArray)
     }
 
-    protected fun internalOnCreateDialog(savedInstanceState: Bundle?, itemArray: List<Any>): Dialog {
+    private fun internalOnCreateDialog(savedInstanceState: Bundle?, itemArray: List<Any>): Dialog {
         var dialog = MaterialDialog(activity!!)
                 .cancelable(true)
                 .noAutoDismiss()
@@ -163,7 +105,7 @@ open class DialogListFragment : BaseDialogFragment() {
     }
 
     @SuppressLint("CheckResult")
-    protected open fun onSetAdapterOrItems(savedInstanceState: Bundle?, itemArray: List<Any>, dialog: MaterialDialog): MaterialDialog {
+    private fun onSetAdapterOrItems(savedInstanceState: Bundle?, itemArray: List<Any>, dialog: MaterialDialog): MaterialDialog {
 
         if (itemArray.size == 0) {
             // create an empty dialog, type of list does not matter
