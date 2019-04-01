@@ -50,7 +50,7 @@ open class DialogListFragment : BaseDialogFragment() {
         // empty...
     }
 
-    protected fun createItems(): List<Any> {
+    protected open fun createItems(): List<Any> {
         return setup.items.map {
             when (it) {
                 is DialogList.Item.Simple -> {
@@ -105,7 +105,7 @@ open class DialogListFragment : BaseDialogFragment() {
     }
 
     @SuppressLint("CheckResult")
-    private fun onSetAdapterOrItems(savedInstanceState: Bundle?, itemArray: List<Any>, dialog: MaterialDialog): MaterialDialog {
+    protected open fun onSetAdapterOrItems(savedInstanceState: Bundle?, itemArray: List<Any>, dialog: MaterialDialog): MaterialDialog {
 
         if (itemArray.size == 0) {
             // create an empty dialog, type of list does not matter
