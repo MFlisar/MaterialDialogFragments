@@ -75,7 +75,9 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
                 .cancelable(true)
                 .noAutoDismiss()
 
-        dialog.title(setup.title)
+        if (!setup.internalSetup.withToolbar) {
+            dialog.title(setup.title)
+        }
         updateBuilder(dialog)
         val view = dialog.getCustomView()
 
