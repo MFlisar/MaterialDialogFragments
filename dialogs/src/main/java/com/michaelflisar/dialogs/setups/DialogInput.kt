@@ -26,7 +26,6 @@ class DialogInput(
         // special setup
         val neutralButtonMode: NeutralButtonMode = NeutralButtonMode.SendEvent,
         val textToInsertOnNeutralButtonClick: Text? = null,
-        val allowEmptyText: Boolean = false,
         val minLines: Int = -1,
         val textSize: Float? = null,
         val inputTextSize: Float? = null,
@@ -37,7 +36,7 @@ class DialogInput(
     override fun create(): DialogFragment = DialogInputFragment.create(this)
 
     @Parcelize
-    class InputField(val label: Text?, val initialText: Text?, val hint: Text?) : Parcelable
+    class InputField(val label: Text?, val initialText: Text?, val hint: Text?, val allowEmptyText: Boolean = false) : Parcelable
 
     enum class NeutralButtonMode {
         SendEvent,

@@ -65,13 +65,13 @@ class DialogInputFragment : BaseDialogFragment() {
             dialog
                     .input(
                             waitForPositiveButton = false,
-                            allowEmpty = setup.allowEmptyText,
+                            allowEmpty = inputFields[0].allowEmptyText,
                             hint = inputFields[0].hint?.get(activity!!) ?: "",
                             prefill = inputTexts[0],
                             inputType = setup.inputType
                     ) { materialDialog: MaterialDialog, charSequence: CharSequence ->
                         inputTexts[0] = charSequence.toString()
-                        val valid = setup.allowEmptyText || inputTexts[0].isNotEmpty()
+                        val valid = inputFields[0].allowEmptyText || inputTexts[0].isNotEmpty()
                         materialDialog.setActionButtonEnabled(WhichButton.POSITIVE, valid)
                     }
             dialog.positiveButton(setup.posButton) {
@@ -146,8 +146,8 @@ class DialogInputFragment : BaseDialogFragment() {
             textViews.add(tvText1)
             textViews.add(tvText2)
 
-            if (!setup.allowEmptyText) {
-                fun shouldPositiveButtonBeEnabled() = inputTexts[0].length > 0 && inputTexts[1].length > 0
+            if (!inputFields[0].allowEmptyText || !inputFields[1].allowEmptyText) {
+                fun shouldPositiveButtonBeEnabled() = (inputFields[0].allowEmptyText || inputTexts[0].length > 0) && (inputFields[1].allowEmptyText || inputTexts[1].length > 0)
                 dialog.getActionButton(WhichButton.POSITIVE).isEnabled = shouldPositiveButtonBeEnabled()
                 for (i in 0 until editTexts.size) {
                     editTexts[i].addTextChangedListener(object : TextWatcher {

@@ -122,8 +122,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     DialogInput(
                             20,
                             "Insert your name".asText(),
-                            DialogInput.InputField("Please insert your full name".asText(), null, "E.g. Max Musterman".asText()),
-                            allowEmptyText = true
+                            DialogInput.InputField("Please insert your full name".asText(), null, "E.g. Max Musterman".asText(), true)
                     )
                             .create()
                             .show(this)
