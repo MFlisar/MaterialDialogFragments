@@ -128,18 +128,20 @@ object DebugDialog {
             }
         }
 
-        class Checkbox(name: String, override val prefName: String, override val defaultValue: Boolean) : Entry<Boolean>(name), EntryWithPref<Boolean> {
+        class Checkbox(name: String, override val prefName: String, override val defaultValue: Boolean, val sideEffect: ((value: Boolean) -> Unit)? = null) : Entry<Boolean>(name), EntryWithPref<Boolean> {
             override fun reset() {
                 setBool(this, defaultValue)
             }
 
             override fun onClick(dialog: Dialog): Array<ClickResult> {
-                setBool(this, !getBool(this))
+                val newValue = !getBool(this)
+                setBool(this, newValue)
+                sideEffect?.invoke(newValue)
                 return arrayOf(ClickResult.Notify)
             }
         }
 
-        class List(name: String, override val prefName: String, override val defaultValue: Int, override var subEntries: ArrayList<ListEntry> = arrayListOf()) : Entry<Int>(name), EntryWithPref<Int>, SubEntryHolder<ListEntry, List> {
+        class List(name: String, override val prefName: String, override val defaultValue: Int, override var subEntries: ArrayList<ListEntry> = arrayListOf(), val sideEffect: ((value: Int) -> Unit)? = null) : Entry<Int>(name), EntryWithPref<Int>, SubEntryHolder<ListEntry, List> {
             override fun reset() {
                 setInt(this, defaultValue)
             }
@@ -154,6 +156,7 @@ object DebugDialog {
         class ListEntry(name: String, val parent: List, val value: Int) : Entry<Int>(name) {
             override fun onClick(dialog: Dialog): Array<ClickResult> {
                 setInt(parent, value)
+                parent.sideEffect?.invoke(value)
                 return arrayOf(ClickResult.GoUp)
             }
         }
