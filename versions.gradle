@@ -19,7 +19,7 @@ ext {
             gradlePlugin   : "3.3.2",
             mavenVersion   : "2.1",
 
-            materialDialogs: "2.6.0",
+            materialDialogs: "2.7.0",
             materialize    : "1.2.1",
             fastAdapter    : "3.3.1",
             colorPicker    : "2.4.1"
