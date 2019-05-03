@@ -21,14 +21,12 @@
         android:id="@+id/svSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentInsetLeft="0dp"
-        android:contentInsetStart="0dp"
         android:iconifiedByDefault="false"
         android:paddingBottom="4dp"
+        android:paddingLeft="-16dp"
+        android:paddingStart="-16dp"
         android:queryHint="@string/dialogs_search"
         android:visibility="gone"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
         app:iconifiedByDefault="false"
         app:queryHint="@string/dialogs_search"/>
 
