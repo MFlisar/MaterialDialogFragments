@@ -32,14 +32,18 @@
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/svSearch"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:contentInsetLeft="0dp"
+            android:contentInsetStart="0dp"
             android:iconifiedByDefault="false"
-            android:queryHint="@string/dialogs_search"
-            app:iconifiedByDefault="false"
             android:paddingBottom="4dp"
-            app:queryHint="@string/dialogs_search" />
+            android:queryHint="@string/dialogs_search"
+            android:visibility="gone"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:iconifiedByDefault="false"
+            app:queryHint="@string/dialogs_search"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
