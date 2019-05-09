@@ -9,7 +9,7 @@ import com.michaelflisar.dialogs.interfaces.IProgressDialogFragment
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class DialogProgress private constructor(
+class DialogProgress internal constructor(
         // base setup
         override val id: Int,
         override val title: Text,
