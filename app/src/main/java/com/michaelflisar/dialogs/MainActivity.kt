@@ -112,6 +112,16 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     )
                             .create()
                             .show(this)
+                },
+                DemoItem("HTLM info demo", "Show a simple info dialog with HTML text") {
+                    DialogInfo(
+                            12,
+                            "Info Title".asText(),
+                            "<b>Header</b></br>Some text with a bold html text title inside text and some <font color=\"#FF0000\">red colored text</font> inside it.</br></br><b>Header2</b></br>This version of <font color=\"#00FF00\">InfoDialog</font> supports <u>all</u> html tags that are supported by a WebView &#128526;.".asText(),
+                            textIsHtml = true
+                    )
+                            .create()
+                            .show(this)
                 })
     }
 

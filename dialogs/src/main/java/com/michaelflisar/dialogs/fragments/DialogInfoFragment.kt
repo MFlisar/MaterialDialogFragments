@@ -111,7 +111,7 @@ open class DialogInfoFragment : BaseDialogFragment() {
             }
         }
 
-        if (setup.warning != null) {
+        if (!setup.textIsHtml && setup.warning != null) {
             val content = dialog.textView()!!.getText().toString()
             val contentExtra: String? = setup.warning!!.get(activity!!)
             val spannable = SpannableString(content + setup.warningSeparator + contentExtra)
@@ -134,20 +134,20 @@ open class DialogInfoFragment : BaseDialogFragment() {
                 color = " color: white;"
             }
             val wv: WebView = dialog.getCustomView().findViewById(R.id.wv)
-            var t = ("<html><head>" +
-                    "<style type=\"label/css\">"
-                    + "body { font-size: 12pt;" + color + " margin: 0px; background-color: transparent; }"
-                    + "h1 { margin-left: 0px; font-size: 14pt; label-decoration: underline; font-weight: bold; }"
-                    + "h2 { margin-left: 0px; font-size: 13pt; font-weight: bold; }"
-                    + "p { font-size: 12pt; }"
-                    + "h3 { font-size: 11pt; font-weight: normal;}"
-                    + "h4 { font-size: 10pt; font-weight: normal;}"
-                    + "code { font-size: 10pt; }"
-                    + "li { margin-left: 0px; font-size: 12pt;}"
-                    + "ul { padding-left: 30px;}"
-                    + "ol { padding-left: 30px;}"
-                    + "</style>"
-                    + "</head><body>")
+            var t = "<html><head>" +
+                    "<style type=\"label/css\">" +
+                    "body { font-size: 12pt;" + color + " margin: 0px; background-color: transparent; }" +
+                    "h1 { margin-left: 0px; font-size: 14pt; label-decoration: underline; font-weight: bold; }" +
+                    "h2 { margin-left: 0px; font-size: 13pt; font-weight: bold; }" +
+                    "h3 { font-size: 11pt; font-weight: normal;}" +
+                    "h4 { font-size: 10pt; font-weight: normal;}" +
+                    "p { font-size: 12pt; }" +
+                    "code { font-size: 10pt; }" +
+                    "li { margin-left: 0px; font-size: 12pt;}" +
+                    "ul { padding-left: 30px;}" +
+                    "ol { padding-left: 30px;}" +
+                    "</style>" +
+                    "</head><body>"
 
             t += setup.text.get(activity!!)
             setup.warning?.let {
@@ -158,7 +158,8 @@ open class DialogInfoFragment : BaseDialogFragment() {
 
             t += "</body></html>"
 
-            wv.loadData(t, "label/html; charset=UTF-8", null)
+            wv.loadData(t, "text/html; charset=UTF-8", "UTF-8");
+//            wv.loadData(t, "label/html; charset=UTF-8", "UTF-8")
             wv.setBackgroundColor(Color.TRANSPARENT)
         }
 

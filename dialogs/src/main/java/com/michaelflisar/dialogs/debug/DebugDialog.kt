@@ -4,12 +4,12 @@ import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.View
-import com.michaelflisar.dialogs.core.BuildConfig
 import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.list.customListAdapter
 import com.afollestad.materialdialogs.list.getListAdapter
 import com.michaelflisar.dialogs.DialogSetup
+import com.michaelflisar.dialogs.core.BuildConfig
 import com.michaelflisar.dialogs.textView
 
 object DebugDialog {
@@ -26,7 +26,7 @@ object DebugDialog {
                 ?: DEFAULT_PREF_NAME, Context.MODE_PRIVATE))
     }
 
-    fun findEntry(prefName: String, items: List<DebugDialog.Entry<*>>): DebugDialog.Entry<*>? {
+    fun findEntry(prefName: String, items: List<Entry<*>>): Entry<*>? {
 
         for (e in items) {
             val isEntry = (e is EntryWithPref<*>) && e.prefName.equals(prefName)
@@ -44,7 +44,7 @@ object DebugDialog {
         return null
     }
 
-    fun reset(items: List<DebugDialog.Entry<*>>, dialog: Dialog?) {
+    fun reset(items: List<Entry<*>>, dialog: Dialog?) {
 
         for (e in items) {
             if (e is EntryWithPref<*>) {
@@ -59,6 +59,31 @@ object DebugDialog {
             val adapter = it.getListAdapter() as DebugAdapter
             adapter.notifyDataSetChanged()
         }
+    }
+
+    fun deleteAll() = cache.deleteAll()
+
+    fun delete(items: List<Entry<*>>){
+        val keys = getAllKeys(items)
+        cache.delete(keys)
+    }
+
+    fun deleteDeprecated(itemsToKeep: List<DebugDialog.Entry<*>>) {
+        val keys = getAllKeys(itemsToKeep)
+        cache.deleteDeprecated(keys)
+    }
+
+    private fun getAllKeys(items: List<Entry<*>>): ArrayList<String> {
+        val keys = ArrayList<String>()
+        for (e in items) {
+            if (e is EntryWithPref<*>) {
+                keys.add(e.prefName)
+            }
+            if (e is SubEntryHolder<*, *>) {
+                reset(e.subEntries, null)
+            }
+        }
+        return keys
     }
 
     // ------------
@@ -165,7 +190,7 @@ object DebugDialog {
             return emptyArray()
         }
 
-        fun withVisibleInRelease(visible: Boolean) : Entry<T> {
+        fun withVisibleInRelease(visible: Boolean): Entry<T> {
             this.visibleInRelease = visible
             return this
         }
@@ -218,6 +243,35 @@ object DebugDialog {
         internal fun putInt(key: String, value: Int) {
             map.put(key, value)
             sharedPreferences.edit().putInt(key, value).apply()
+        }
+
+        internal fun delete(keys: List<String>) {
+            for (k in keys) {
+                map.remove(k)
+            }
+            val editor = sharedPreferences.edit()
+            for (k in keys) {
+                editor.remove(k)
+            }
+            editor.apply()
+        }
+
+        internal fun deleteDeprecated(keysToKeep: List<String>) {
+            val keysToDelete = ArrayList<String>()
+            for (k in map.keys) {
+                if (!keysToKeep.contains(k))
+                    keysToDelete.add(k)
+            }
+            val editor = sharedPreferences.edit()
+            for (k in keysToDelete) {
+                editor.remove(k)
+            }
+            editor.apply()
+        }
+
+        internal fun deleteAll() {
+            map.clear()
+            sharedPreferences.edit().clear().apply()
         }
     }
 }
