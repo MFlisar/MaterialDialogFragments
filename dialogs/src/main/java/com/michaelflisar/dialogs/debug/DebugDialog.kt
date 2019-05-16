@@ -80,7 +80,7 @@ object DebugDialog {
                 keys.add(e.prefName)
             }
             if (e is SubEntryHolder<*, *>) {
-                reset(e.subEntries, null)
+                keys.addAll(getAllKeys(e.subEntries))
             }
         }
         return keys
@@ -258,7 +258,8 @@ object DebugDialog {
 
         internal fun deleteDeprecated(keysToKeep: List<String>) {
             val keysToDelete = ArrayList<String>()
-            for (k in map.keys) {
+            val allKeys = sharedPreferences.all.keys
+            for (k in allKeys) {
                 if (!keysToKeep.contains(k))
                     keysToDelete.add(k)
             }
