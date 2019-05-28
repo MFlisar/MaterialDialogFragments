@@ -15,7 +15,7 @@ class DialogFastAdapterEvent(setup: BaseDialogSetup, private val selectedItem: I
 //    }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : IItem<*, *>> getItem(): T? {
+    fun <T> getItem(): T? {
         return selectedItem as T?
     }
 }
