@@ -21,9 +21,11 @@ import com.michaelflisar.dialogs.fastadapter.R
 import com.michaelflisar.dialogs.positiveButton
 import com.michaelflisar.dialogs.setups.DialogFastAdapter
 import com.michaelflisar.dialogs.title
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.IItemAdapter
-import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
+import com.mikepenz.fastadapter.adapters.ItemAdapter
 import java.util.*
 
 abstract class DialogFastAdapterFragment : BaseDialogFragment() {
@@ -43,14 +45,14 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
     protected var pbLoading: ProgressBar? = null
     protected var tvLoading: TextView? = null
     protected var svSearch: SearchView? = null
-    protected var data: ArrayList<IItem<*, *>>? = null
+    protected var data: ArrayList<IItem<*>>? = null
         private set
-    protected var mAdapter: FastItemAdapter<IItem<*, *>>? = null
+    protected var itemAdapter: ItemAdapter<IItem<*>>? = null
     private var lastFilter: String? = null
 
     @Suppress("UNCHECKED_CAST")
-    protected val adapter: FastItemAdapter<IItem<*, *>>
-        get() = rvData!!.adapter as FastItemAdapter<IItem<*, *>>
+    protected val adapter: FastAdapter<IItem<*>>
+        get() = rvData!!.adapter as FastAdapter<IItem<*>>
 
     protected lateinit var setup: DialogFastAdapter
 
@@ -96,9 +98,11 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         }
 
         rvData!!.layoutManager = getLayoutManager()
-        mAdapter = FastItemAdapter()
+        itemAdapter = ItemAdapter<IItem<*>>()
+        val fastAdapter = FastAdapter.with(itemAdapter!!)
+
         if (setup.internalSetup.clickable) {
-            mAdapter!!.withOnClickListener { _, _, item, position ->
+            fastAdapter.onClickListener = { _, _, item, position ->
                 val originalPosition = if (setup.internalSetup.filterable) data!!.indexOf(item) else position
                 if (isClickable(item, originalPosition)) {
                     onHandleClick(item, originalPosition)
@@ -109,33 +113,35 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
                 true
             }
         }
-        onUpdateAdapter(mAdapter!!)
-        rvData!!.adapter = mAdapter
+        onUpdateAdapter(itemAdapter!!)
+        rvData!!.adapter = fastAdapter
         data = createData()
-        mAdapter!!.add(data)
+        itemAdapter!!.add(data!!)
 
         updateInfo(setup.internalSetup.info, view)
-        onViewCreated(view, mAdapter!!)
+        onViewCreated(view, itemAdapter!!)
 
         if (setup.internalSetup.filterable) {
             try {
                 @Suppress("UNCHECKED_CAST")
-                mAdapter!!.itemFilter.withFilterPredicate(this as IItemAdapter.Predicate<IItem<*, *>>)
+                itemAdapter!!.itemFilter.filterPredicate = { item: IItem<*>, constraint: CharSequence? ->
+                    (this as IPredicate<IItem<*>>).filter(item, constraint)
+                }
             } catch (e: ClassCastException) {
-                throw RuntimeException("Filterable adapter must implement IItemAdapter.Predicate<IItem>!")
+                throw RuntimeException("Filterable adapter must implement IPredicate<IItem<*>>!")
             }
 
             svSearch!!.visibility = View.VISIBLE
             svSearch!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     lastFilter = query ?: ""
-                    mAdapter!!.filter(lastFilter)
+                    itemAdapter!!.filter(lastFilter)
                     return true
                 }
 
                 override fun onQueryTextChange(query: String?): Boolean {
                     lastFilter = query ?: ""
-                    mAdapter!!.filter(lastFilter)
+                    itemAdapter!!.filter(lastFilter)
                     return true
                 }
             })
@@ -161,11 +167,11 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         }
     }
 
-    protected open fun onHandleClick(item: IItem<*, *>, position: Int) {
+    protected open fun onHandleClick(item: IItem<*>, position: Int) {
         sendEvent(DialogFastAdapterEvent(setup, item, position))
     }
 
-    protected open fun onUpdateAdapter(adapter: FastItemAdapter<IItem<*, *>>) {
+    protected open fun onUpdateAdapter(adapter: ItemAdapter<IItem<*>>) {
 
     }
 
@@ -173,7 +179,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
 
     }
 
-    protected open fun onViewCreated(view: View, adapter: FastItemAdapter<IItem<*, *>>) {
+    protected open fun onViewCreated(view: View, adapter: ItemAdapter<IItem<*>>) {
 
     }
 
@@ -183,18 +189,16 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
 
     protected open fun getLayoutManager(): RecyclerView.LayoutManager = LinearLayoutManager(activity)
 
-    protected open fun isClickable(item: IItem<*, *>, pos: Int): Boolean {
+    protected open fun isClickable(item: IItem<*>, pos: Int): Boolean {
         return true
     }
 
-    protected open fun updateData(items: ArrayList<IItem<*, *>>) {
-        @Suppress("UNCHECKED_CAST")
-        val adapter = rvData!!.adapter as FastItemAdapter<IItem<*, *>>?
+    protected open fun updateData(items: ArrayList<IItem<*>>) {
         data = items
-        adapter!!.setNewList(data)
+        itemAdapter!!.setNewList(data!!)
 
         if (lastFilter != null && lastFilter!!.length > 0) {
-            adapter.filter(lastFilter)
+            itemAdapter!!.itemFilter.filter(lastFilter)
         }
     }
 
@@ -206,15 +210,15 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         super.onDestroyView()
     }
 
-    protected fun addItem(item: IItem<*, *>) {
+    protected fun addItem(item: IItem<*>) {
         data!!.add(item)
-        adapter.add(item)
+        itemAdapter!!.add(item)
     }
 
-    protected fun removeItem(item: IItem<*, *>): Int {
+    protected fun removeItem(item: IItem<*>): Int {
         val index = data!!.indexOf(item)
         data!!.removeAt(index)
-        adapter.remove(index)
+        itemAdapter!!.remove(index)
         return index
     }
 
@@ -228,5 +232,9 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         }
     }
 
-    protected abstract fun createData(): ArrayList<IItem<*, *>>
+    protected abstract fun createData(): ArrayList<IItem<*>>
+
+    interface IPredicate<Item: IItem<*>> {
+        fun filter(item: Item, constraint: CharSequence?): Boolean
+    }
 }

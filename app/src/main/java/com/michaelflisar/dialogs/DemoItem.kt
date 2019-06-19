@@ -12,10 +12,10 @@ class DemoItem(
         val title: String,
         val desc: String,
         val function: ((DemoItem) -> Unit)
-) : AbstractItem<DemoItem, DemoItem.ViewHolder>() {
+) : AbstractItem<DemoItem.ViewHolder>() {
 
-    override fun getType() = R.id.fast_adapter_demo_item
-    override fun getLayoutRes() = R.layout.demo_item
+    override val type = R.id.fast_adapter_demo_item
+    override val layoutRes = R.layout.demo_item
 
     override fun getViewHolder(v: View): ViewHolder {
         return ViewHolder(v)
@@ -29,7 +29,7 @@ class DemoItem(
             binding = DataBindingUtil.bind(view)!!
         }
 
-        override fun bindView(item: DemoItem, payloads: List<Any>) {
+        override fun bindView(item: DemoItem, payloads: MutableList<Any>) {
             binding.title.text = item.title
             binding.desc.text = item.desc
         }

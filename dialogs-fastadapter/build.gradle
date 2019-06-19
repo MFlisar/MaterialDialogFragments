@@ -56,5 +56,4 @@ dependencies {
     // ------------------------
 
     api "com.mikepenz:fastadapter:${versions.fastAdapter}"
-    implementation "com.mikepenz:fastadapter-commons:${versions.fastAdapter}"
 }

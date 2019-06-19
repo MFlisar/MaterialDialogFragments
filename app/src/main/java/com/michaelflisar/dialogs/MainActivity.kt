@@ -15,6 +15,7 @@ import com.michaelflisar.dialogs.classes.asText
 import com.michaelflisar.dialogs.debug.DebugDialog
 import com.michaelflisar.dialogs.enums.IconSize
 import com.michaelflisar.dialogs.events.*
+import com.michaelflisar.dialogs.fastAdapter.AllAppsFastAdapterDialog
 import com.michaelflisar.dialogs.fragments.DialogColorFragment
 import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
 import com.michaelflisar.dialogs.setups.*
@@ -22,6 +23,7 @@ import com.michaelflisar.dialogs.utils.ColorUtil
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
+import com.mikepenz.fastadapter.select.getSelectExtension
 
 
 class MainActivity : AppCompatActivity(), DialogFragmentCallback {
@@ -73,11 +75,14 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
     // helper functions for content setup
     // -------------------
 
-    private fun initRecyclerView(): ItemAdapter<IItem<*, *>> {
-        val itemAdapter = ItemAdapter<IItem<*, *>>()
-        val adapter = FastAdapter.with<IItem<*, *>, ItemAdapter<IItem<*, *>>>(itemAdapter)
-                .withSelectable(true)
-                .withOnClickListener { _, _, item, _ ->
+    private fun initRecyclerView(): ItemAdapter<IItem<*>> {
+        val itemAdapter = ItemAdapter<IItem<*>>()
+        val adapter = FastAdapter.with(itemAdapter)
+
+        val selectExtension = adapter.getSelectExtension()
+        selectExtension.isSelectable = true
+
+        adapter.onClickListener = { _, _, item, _ ->
                     if (item is DemoItem) {
                         item.function(item)
                     }
@@ -88,7 +93,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         return itemAdapter
     }
 
-    private fun addInfoDialogItems(adapter: ItemAdapter<IItem<*, *>>) {
+    private fun addInfoDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
                 HeaderItem("INFO demos"),
                 DemoItem("Simple info demo", "Show a simple info dialog") {
@@ -125,7 +130,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                 })
     }
 
-    private fun addInputDialogItems(adapter: ItemAdapter<IItem<*, *>>) {
+    private fun addInputDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
                 HeaderItem("INPUT demos"),
                 DemoItem("Input demo 1", "Show a dialog with an input field and a hint and allow an empty input") {
@@ -162,7 +167,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         )
     }
 
-    private fun addListDialogItems(adapter: ItemAdapter<IItem<*, *>>) {
+    private fun addListDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
                 HeaderItem("LIST demos"),
                 DemoItem("List demo 1", "Show a dialog with a list of items - single select") {
@@ -213,7 +218,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         )
     }
 
-    private fun addNumberDialogItems(adapter: ItemAdapter<IItem<*, *>>) {
+    private fun addNumberDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
                 HeaderItem("NUMBER demos"),
                 DemoItem("Number demo", "Show a dialog with an text input field and limit input number range") {
@@ -276,7 +281,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         )
     }
 
-    private fun addProgressDialogItems(adapter: ItemAdapter<IItem<*, *>>) {
+    private fun addProgressDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
                 HeaderItem("PROGRESS demos"),
                 DemoItem("Progress demo", "Show a progress dialog for 5s") {
@@ -308,16 +313,32 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         )
     }
 
-    private fun addFastAdapterDialogItems(adapter: ItemAdapter<IItem<*, *>>) {
-
+    private fun addFastAdapterDialogItems(adapter: ItemAdapter<IItem<*>>) {
+        adapter.add(
+                HeaderItem("Fast adapter demos"),
+                DemoItem("Installed apps", "Show a list of all installed apps in a fast adapter list dialog + enable filtering via custom predicate") {
+                    val dialog = AllAppsFastAdapterDialog.create(
+                            AllAppsFastAdapterDialog.Setup(
+                                    DialogFastAdapter.InternalSetup(
+                                            60,
+                                            "Select app".asText(),
+                                            clickable = true,
+                                            dismissOnClick = true,
+                                            filterable = true
+                                    )
+                            )
+                    )
+                    dialog.show(this)
+                }
+        )
     }
 
-    private fun addColorDialogItems(adapter: ItemAdapter<IItem<*, *>>) {
+    private fun addColorDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
                 HeaderItem("Color demos"),
                 DemoItem("Color demo", "Show a color dialog") {
                     DialogColor(
-                            50,
+                            70,
                             "Select color".asText(),
                             color = Color.BLUE
                     )
@@ -337,7 +358,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         )
     }
 
-    private fun addDebugDialogItems(adapter: ItemAdapter<IItem<*, *>>) {
+    private fun addDebugDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
                 HeaderItem("DEBUGGING SETTINGS demos"),
                 DemoItem("Debug settings demo", "Show a custom debug settings dialog") {

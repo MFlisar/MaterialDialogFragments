@@ -36,7 +36,7 @@ class DialogInput(
     override fun create(): DialogFragment = DialogInputFragment.create(this)
 
     @Parcelize
-    class InputField(val label: Text?, val initialText: Text?, val hint: Text?, val allowEmptyText: Boolean = false) : Parcelable
+    class InputField(val label: Text? = null, val initialText: Text? = null, val hint: Text? = null, val allowEmptyText: Boolean = false) : Parcelable
 
     enum class NeutralButtonMode {
         SendEvent,
