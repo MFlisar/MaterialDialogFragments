@@ -72,6 +72,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         val dialog = MaterialDialog(activity!!)
                 .customView(if (setup.internalSetup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview, scrollable = false)
                 .positiveButton(setup.posButton) {
+                    onHandleClick(null, -1)
                     dismiss()
                 }
                 .cancelable(setup.cancelable)
@@ -168,7 +169,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         }
     }
 
-    protected open fun onHandleClick(item: IItem<*>, position: Int) {
+    protected open fun onHandleClick(item: IItem<*>?, position: Int) {
         sendEvent(DialogFastAdapterEvent(setup, item, position))
     }
 
