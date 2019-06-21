@@ -74,8 +74,9 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
                 .positiveButton(setup.posButton) {
                     dismiss()
                 }
-                .cancelable(true)
+                .cancelable(setup.cancelable)
                 .noAutoDismiss()
+        this.isCancelable = setup.cancelable
 
         if (!setup.internalSetup.withToolbar) {
             dialog.title(setup.title)
