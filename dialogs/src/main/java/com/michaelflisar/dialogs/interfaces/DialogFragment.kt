@@ -40,7 +40,7 @@ open class DialogFragment : ExtendedFragment() {
         handler.showAllowingStateLoss(activity, this)
     }
 
-    override fun onCancel(dialog: DialogInterface?) {
+    override fun onCancel(dialog: DialogInterface) {
         if (internalSetup.sendCancelEvent) {
             sendEvent(DialogCancelledEvent(internalSetup))
         }
