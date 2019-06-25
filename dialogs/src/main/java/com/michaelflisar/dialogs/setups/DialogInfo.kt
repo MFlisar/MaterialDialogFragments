@@ -33,6 +33,7 @@ class DialogInfo(
         override val neutrButton: Text?  = null,
         override val cancelable: Boolean = true,
         override val extra: Bundle? = null,
+        override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
         val darkTheme: Boolean? = null,
 
         // special setup

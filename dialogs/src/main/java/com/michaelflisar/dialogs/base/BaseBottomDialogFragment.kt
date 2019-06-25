@@ -49,22 +49,4 @@ abstract class BaseBottomDialogFragment : DialogFragment(), BaseDialogFragmentHa
     // -----------------------------
 
     abstract override fun onHandleCreateBottomDialog(savedInstanceState: Bundle?): View
-
-    // -----------------------------
-    // Result
-    // -----------------------------
-
-    protected fun <X : BaseDialogEvent> sendEvent(event: X) {
-        // send result to any custom handler
-        DialogSetup.sendResult(event)
-        // send result the default way
-        DialogUtil.trySendResult(event, this, handler.customSendResultType
-                ?: DialogSetup.DEFAULT_SEND_RESULT_TYPE)
-
-        onEventSend(event)
-    }
-
-    protected open fun <X : BaseDialogEvent> onEventSend(event: X) {
-
-    }
 }

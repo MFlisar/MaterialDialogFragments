@@ -34,6 +34,11 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        // should be done in an application once
+        // optionally we can enable cancel events, but then we must handle them in onDialogResultAvailable as well
+        // this defines the default value => EVERY SETUP allows to overwrite this default value for a single dialog!
+        DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT = true
+
         val itemAdapter = initRecyclerView()
         addInfoDialogItems(itemAdapter)
         addInputDialogItems(itemAdapter)
@@ -49,6 +54,14 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
      * optionally handle the results of the dialog - use the event.id to find out where the event comes from
      */
     override fun onDialogResultAvailable(event: BaseDialogEvent) {
+
+        // we have enabled this manually in this demo, by default cancel events are not send!
+        // useful if you want to close the parent activity if a special dialog is cancelled or do something else based on this event
+        if (event is DialogCancelledEvent) {
+            Toast.makeText(this, "Dialog (ID ${event.id}) cancelled via touch outside or back button press!", Toast.LENGTH_LONG).show()
+            return
+        }
+
         val data = when (event) {
             is DialogInfoEvent -> "Info dialog closed\nButton: ${event.buttonIndex}"
             is DialogInputEvent -> {
@@ -83,11 +96,11 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         selectExtension.isSelectable = true
 
         adapter.onClickListener = { _, _, item, _ ->
-                    if (item is DemoItem) {
-                        item.function(item)
-                    }
-                    true
-                }
+            if (item is DemoItem) {
+                item.function(item)
+            }
+            true
+        }
         binding.rvDemoItems.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         binding.rvDemoItems.adapter = adapter
         return itemAdapter

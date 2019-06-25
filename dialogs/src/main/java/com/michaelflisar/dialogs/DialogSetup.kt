@@ -14,6 +14,8 @@ object DialogSetup {
 
     var useDarkTheme: (() -> Boolean) = { false }
 
+    var SEND_CANCEL_EVENT_BY_DEFAULT: Boolean = false
+
     fun sendResult(result: Any) {
         resultHandler?.invoke(result)
     }

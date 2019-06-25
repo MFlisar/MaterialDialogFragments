@@ -3,6 +3,7 @@ package com.michaelflisar.dialogs.setups
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.InputType
+import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.fragments.DialogInputFragment
@@ -21,6 +22,7 @@ class DialogInput(
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = true,
         override val extra: Bundle? = null,
+        override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
         val inputType: Int = InputType.TYPE_CLASS_TEXT,
 
         // special setup

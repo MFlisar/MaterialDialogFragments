@@ -3,6 +3,7 @@ package com.michaelflisar.dialogs.setups
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
+import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Text
 import kotlinx.android.parcel.Parcelize
@@ -18,6 +19,7 @@ abstract class DialogFastAdapter(
     override val neutrButton: Text? = internalSetup.neutrButton
     override val cancelable: Boolean = internalSetup.cancelable
     override val extra: Bundle? = internalSetup.extra
+    override val sendCancelEvent: Boolean = internalSetup.sendCancelEvent
 
     @Parcelize
     class InternalSetup(
@@ -29,6 +31,7 @@ abstract class DialogFastAdapter(
             val neutrButton: Text? = null,
             val cancelable: Boolean = true,
             val extra: Bundle? = null,
+            val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
 
             // special setup
             val clickable: Boolean = false,

@@ -12,6 +12,7 @@ interface BaseDialogSetup : Parcelable {
     val neutrButton: Text?
     val cancelable: Boolean
     val extra: Bundle?
+    val sendCancelEvent: Boolean
 
     fun create(): DialogFragment
 }

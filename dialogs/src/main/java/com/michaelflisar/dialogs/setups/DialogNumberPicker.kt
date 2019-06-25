@@ -2,6 +2,7 @@ package com.michaelflisar.dialogs.setups
 
 import android.os.Bundle
 import android.os.Parcelable
+import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.fragments.DialogNumberPickerFragment
@@ -20,6 +21,7 @@ class DialogNumberPicker(
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = true,
         override val extra: Bundle? = null,
+        override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
 
         // special setup
         val min: Int? = null,
