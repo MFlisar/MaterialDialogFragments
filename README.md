@@ -27,4 +27,4 @@ dependencies {
 
 - [x] Dialogs
 - [x] Color Dialog
-- [ ] FastAdapter Dialog DEMO
+- [x] FastAdapter Dialog
