@@ -3,6 +3,7 @@ package com.michaelflisar.dialogs.fragments
 import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.michaelflisar.dialogs.setups.DialogProgress
 import com.michaelflisar.dialogs.base.BaseDialogFragment
@@ -12,10 +13,11 @@ import com.michaelflisar.dialogs.events.DialogProgressEvent
 import com.michaelflisar.dialogs.helper.EventQueue
 import com.michaelflisar.dialogs.interfaces.IProgressDialogFragment
 import com.michaelflisar.dialogs.negativeButton
+import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.textView
 import com.michaelflisar.dialogs.title
 
-class DialogProgressFragment : BaseDialogFragment(), IProgressDialogFragment {
+class DialogProgressFragment : BaseDialogFragment<DialogProgress>(), IProgressDialogFragment {
 
     companion object {
         fun create(setup: DialogProgress): DialogProgressFragment {
@@ -40,9 +42,9 @@ class DialogProgressFragment : BaseDialogFragment(), IProgressDialogFragment {
                         }
                         is Event.Close -> {
                             if (event.forcedByNewDialog) {
-                                sendEvent(DialogProgressEvent.Cancelled(setup, true))
+                                sendEvent(DialogProgressEvent(setup, null, DialogProgressEvent.Data(true, true)))
                             } else {
-                                sendEvent(DialogProgressEvent.Closed(setup))
+                                sendEvent(DialogProgressEvent(setup, null, DialogProgressEvent.Data(true, false)))
                             }
                             dismissAllowingStateLoss()
                         }
@@ -88,11 +90,7 @@ class DialogProgressFragment : BaseDialogFragment(), IProgressDialogFragment {
     // public static updater
     // -----------------------------
 
-    protected lateinit var setup: DialogProgress
-
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        setup = getSetup()
 
         text = if (savedInstanceState != null && savedInstanceState.containsKey("text")) {
             savedInstanceState.getString("text")
@@ -112,11 +110,17 @@ class DialogProgressFragment : BaseDialogFragment(), IProgressDialogFragment {
         setup.negButton?.let {
             dialog
                     .negativeButton(it) {
-                        sendEvent(DialogProgressEvent.Cancelled(setup, false))
+                        sendEvent(DialogProgressEvent(setup, WhichButton.NEGATIVE.ordinal, DialogProgressEvent.Data(setup.dismissOnNegative, false)))
                         if (setup.dismissOnNegative) {
                             dismissAllowingStateLoss()
                         }
                     }
+        }
+
+        setup.neutrButton?.let {
+            dialog.neutralButton(it) {
+                sendEvent(DialogProgressEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+            }
         }
 
         dialog.title(setup.title)

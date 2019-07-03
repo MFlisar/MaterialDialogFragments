@@ -1,15 +1,19 @@
 package com.michaelflisar.dialogs.events
 
-import android.os.Bundle
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 
-class DialogListEvent(setup: BaseDialogSetup, val indizes: List<Int>, val items: List<Any>) : BaseDialogEvent(setup) {
+class DialogListEvent(setup: BaseDialogSetup, buttonIndex: Int?, val data: Data?) : BaseDialogEvent(setup, buttonIndex) {
 
-    constructor(setup: BaseDialogSetup, index: Int, item: Any) : this(setup, arrayListOf(index), arrayListOf(item))
+    class Data(val indizes: List<Int>, val items: List<Any>) {
+        constructor(index: Int, item: Any) : this(arrayListOf(index), arrayListOf(item))
 
-    val itemCount = indizes.size
+        val itemCount = indizes.size
 
-    fun getIndex(i: Int = 0) = indizes[i]
+        val index = indizes[0]!!
+        fun <T> getItem()  = items[0] as T
 
-    fun <T> getItem(i: Int = 0) = items[i] as T
+        fun getIndex(i: Int = 0) = indizes[i]
+
+        fun <T> getItem(i: Int = 0) = items[i] as T
+    }
 }

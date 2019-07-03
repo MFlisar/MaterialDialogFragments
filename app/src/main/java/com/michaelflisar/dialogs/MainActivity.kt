@@ -16,7 +16,6 @@ import com.michaelflisar.dialogs.debug.DebugDialog
 import com.michaelflisar.dialogs.enums.IconSize
 import com.michaelflisar.dialogs.events.*
 import com.michaelflisar.dialogs.fastAdapter.AllAppsFastAdapterDialog
-import com.michaelflisar.dialogs.fragments.DialogColorFragment
 import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
 import com.michaelflisar.dialogs.setups.*
 import com.michaelflisar.dialogs.utils.ColorUtil
@@ -24,6 +23,7 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.select.getSelectExtension
+import java.text.SimpleDateFormat
 
 
 class MainActivity : AppCompatActivity(), DialogFragmentCallback {
@@ -47,6 +47,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         addProgressDialogItems(itemAdapter)
         addFastAdapterDialogItems(itemAdapter)
         addColorDialogItems(itemAdapter)
+        addDateTimeDialogItems(itemAdapter)
+        addFrequencyDialogItems(itemAdapter)
         addDebugDialogItems(itemAdapter)
     }
 
@@ -62,23 +64,43 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
             return
         }
 
+        // depending on your dialog setup distinguish between event.posClicked(), event.neutrClicked() and event.negClicked()
+        // depending on your dialog setup it may happen that no button was clicked, e.g. the list dialog allows to send events on every item click
+        // if you are only interested in any data, simply do following:
+        //
+        // event.data?.let {
+        //    // some data is available for sure, either because pos button was clicked or because dialog setup defines, that data should be reported
+        // }
+
         val data = when (event) {
-            is DialogInfoEvent -> "Info dialog closed\nButton: ${event.buttonIndex}"
+            is DialogInfoEvent -> "Info dialog closed"
             is DialogInputEvent -> {
-                when (event) {
-                    is DialogInputEvent.Input -> "Input dialog closed\nInput: ${event.getInput()} | ${event.getInput(1)}"
-                    is DialogInputEvent.NeutralButton -> "Input dialog closed\nClosed by neutral button click"
+                if (event.neutrClicked()) {
+                    "Input dialog closed\nClosed by neutral button click"
+                } else {
+                    "Input dialog closed\nInput: ${event.data?.getInput()} | ${event.data?.getInput(1)}"
                 }
             }
-            is DialogNumberEvent -> "Number dialog closed\nInput: ${event.value} (${event.values})"
+            is DialogNumberEvent -> "Number dialog closed\nInput: ${event.data?.value} (${event.data?.values})"
             is DialogProgressEvent -> {
-                when (event) {
-                    is DialogProgressEvent.Closed -> "Progress dialog closed\nProgress finished"
-                    is DialogProgressEvent.Cancelled -> "Progress dialog closed\nCANCELLED"
+                if (event.negClicked()) {
+                    "Progress dialog closed\nCANCELLED"
+                } else {
+                    "Progress dialog closed\nProgress finished"
                 }
             }
-            is DialogListEvent -> "List dialog event\nIndizes: ${event.indizes.joinToString()}"
-            is DialogColorFragment.DialogColorEvent -> "Color dialog event\nIndizes: ${ColorUtil.getColorAsARGB(event.color)}"
+            is DialogListEvent -> "List dialog event\nIndizes: ${event.data?.indizes?.joinToString()}"
+            is DialogColorEvent -> "Color dialog event\nColor: ${ColorUtil.getColorAsARGB(event.data!!.color)}"
+            is DialogDateTimeEvent -> {
+                val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                val date = event.data?.date?.let { format.format(it.time) } ?: "NULL"
+                "Date time event\nSelected date: $date"
+            }
+            is DialogFrequencyEvent -> {
+                // TODO!!!
+                val frequencyData = event.data?.frequency
+                "Frequency event\nSelected freqeuncy: TODO"
+            }
             else -> null
         }
         Toast.makeText(this, "Event: ${event.id}\n$data", Toast.LENGTH_LONG).show()
@@ -360,10 +382,38 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                 },
                 DemoItem("Color demo", "Show a color dialog - with possiblility to select an alpha value") {
                     DialogColor(
-                            50,
+                            71,
                             "Select color".asText(),
                             color = ColorUtil.COLORS_RED.getMainColor(this), // returns main (500) red material color
                             showAlpha = true
+                    )
+                            .create()
+                            .show(this)
+                }
+        )
+    }
+
+    private fun addDateTimeDialogItems(adapter: ItemAdapter<IItem<*>>) {
+        adapter.add(
+                HeaderItem("Date/Time demos"),
+                DemoItem("Datetime demo", "Show a date time dialog") {
+                    DialogDateTime(
+                            80,
+                            "DateTime".asText()
+                    )
+                            .create()
+                            .show(this)
+                }
+        )
+    }
+
+    private fun addFrequencyDialogItems(adapter: ItemAdapter<IItem<*>>) {
+        adapter.add(
+                HeaderItem("Frequency demos"),
+                DemoItem("Frequency demo", "Show a frequency dialog") {
+                    DialogFrequency(
+                            90,
+                            "Frequency".asText()
                     )
                             .create()
                             .show(this)

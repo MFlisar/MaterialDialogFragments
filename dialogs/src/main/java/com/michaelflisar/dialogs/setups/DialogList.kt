@@ -14,7 +14,7 @@ import com.michaelflisar.dialogs.interfaces.IParcelableTextImageProvider
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class DialogList(
+data class DialogList(
         // base setup
         override val id: Int,
         override val title: Text,
@@ -42,7 +42,7 @@ class DialogList(
 
 ) : BaseDialogSetup {
 
-    override fun create(): DialogFragment = DialogListFragment.create(this)
+    override fun create(): DialogFragment<DialogList> = DialogListFragment.create(this)
 
     enum class SelectionMode {
         None,

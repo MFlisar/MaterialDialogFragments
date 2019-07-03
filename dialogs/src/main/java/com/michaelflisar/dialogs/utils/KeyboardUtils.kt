@@ -5,7 +5,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 
 
-internal object KeyboardUtils {
+object KeyboardUtils {
     fun hideKeyboard(parent: Context?, currentFocus: View?) {
         if (parent != null && currentFocus != null) {
             val imm = parent.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

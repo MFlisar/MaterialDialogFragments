@@ -14,5 +14,5 @@ interface BaseDialogSetup : Parcelable {
     val extra: Bundle?
     val sendCancelEvent: Boolean
 
-    fun create(): DialogFragment
+    fun create(): DialogFragment<*>
 }

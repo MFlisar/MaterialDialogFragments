@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.tabs.TabLayout
@@ -20,13 +21,15 @@ import com.michaelflisar.dialogs.adapter.ColorAdapter
 import com.michaelflisar.dialogs.adapter.MainColorAdapter
 import com.michaelflisar.dialogs.base.BaseDialogFragment
 import com.michaelflisar.dialogs.color.R
-import com.michaelflisar.dialogs.events.BaseDialogEvent
+import com.michaelflisar.dialogs.events.DialogColorEvent
+import com.michaelflisar.dialogs.negativeButton
+import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.setups.DialogColor
 import com.michaelflisar.dialogs.utils.ColorUtil
 import com.michaelflisar.dialogs.utils.RecyclerViewUtil
 import com.rarepebble.colorpicker.ColorPickerView
 
-class DialogColorFragment : BaseDialogFragment() {
+class DialogColorFragment : BaseDialogFragment<DialogColor>() {
 
     companion object {
 
@@ -50,15 +53,11 @@ class DialogColorFragment : BaseDialogFragment() {
 
     private var selectedColorGroupIndex: Int = 0
 
-    protected lateinit var setup: DialogColor
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        setup = getSetup()
 
         if (savedInstanceState != null)
             selectedColorGroupIndex = savedInstanceState.getInt("selectedColorGroupIndex")
@@ -67,14 +66,31 @@ class DialogColorFragment : BaseDialogFragment() {
         }
 
         val dialog = MaterialDialog(activity!!)
-                .customView(R.layout.dialog_color, scrollable = false)
+                .customView(
+                        R.layout.dialog_color,
+                        scrollable = false,
+                        noVerticalPadding = true
+                )
                 .positiveButton(R.string.dialogs_save) {
                     val c = colorPicker.color
-                    sendEvent(DialogColorEvent(setup, selectedColorGroupIndex, c))
+                    sendEvent(DialogColorEvent(setup, WhichButton.POSITIVE.ordinal, DialogColorEvent.Data(selectedColorGroupIndex, c)))
                     dismiss()
                 }
                 .cancelable(true)
                 .noAutoDismiss()
+
+        setup.negButton?.let {
+            dialog.negativeButton(it) {
+                sendEvent(DialogColorEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                dismiss()
+            }
+        }
+
+        setup.neutrButton?.let {
+            dialog.neutralButton(it) {
+                sendEvent(DialogColorEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+            }
+        }
 
         val view = dialog.getCustomView()
 
@@ -183,5 +199,4 @@ class DialogColorFragment : BaseDialogFragment() {
         }
     }
 
-    class DialogColorEvent(setup: DialogColor, var colorGroupIndex: Int, var color: Int) : BaseDialogEvent(setup)
 }

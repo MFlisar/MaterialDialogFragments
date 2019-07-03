@@ -47,8 +47,13 @@ dependencies {
 
     implementation project(':dialogs')
 
-    // optional: for the use of color dialogs
-    implementation project(':dialogs-color')
-    // optional: for the use of mike penz's fast adapter (a very functional RecyclerView Adapter library)
-    implementation project(':dialogs-fastadapter')
+    // -------------------------
+    // all following is optional
+    // -------------------------
+
+    implementation project(':dialogs-input') // for the use of input and number dialogs
+    implementation project(':dialogs-datetime') // for the use of date/time/datetime dialogs
+    implementation project(':dialogs-color') // for the use of color dialogs
+    implementation project(':dialogs-fastadapter') // for the use of mike penz's fast adapter (a very functional RecyclerView Adapter library)
+    implementation project(':dialogs-frequency') // for the use of freqeuncy dialogs
 }

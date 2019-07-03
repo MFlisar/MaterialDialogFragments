@@ -1,0 +1,36 @@
+<resources>
+
+    <string name="dialogs_frequency_type">Type</string>
+
+    <string name="dialogs_type_repeat_daily">Repeat daily</string>
+    <string name="dialogs_type_repeat_weekly">Repeat weekly</string>
+    <string name="dialogs_type_repeat_monthly">Repeat monthly</string>
+    <string name="dialogs_type_repeat_yearly">Repeat yearly</string>
+
+    <string name="dialogs_repeat_start_label">Begin</string>
+    <string name="dialogs_repeat_start_today">Today</string>
+    <string name="dialogs_repeat_start_tomorrow">Tomorrow</string>
+    <string name="dialogs_repeat_start_next_monday">Next monday</string>
+    <string name="dialogs_repeat_start_select_date">Select a date</string>
+
+    <string name="dialogs_repeat_end_label">End</string>
+    <string name="dialogs_repeat_end_forever">Never</string>
+    <string name="dialogs_repeat_end_select_date">At a date</string>
+    <string name="dialogs_repeat_end_number_of_times">After number of times</string>
+
+    <string name="dialogs_repeat_type_regular">Repeat regularly</string>
+    <string name="dialogs_repeat_type_irregular">Repeat irregularly</string>
+
+    <string name="before_every_x_day">Every</string>
+    <string name="before_every_x_week">Every</string>
+    <string name="before_every_x_month">Every</string>
+    <string name="before_every_x_year">Every</string>
+    <string name="after_every_x_day">day(s)</string>
+    <string name="after_every_x_week">week(s)</string>
+    <string name="after_every_x_month">month(s)</string>
+    <string name="after_every_x_year">year(s)</string>
+
+    <string name="before_number_of_times_day"></string>
+    <string name="after_number_of_times_day">time(s) a day</string>
+
+</resources>

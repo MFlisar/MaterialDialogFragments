@@ -14,7 +14,7 @@ import com.michaelflisar.dialogs.helper.BaseDialogFragmentHandler
 import com.michaelflisar.dialogs.interfaces.DialogFragment
 import com.michaelflisar.dialogs.utils.DialogUtil
 
-abstract class BaseDialogFragment : DialogFragment(), BaseDialogFragmentHandler.IBaseDialog {
+abstract class BaseDialogFragment<T: BaseDialogSetup> : DialogFragment<T>(), BaseDialogFragmentHandler.IBaseDialog {
 
     // -----------------------------
     // forward functions to handler

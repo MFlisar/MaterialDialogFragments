@@ -4,7 +4,6 @@ import android.os.Bundle
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Text
-import com.michaelflisar.dialogs.fragments.DialogNumberFragment
 import com.michaelflisar.dialogs.interfaces.DialogFragment
 import kotlinx.android.parcel.Parcelize
 
@@ -29,5 +28,5 @@ class DialogNumber(
         val max: Int? = null,
         val errorMessage: Text? = null
 ) : BaseDialogSetup {
-    override fun create(): DialogFragment = DialogNumberFragment.create(this)
+    override fun create(): DialogFragment<DialogNumber> = com.michaelflisar.dialogs.fragments.DialogNumberFragment.create(this)
 }

@@ -17,12 +17,12 @@ import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.michaelflisar.dialogs.*
 import com.michaelflisar.dialogs.base.BaseDialogFragment
-import com.michaelflisar.dialogs.core.R
 import com.michaelflisar.dialogs.events.DialogInputEvent
+import com.michaelflisar.dialogs.input.R
 import com.michaelflisar.dialogs.setups.DialogInput
 import com.michaelflisar.dialogs.utils.KeyboardUtils
 
-class DialogInputFragment : BaseDialogFragment() {
+class DialogInputFragment : BaseDialogFragment<DialogInput>() {
 
     companion object {
 
@@ -33,13 +33,9 @@ class DialogInputFragment : BaseDialogFragment() {
         }
     }
 
-    protected lateinit var setup: DialogInput
-
     private var inputTexts: ArrayList<String> = arrayListOf()
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        setup = getSetup()
 
         val inputFields = arrayListOf(setup.input)
         inputFields.addAll(setup.additonalInputs)
@@ -103,7 +99,13 @@ class DialogInputFragment : BaseDialogFragment() {
                     .neutralButton(it) {
                         when (setup.neutralButtonMode) {
                             DialogInput.NeutralButtonMode.SendEvent -> {
-                                sendEvent(DialogInputEvent.NeutralButton(setup))
+                                sendEvent(
+                                    DialogInputEvent(
+                                        setup,
+                                        WhichButton.NEUTRAL.ordinal,
+                                        null
+                                    )
+                                )
                                 dismiss()
                             }
                             DialogInput.NeutralButtonMode.InsertText -> {
@@ -113,6 +115,19 @@ class DialogInputFragment : BaseDialogFragment() {
                             }
                         }
                     }
+        }
+        setup.negButton?.let {
+            dialog
+                .negativeButton(it) {
+                    sendEvent(
+                        DialogInputEvent(
+                            setup,
+                            WhichButton.NEGATIVE.ordinal,
+                            null
+                        )
+                    )
+                    dismiss()
+                }
         }
 
         val editTexts = ArrayList<EditText>()
@@ -200,7 +215,13 @@ class DialogInputFragment : BaseDialogFragment() {
     }
 
     private fun finishAndSendEvent(materialDialog: MaterialDialog) {
-        sendEvent(DialogInputEvent.Input(setup, inputTexts))
+        sendEvent(
+            DialogInputEvent(
+                setup,
+                WhichButton.POSITIVE.ordinal,
+                DialogInputEvent.Data(inputTexts)
+            )
+        )
         if (activity != null) {
             KeyboardUtils.hideKeyboardWithZeroFlag(activity, materialDialog.currentFocus)
         }

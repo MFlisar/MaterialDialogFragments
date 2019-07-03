@@ -9,15 +9,12 @@ import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.setActionButtonEnabled
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
+import com.michaelflisar.dialogs.*
 import com.michaelflisar.dialogs.base.BaseDialogFragment
-import com.michaelflisar.dialogs.events.DialogNumberEvent
-import com.michaelflisar.dialogs.message
-import com.michaelflisar.dialogs.positiveButton
 import com.michaelflisar.dialogs.setups.DialogNumber
-import com.michaelflisar.dialogs.title
 import com.michaelflisar.dialogs.utils.KeyboardUtils
 
-class DialogNumberFragment : BaseDialogFragment() {
+class DialogNumberFragment : BaseDialogFragment<DialogNumber>() {
 
     companion object {
 
@@ -28,12 +25,9 @@ class DialogNumberFragment : BaseDialogFragment() {
         }
     }
 
-    protected lateinit var setup: DialogNumber
     private var input: Int? = null
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        setup = getSetup()
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("input"))
@@ -51,7 +45,13 @@ class DialogNumberFragment : BaseDialogFragment() {
                             Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        sendEvent(DialogNumberEvent(setup, input!!))
+                        sendEvent(
+                            com.michaelflisar.dialogs.events.DialogNumberEvent(
+                                setup,
+                                WhichButton.POSITIVE.ordinal,
+                                com.michaelflisar.dialogs.events.DialogNumberEvent.Data(input!!)
+                            )
+                        )
                         val activity = activity
                         KeyboardUtils.hideKeyboard(activity, it.currentFocus)
                         dismiss()
@@ -59,6 +59,19 @@ class DialogNumberFragment : BaseDialogFragment() {
                 }
                 .cancelable(true)
                 .noAutoDismiss()
+
+        setup.negButton?.let {
+            dialog.negativeButton(it) {
+                sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                dismiss()
+            }
+        }
+
+        setup.neutrButton?.let {
+            dialog.neutralButton(it) {
+                sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+            }
+        }
 
         setup.text?.let {
             dialog.message(it)

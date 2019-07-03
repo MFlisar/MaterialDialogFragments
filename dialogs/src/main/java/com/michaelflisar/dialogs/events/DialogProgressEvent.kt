@@ -2,7 +2,6 @@ package com.michaelflisar.dialogs.events
 
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 
-sealed class DialogProgressEvent(setup: BaseDialogSetup) : BaseDialogEvent(setup) {
-    class Closed(setup: BaseDialogSetup) : DialogProgressEvent(setup)
-    class Cancelled(setup: BaseDialogSetup, val forcedByNewDialog: Boolean) : DialogProgressEvent(setup)
+class DialogProgressEvent(setup: BaseDialogSetup, buttonIndex: Int?, val data: Data?) : BaseDialogEvent(setup, buttonIndex) {
+    class Data(closed: Boolean, closeForcedByNewDialog: Boolean)
 }

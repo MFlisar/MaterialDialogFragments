@@ -14,17 +14,14 @@ import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
+import com.michaelflisar.dialogs.*
 import com.michaelflisar.dialogs.base.BaseDialogFragment
 import com.michaelflisar.dialogs.core.R
 import com.michaelflisar.dialogs.enums.SendResultType
 import com.michaelflisar.dialogs.events.DialogInfoEvent
-import com.michaelflisar.dialogs.message
-import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.setups.DialogInfo
-import com.michaelflisar.dialogs.textView
-import com.michaelflisar.dialogs.title
 
-open class DialogInfoFragment : BaseDialogFragment() {
+open class DialogInfoFragment : BaseDialogFragment<DialogInfo>() {
 
     companion object {
         fun create(setup: DialogInfo): DialogInfoFragment {
@@ -34,16 +31,12 @@ open class DialogInfoFragment : BaseDialogFragment() {
         }
     }
 
-    protected lateinit var setup: DialogInfo
-
     private var posButtonText: String? = null
     private var posButton: AppCompatButton? = null
     private var handlerTimer: Handler? = null
     private var timeLeft: Int = 0
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        setup = getSetup()
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("timeLeft")) {
@@ -100,8 +93,9 @@ open class DialogInfoFragment : BaseDialogFragment() {
         }
 
         setup.negButton?.let {
-            dialog.neutralButton(it) {
+            dialog.negativeButton(it) {
                 onClick(WhichButton.NEGATIVE)
+                dismiss()
             }
         }
 

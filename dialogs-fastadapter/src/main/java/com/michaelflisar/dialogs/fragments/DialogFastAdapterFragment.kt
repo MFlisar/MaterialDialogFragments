@@ -12,23 +12,24 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.michaelflisar.dialogs.base.BaseDialogFragment
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.events.DialogFastAdapterEvent
 import com.michaelflisar.dialogs.fastadapter.R
+import com.michaelflisar.dialogs.negativeButton
+import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.positiveButton
 import com.michaelflisar.dialogs.setups.DialogFastAdapter
 import com.michaelflisar.dialogs.title
 import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.IItem
-import com.mikepenz.fastadapter.IItemAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import java.util.*
 
-abstract class DialogFastAdapterFragment : BaseDialogFragment() {
+abstract class DialogFastAdapterFragment : BaseDialogFragment<DialogFastAdapter>() {
 
     companion object {
 
@@ -54,8 +55,6 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
     protected val adapter: FastAdapter<IItem<*>>
         get() = rvData!!.adapter as FastAdapter<IItem<*>>
 
-    protected lateinit var setup: DialogFastAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         data = data
@@ -67,17 +66,32 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        setup = getSetup()
-
         val dialog = MaterialDialog(activity!!)
-                .customView(if (setup.internalSetup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview, scrollable = false)
+                .customView(
+                        if (setup.internalSetup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview,
+                        scrollable = false,
+                        noVerticalPadding = setup.internalSetup.withToolbar
+                )
                 .positiveButton(setup.posButton) {
-                    onHandleClick(null, -1)
+                    onHandleClick(null, WhichButton.POSITIVE.ordinal, null)
                     dismiss()
                 }
                 .cancelable(setup.cancelable)
                 .noAutoDismiss()
         this.isCancelable = setup.cancelable
+
+        setup.negButton?.let {
+            dialog.negativeButton(it) {
+                sendEvent(DialogFastAdapterEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                dismiss()
+            }
+        }
+
+        setup.neutrButton?.let {
+            dialog.neutralButton(it) {
+                sendEvent(DialogFastAdapterEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+            }
+        }
 
         if (!setup.internalSetup.withToolbar) {
             dialog.title(setup.title)
@@ -107,7 +121,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
             fastAdapter.onClickListener = { _, _, item, position ->
                 val originalPosition = if (setup.internalSetup.filterable) data!!.indexOf(item) else position
                 if (isClickable(item, originalPosition)) {
-                    onHandleClick(item, originalPosition)
+                    onHandleClick(item, null, originalPosition)
                     if (setup.internalSetup.dismissOnClick) {
                         dismiss()
                     }
@@ -169,8 +183,11 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
         }
     }
 
-    protected open fun onHandleClick(item: IItem<*>?, position: Int) {
-        sendEvent(DialogFastAdapterEvent(setup, item, position))
+    protected open fun onHandleClick(item: IItem<*>?, buttonIndex: Int?, position: Int?) {
+        val data = if (item != null && position != null) {
+            DialogFastAdapterEvent.Data(item, position)
+        } else null
+        sendEvent(DialogFastAdapterEvent(setup, buttonIndex, data))
     }
 
     protected open fun onUpdateAdapter(adapter: ItemAdapter<IItem<*>>) {
@@ -236,7 +253,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment() {
 
     protected abstract fun createData(): ArrayList<IItem<*>>
 
-    interface IPredicate<Item: IItem<*>> {
+    interface IPredicate<Item : IItem<*>> {
         fun filter(item: Item, constraint: CharSequence?): Boolean
     }
 }

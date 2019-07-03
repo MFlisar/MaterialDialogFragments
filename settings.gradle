@@ -1,1 +1,7 @@
-include ':app', 'dialogs', 'dialogs-color', 'dialogs-fastadapter'
+include ':app'
+include 'dialogs'
+include 'dialogs-input'
+include 'dialogs-datetime'
+include 'dialogs-color'
+include 'dialogs-fastadapter'
+include 'dialogs-frequency'

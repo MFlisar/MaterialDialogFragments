@@ -29,7 +29,7 @@ class DialogColor(
 
 ) : BaseDialogSetup {
 
-    override fun create(): DialogFragment = DialogColorFragment.create(this)
+    override fun create(): DialogFragment<DialogColor> = DialogColorFragment.create(this)
 
     fun useDarkTheme() = darkTheme ?: DialogSetup.useDarkTheme()
 

@@ -12,27 +12,40 @@ import com.michaelflisar.dialogs.events.DialogCancelledEvent
 import com.michaelflisar.dialogs.helper.BaseDialogFragmentHandler
 import com.michaelflisar.dialogs.utils.DialogUtil
 
-open class DialogFragment : ExtendedFragment() {
+open class DialogFragment<T : BaseDialogSetup> : ExtendedFragment() {
 
     companion object {
         const val ARG_SETUP = "setup"
     }
 
     protected val handler: BaseDialogFragmentHandler<*> = BaseDialogFragmentHandler(this)
-    private val internalSetup: BaseDialogSetup by lazy {
-        arguments!!.getParcelable<BaseDialogSetup>(ARG_SETUP)!!
-    }
 
-    @Suppress("UNCHECKED_CAST")
-    fun <T : BaseDialogSetup> getSetup(): T = internalSetup as T
+    private var pSetup: T? = null
+
+    protected val setup: T
+        get() {
+            if (pSetup == null) {
+                pSetup = arguments!!.getParcelable<T>(ARG_SETUP)!!
+            }
+            return pSetup!!
+        }
+
+    protected fun resetSetup() {
+        pSetup = null
+    }
 
     fun setSetupArgs(setup: BaseDialogSetup) {
         val args = arguments ?: Bundle()
         args.putParcelable(ARG_SETUP, setup)
         arguments = args
+        resetSetup()
     }
 
-    fun show(activity: FragmentActivity, customSendResultType: SendResultType? = DialogSetup.DEFAULT_SEND_RESULT_TYPE, tag: String = this::class.java.name) {
+    fun show(
+        activity: FragmentActivity,
+        customSendResultType: SendResultType? = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
+        tag: String = this::class.java.name
+    ) {
         handler.show(activity, tag, customSendResultType)
     }
 
@@ -41,8 +54,8 @@ open class DialogFragment : ExtendedFragment() {
     }
 
     override fun onCancel(dialog: DialogInterface) {
-        if (internalSetup.sendCancelEvent) {
-            sendEvent(DialogCancelledEvent(internalSetup))
+        if (setup.sendCancelEvent) {
+            sendEvent(DialogCancelledEvent(setup))
         }
         super.onCancel(dialog)
     }
@@ -55,8 +68,10 @@ open class DialogFragment : ExtendedFragment() {
         // send result to any custom handler
         DialogSetup.sendResult(event)
         // send result the default way
-        DialogUtil.trySendResult(event, this, handler.customSendResultType
-                ?: DialogSetup.DEFAULT_SEND_RESULT_TYPE)
+        DialogUtil.trySendResult(
+            event, this, handler.customSendResultType
+                ?: DialogSetup.DEFAULT_SEND_RESULT_TYPE
+        )
 
         onEventSend(event)
     }
