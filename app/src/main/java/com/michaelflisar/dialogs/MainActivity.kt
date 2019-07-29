@@ -97,9 +97,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                 "Date time event\nSelected date: $date"
             }
             is DialogFrequencyEvent -> {
-                // TODO!!!
-                val frequencyData = event.data?.frequency
-                "Frequency event\nSelected freqeuncy: TODO"
+                val frequency = event.data?.frequency?.toReadableString()
+                "Frequency event\nSelected frequency: $frequency"
             }
             else -> null
         }

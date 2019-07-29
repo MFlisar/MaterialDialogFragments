@@ -3,10 +3,11 @@ package com.michaelflisar.dialogs.interfaces
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.ExtendedFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
-import com.michaelflisar.dialogs.enums.SendResultType
+import com.michaelflisar.dialogs.classes.SendResultType
 import com.michaelflisar.dialogs.events.BaseDialogEvent
 import com.michaelflisar.dialogs.events.DialogCancelledEvent
 import com.michaelflisar.dialogs.helper.BaseDialogFragmentHandler
@@ -49,6 +50,14 @@ open class DialogFragment<T : BaseDialogSetup> : ExtendedFragment() {
         handler.show(activity, tag, customSendResultType)
     }
 
+    fun show(
+        parent: Fragment,
+        customSendResultType: SendResultType? = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
+        tag: String = this::class.java.name
+    ) {
+        handler.show(parent, tag, customSendResultType)
+    }
+
     fun showAllowingStateLoss(activity: FragmentActivity) {
         handler.showAllowingStateLoss(activity, this)
     }
@@ -69,8 +78,9 @@ open class DialogFragment<T : BaseDialogSetup> : ExtendedFragment() {
         DialogSetup.sendResult(event)
         // send result the default way
         DialogUtil.trySendResult(
-            event, this, handler.customSendResultType
-                ?: DialogSetup.DEFAULT_SEND_RESULT_TYPE
+            event,
+            this,
+            handler.customSendResultType ?: DialogSetup.DEFAULT_SEND_RESULT_TYPE
         )
 
         onEventSend(event)

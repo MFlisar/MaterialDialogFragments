@@ -36,7 +36,6 @@ class DialogNumberFragment : BaseDialogFragment<DialogNumber>() {
             input = setup.initialValue
 
         val dialog = MaterialDialog(activity!!)
-                .title(setup.title)
                 .positiveButton(setup.posButton) {
                     input = it.getInputField().text.toString().toInt()
                     if ((setup.min != null && input!! < setup.min!!) || (setup.max != null && input!! > setup.max!!)) {
@@ -59,6 +58,10 @@ class DialogNumberFragment : BaseDialogFragment<DialogNumber>() {
                 }
                 .cancelable(true)
                 .noAutoDismiss()
+
+        setup.title?.let {
+            dialog.title(it)
+        }
 
         setup.negButton?.let {
             dialog.negativeButton(it) {
@@ -89,6 +92,14 @@ class DialogNumberFragment : BaseDialogFragment<DialogNumber>() {
                 input = null
             }
             materialDialog.setActionButtonEnabled(WhichButton.POSITIVE, valid)
+        }
+
+        val editText = dialog.getInputField()
+        if (setup.selectText) {
+            editText.post {
+                editText.setSelection(0, editText.text.toString().length)
+                editText.selectAll()
+            }
         }
 
 

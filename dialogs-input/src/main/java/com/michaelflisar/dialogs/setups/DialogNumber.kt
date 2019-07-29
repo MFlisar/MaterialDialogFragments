@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parcelize
 class DialogNumber(
         // base setup
         override val id: Int,
-        override val title: Text,
+        override val title: Text?,
         val initialValue: Int? = null,
         val text: Text? = null,
         val hint: Text? = null,
@@ -26,6 +26,7 @@ class DialogNumber(
         // special setup
         val min: Int? = null,
         val max: Int? = null,
+        val selectText: Boolean = false,
         val errorMessage: Text? = null
 ) : BaseDialogSetup {
     override fun create(): DialogFragment<DialogNumber> = com.michaelflisar.dialogs.fragments.DialogNumberFragment.create(this)

@@ -10,7 +10,7 @@ internal class NoPaddingArrayAdapter<T>(
     context: Context,
     layoutId: Int,
     items: List<T>?,
-    val alignTextRight: Boolean = true
+    val alignTextRight: Boolean = false
 ) :
     ArrayAdapter<T>(context, layoutId, items) {
 

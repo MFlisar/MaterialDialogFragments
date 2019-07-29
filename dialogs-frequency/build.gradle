@@ -53,4 +53,12 @@ dependencies {
     // ------------------------
 
     api project(':dialogs')
+    api project(':dialogs-datetime')
+    api project(':dialogs-input')
+
+    // ------------------------
+    // Others
+    // ------------------------
+
+    implementation "com.mikepenz:fastadapter:${versions.fastAdapter}"
 }

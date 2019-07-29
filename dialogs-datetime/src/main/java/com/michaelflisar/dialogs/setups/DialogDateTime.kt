@@ -23,7 +23,7 @@ import java.util.*
 class DialogDateTime(
     // base setup
     override val id: Int,
-    override val title: Text,
+    override val title: Text? = null,
     override val posButton: Text = Text.TextRes(android.R.string.ok),
     override val negButton: Text? = null,
     override val neutrButton: Text? = null,

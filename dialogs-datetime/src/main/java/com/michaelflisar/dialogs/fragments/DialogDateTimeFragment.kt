@@ -39,11 +39,11 @@ open class DialogDateTimeFragment : BaseDialogFragment<DialogDateTime>() {
             date = setup.currentDateTime ?: Calendar.getInstance()
         }
 
-        val dialog = MaterialDialog(activity!!)
+        val dlg = MaterialDialog(activity!!)
 
         when (setup.type) {
             DialogDateTime.Type.DateOnly -> {
-                dialog.datePicker(
+                dlg.datePicker(
                     setup.minDateTime,
                     setup.maxDateTime,
                     date,
@@ -53,7 +53,7 @@ open class DialogDateTimeFragment : BaseDialogFragment<DialogDateTime>() {
                 }
             }
             DialogDateTime.Type.TimeOnly -> {
-                dialog.timePicker(
+                dlg.timePicker(
                     date,
                     setup.requireFutureDateTime,
                     setup.show24HoursView
@@ -62,7 +62,7 @@ open class DialogDateTimeFragment : BaseDialogFragment<DialogDateTime>() {
                 }
             }
             DialogDateTime.Type.DateAndTime -> {
-                dialog.dateTimePicker(
+                dlg.dateTimePicker(
                     setup.minDateTime,
                     date,
                     setup.requireFutureDateTime,
@@ -72,7 +72,7 @@ open class DialogDateTimeFragment : BaseDialogFragment<DialogDateTime>() {
                 }
             }
         }
-        dialog
+        dlg
             .positiveButton(setup.posButton) {
                 sendEvent(
                     DialogDateTimeEvent(
@@ -87,10 +87,12 @@ open class DialogDateTimeFragment : BaseDialogFragment<DialogDateTime>() {
         this.isCancelable = setup.cancelable
 
 
-        dialog.title(setup.title)
+        setup.title?.let {
+            dlg.title(it)
+        }
 
         setup.negButton?.let {
-            dialog.negativeButton(it) {
+            dlg.negativeButton(it) {
                 sendEvent(
                     DialogDateTimeEvent(
                         setup,
@@ -103,7 +105,7 @@ open class DialogDateTimeFragment : BaseDialogFragment<DialogDateTime>() {
         }
 
         setup.neutrButton?.let {
-            dialog.neutralButton(it) {
+            dlg.neutralButton(it) {
                 sendEvent(
                     DialogDateTimeEvent(
                         setup,
@@ -114,7 +116,7 @@ open class DialogDateTimeFragment : BaseDialogFragment<DialogDateTime>() {
             }
         }
 
-        return dialog
+        return dlg
     }
 
     private fun onClick(which: WhichButton) {

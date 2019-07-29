@@ -26,7 +26,7 @@ import kotlinx.android.parcel.Parcelize
 class DialogInfo(
         // base setup
         override val id: Int,
-        override val title: Text,
+        override val title: Text?,
         val text: Text,
         override val posButton: Text = Text.TextRes(android.R.string.ok),
         override val negButton: Text? = null,

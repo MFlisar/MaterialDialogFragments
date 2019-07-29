@@ -1,18 +1,10 @@
 package com.michaelflisar.dialogs.base
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.ExtendedFragment
-import androidx.fragment.app.FragmentActivity
-import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
-import com.michaelflisar.dialogs.enums.SendResultType
-import com.michaelflisar.dialogs.events.BaseDialogEvent
-import com.michaelflisar.dialogs.events.DialogCancelledEvent
 import com.michaelflisar.dialogs.helper.BaseDialogFragmentHandler
 import com.michaelflisar.dialogs.interfaces.DialogFragment
-import com.michaelflisar.dialogs.utils.DialogUtil
 
 abstract class BaseDialogFragment<T: BaseDialogSetup> : DialogFragment<T>(), BaseDialogFragmentHandler.IBaseDialog {
 

@@ -21,7 +21,7 @@ dependencies {
 	implementation "com.github.MFlisar.material-dialogfragments:dialogs-datetime:<LATEST-VERSION>"
 	implementation "com.github.MFlisar.material-dialogfragments:dialogs-fastadapter:<LATEST-VERSION>"
 	implementation "com.github.MFlisar.material-dialogfragments:dialogs-color:<LATEST-VERSION>"
-	implementation "com.github.MFlisar.material-dialogfragments:dialogs-frequency:<LATEST-VERSION>" // <= this one is currently under development, will be finished in the next days
+	implementation "com.github.MFlisar.material-dialogfragments:dialogs-frequency:<LATEST-VERSION>"
 
 	// alternatively, to include ALL modules at once
 	// implementation 'com.github.MFlisar:material-dialogfragments:<LATEST-VERSION>'

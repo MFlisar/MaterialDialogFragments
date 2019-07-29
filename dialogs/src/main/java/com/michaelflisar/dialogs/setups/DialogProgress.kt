@@ -13,7 +13,7 @@ import kotlinx.android.parcel.Parcelize
 class DialogProgress internal constructor(
         // base setup
         override val id: Int,
-        override val title: Text,
+        override val title: Text?,
         val text: Text?,
         val horizontal: Boolean,
         val dismissOnNegative: Boolean,

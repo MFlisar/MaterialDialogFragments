@@ -92,7 +92,9 @@ class DialogInputFragment : BaseDialogFragment<DialogInput>() {
 
         isCancelable = setup.cancelable
 
-        dialog.title(setup.title)
+        setup.title?.let {
+            dialog.title(it)
+        }
 
         setup.neutrButton?.let {
             dialog

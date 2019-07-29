@@ -73,7 +73,10 @@ open class DialogNumberPickerFragment : BaseDialogFragment<DialogNumberPicker>()
                 }
                 .cancelable(true)
 
-        dialog.title(setup.title)
+        setup.title?.let {
+            dialog.title(it)
+        }
+
         dialog.positiveButton(setup.posButton)
 
         setup.negButton?.let {

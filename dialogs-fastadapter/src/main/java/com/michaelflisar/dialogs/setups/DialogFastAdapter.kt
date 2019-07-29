@@ -13,7 +13,7 @@ abstract class DialogFastAdapter(
 ) : BaseDialogSetup {
 
     override val id: Int = internalSetup.id
-    override val title: Text = internalSetup.title
+    override val title: Text? = internalSetup.title
     override val posButton: Text = internalSetup.posButton
     override val negButton: Text? = internalSetup.negButton
     override val neutrButton: Text? = internalSetup.neutrButton
@@ -25,7 +25,7 @@ abstract class DialogFastAdapter(
     class InternalSetup(
             // base setup
             val id: Int,
-            val title: Text,
+            val title: Text?,
             val posButton: Text = Text.TextRes(android.R.string.ok),
             val negButton: Text? = null,
             val neutrButton: Text? = null,

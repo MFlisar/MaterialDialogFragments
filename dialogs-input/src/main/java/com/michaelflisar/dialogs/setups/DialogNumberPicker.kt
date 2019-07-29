@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parcelize
 class DialogNumberPicker(
         // base setup
         override val id: Int,
-        override val title: Text,
+        override val title: Text?,
         val initialValue: Int = 0,
         val text: Text? = null,
         override val posButton: Text = Text.TextRes(android.R.string.ok),

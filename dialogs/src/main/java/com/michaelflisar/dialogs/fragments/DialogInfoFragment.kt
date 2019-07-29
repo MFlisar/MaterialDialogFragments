@@ -17,7 +17,6 @@ import com.afollestad.materialdialogs.customview.getCustomView
 import com.michaelflisar.dialogs.*
 import com.michaelflisar.dialogs.base.BaseDialogFragment
 import com.michaelflisar.dialogs.core.R
-import com.michaelflisar.dialogs.enums.SendResultType
 import com.michaelflisar.dialogs.events.DialogInfoEvent
 import com.michaelflisar.dialogs.setups.DialogInfo
 
@@ -56,7 +55,7 @@ open class DialogInfoFragment : BaseDialogFragment<DialogInfo>() {
                 override fun run() {
                     timeLeft = timeLeft.dec()
                     if (timeLeft > 0) {
-                        posButton!!.text = getString(R.string.dialogs_timer_button, posButtonText, timeLeft.toString())
+                        posButton!!.text = getString(R.string.mdf_dialogs_timer_button, posButtonText, timeLeft.toString())
                         handlerTimer!!.postDelayed(this, 1000)
                     } else {
                         posButton!!.isEnabled = true
@@ -78,11 +77,13 @@ open class DialogInfoFragment : BaseDialogFragment<DialogInfo>() {
             dialog.message(setup.text)
         }
 
-        dialog.title(setup.title)
+        setup.title?.let {
+            dialog.title(it)
+        }
 
         if (posButtonText != null) {
             if (timeLeft > 0) {
-                dialog.positiveButton(text = getString(R.string.dialogs_timer_button, posButtonText, timeLeft.toString())) {
+                dialog.positiveButton(text = getString(R.string.mdf_dialogs_timer_button, posButtonText, timeLeft.toString())) {
                     onClick(WhichButton.POSITIVE)
                 }
             } else {
@@ -159,7 +160,7 @@ open class DialogInfoFragment : BaseDialogFragment<DialogInfo>() {
 
         posButton = dialog.getActionButton(WhichButton.POSITIVE)
         if (timeLeft > 0) {
-            posButton!!.setEnabled(false)
+            posButton!!.isEnabled = false
         }
 
         return dialog

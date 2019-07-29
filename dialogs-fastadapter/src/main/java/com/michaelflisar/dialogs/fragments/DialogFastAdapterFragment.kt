@@ -94,7 +94,9 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment<DialogFastAdapter>
         }
 
         if (!setup.internalSetup.withToolbar) {
-            dialog.title(setup.title)
+            setup.title?.let {
+                dialog.title(it)
+            }
         }
         updateBuilder(dialog)
         val view = dialog.getCustomView()
@@ -110,7 +112,7 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment<DialogFastAdapter>
         svSearch = view.findViewById(R.id.svSearch)
 
         if (setup.internalSetup.withToolbar) {
-            toolbar!!.setTitle(setup.title.get(activity!!))
+            toolbar!!.setTitle(setup.title?.get(activity!!))
         }
 
         rvData!!.layoutManager = getLayoutManager()

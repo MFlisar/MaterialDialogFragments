@@ -13,6 +13,11 @@ internal fun Calendar.addWeeks(weeks: Int): Calendar {
     return this
 }
 
+internal fun Calendar.addMonths(months: Int): Calendar {
+    add(Calendar.MONTH, months)
+    return this
+}
+
 internal fun Calendar.nextWeekDay(weekday: Int): Calendar {
     addDays(1)
     while (get(Calendar.DAY_OF_WEEK) != weekday) {

@@ -123,7 +123,9 @@ class DialogProgressFragment : BaseDialogFragment<DialogProgress>(), IProgressDi
             }
         }
 
-        dialog.title(setup.title)
+        setup.title?.let {
+            dialog.title(it)
+        }
 
         dialog.setCancelable(false)
         dialog.setCanceledOnTouchOutside(false)

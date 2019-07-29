@@ -1,5 +1,5 @@
 <resources>
 
-    <string name="dialogs_timer_button" translatable="false">%1$s (%2$ss)</string>
+    <string name="mdf_dialogs_timer_button" translatable="false">%1$s (%2$ss)</string>
 
 </resources>

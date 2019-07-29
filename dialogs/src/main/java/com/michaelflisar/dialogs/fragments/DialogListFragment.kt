@@ -30,12 +30,15 @@ open class DialogListFragment : BaseDialogFragment<DialogList>() {
             return dlg
         }
     }
-    
+
     private var mAdapter: TextImageRVAdapter? = null
 
-    fun updateItems(items: List<DialogList.Item>) {
+    fun updateItems(items: List<DialogList.Item>, setupUpdater: ((setup: DialogList) -> DialogList)? = null) {
 
-        val newSetup = setup.copy(items = items)
+        var newSetup = setup.copy(items = items)
+        setupUpdater?.let {
+            newSetup = it.invoke(newSetup)
+        }
         setSetupArgs(newSetup)
 
         dialog?.let {
@@ -45,7 +48,7 @@ open class DialogListFragment : BaseDialogFragment<DialogList>() {
     }
 
     final override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
-        
+
         val items = createItems()
         val dialog = internalOnCreateDialog(savedInstanceState, items)
         onUpdateDialog(dialog)
@@ -79,7 +82,10 @@ open class DialogListFragment : BaseDialogFragment<DialogList>() {
 
         dialog = onSetCallback(savedInstanceState, itemArray, dialog)
 
-        dialog.title(setup.title)
+        setup.title?.let {
+            dialog.title(it)
+        }
+
         dialog.positiveButton(setup.posButton)
 
         setup.negButton?.let {

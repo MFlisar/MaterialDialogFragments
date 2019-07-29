@@ -6,7 +6,7 @@ import com.michaelflisar.dialogs.interfaces.DialogFragment
 
 interface BaseDialogSetup : Parcelable {
     val id: Int
-    val title: Text
+    val title: Text?
     val posButton: Text
     val negButton: Text?
     val neutrButton: Text?

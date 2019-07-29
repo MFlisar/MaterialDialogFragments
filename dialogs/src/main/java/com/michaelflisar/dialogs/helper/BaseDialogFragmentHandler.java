@@ -4,9 +4,10 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.michaelflisar.dialogs.enums.SendResultType;
+import com.michaelflisar.dialogs.classes.SendResultType;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.ExtendedFragment;
@@ -81,6 +82,11 @@ public class BaseDialogFragmentHandler<T extends ExtendedFragment> {
     public void show(FragmentActivity activity, String tag, SendResultType sendResultType) {
         customSendResultType = sendResultType;
         mParent.show(activity.getSupportFragmentManager(), tag);
+    }
+
+    public void show(Fragment parent, String tag, SendResultType sendResultType) {
+        customSendResultType = sendResultType;
+        mParent.show(parent.getChildFragmentManager(), tag);
     }
 
     public void showAllowingStateLoss(FragmentActivity activity, DialogFragment fragment) {

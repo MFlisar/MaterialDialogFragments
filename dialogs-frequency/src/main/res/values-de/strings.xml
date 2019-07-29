@@ -1,0 +1,93 @@
+<resources>
+
+    <string name="mdf_type_repeat_daily">Täglich wiederholen</string>
+    <string name="mdf_type_repeat_weekly">Wochentlich wiederholen</string>
+    <string name="mdf_type_repeat_monthly">Monatlich wiederholen</string>
+    <string name="mdf_type_repeat_yearly">Jährlich wiederholen</string>
+
+    <string name="mdf_repeat_start_today">Heute beginnen</string>
+    <string name="mdf_repeat_start_tomorrow">Morgen beginnen</string>
+    <string name="mdf_repeat_start_next_monday">Nächsten Montag beginnen</string>
+    <string name="mdf_repeat_start_select_date">Am &#8230; beginnen</string>
+
+    <string name="mdf_repeat_end_forever">Für immer wiederholen</string>
+    <string name="mdf_repeat_end_select_date">Bis zum &#8230; wiederholen</string>
+    <string name="mdf_repeat_end_number_of_times">&#8230; Male wiederholen</string>
+
+    <string name="mdf_repeat_type_regular">Regelmäßig wiederholen</string>
+    <string name="mdf_repeat_type_irregular">Unregelmäßig wiederholen</string>
+
+    <string name="mdf_month_day_type_day_of_month">Tag des Monats</string>
+    <string name="mdf_month_day_type_weekday_of_month">Wochentag des Monats</string>
+
+    <string name="mdf_dialog_title_select_number">Wert eingeben</string>
+    <string name="mdf_dialog_title_add_day">Tag hinzufügen</string>
+
+    <string name="mdf_before_every_x_day">Alle</string>
+    <string name="mdf_before_every_x_week">Alle</string>
+    <string name="mdf_before_every_x_month">Alle</string>
+    <string name="mdf_before_every_x_year">Alle</string>
+    <string name="mdf_after_every_x_day">Tage</string>
+    <string name="mdf_after_every_x_week">Wochen</string>
+    <string name="mdf_after_every_x_month">Monate</string>
+    <string name="mdf_after_every_x_year">Jahre</string>
+
+    <string name="mdf_before_n_times_week">An</string>
+    <string name="mdf_before_n_times_month">An</string>
+    <string name="mdf_after_n_times_week">Tagen in der Woche</string>
+    <string name="mdf_after_n_times_month">Tagen im Monat</string>
+
+    <string name="mdf_day_n">Tag %1$d</string>
+    <string name="mdf_weekday_n">%1$d mal im Monat</string>
+    <string name="mdf_day_from_start">Vom Anfang des Monats</string>
+    <string name="mdf_day_from_end">Vom Ende des Monats</string>
+
+    <string name="mdf_day_of_month_nth">%1$d Tag des Monats</string>
+    <!--<string name="mdf_day_of_month_last">Am letzten Tag des Monats</string>-->
+    <!--<string name="mdf_day_of_month_second_last">Am vorletzten Tag des Monats</string>-->
+    <string name="mdf_day_of_month_nth_last">%1$d Tag vom Ende des Monats</string>
+
+    <!-- e.g. "first" "monday" in the month -->
+    <string name="mdf_weekday_of_month_info">%1$d %2$s im Monat</string>
+
+    <string name="mdf_error_title">Ungültige Konfiguration</string>
+    <string name="mdf_error_end_is_before_start">Das End Datum ist vor dem Start Datum, koorigiere dies bitte</string>
+    <string name="mdf_error_no_weekday_selected">Kein Wochentag ausgewählt, wähle bitte zumindest einen aus</string>
+    <string name="mdf_error_no_monthday_selected">Kein Tag des Monats ausgewählt, wähle bitte zumindest einen aus</string>
+    <string name="mdf_error_value_must_be_greater_than_zero">Gibt bitte einen Wert größer als 0 ein</string>
+    <string name="mdf_error_value_must_be_between_1_and_X">Gib bitte einen Wert zwischen 1 and %1$d ein</string>
+
+    <string name="mdf_formatted_frequency_day_1">Jeden Tag wiederholen</string>
+    <string name="mdf_formatted_frequency_day_2">Jeden 2. Tag wiederholen</string>
+    <string name="mdf_formatted_frequency_day_X">Jeden %1$d. Tag wiederholen</string>
+    <string name="mdf_formatted_frequency_week_1">Jede Woche am %1$s wiederholen</string>
+    <string name="mdf_formatted_frequency_week_2">Jede 2. Woche am %1$s wiederholen</string>
+    <string name="mdf_formatted_frequency_week_X">Jede %1$d. Woche am %2$s wiederholen</string>
+    <string name="mdf_formatted_frequency_week_1_ntimes_1">Jede Woche an 1 beliebigen Tag wiederholen</string>
+    <string name="mdf_formatted_frequency_week_2_ntimes_1">Jede 2. Woche an 1 beliebigen Tag wiederholen</string>
+    <string name="mdf_formatted_frequency_week_X_ntimes_1">Jede %1$d. Woche an 1 beliebigen Tag wiederholen</string>
+    <string name="mdf_formatted_frequency_week_1_ntimes_X">Jede Woche an %1$d beliebigen Tagen wiederholen</string>
+    <string name="mdf_formatted_frequency_week_2_ntimes_X">Jede 2. Woche an %1$d beliebigen Tagen wiederholen</string>
+    <string name="mdf_formatted_frequency_week_X_ntimes_X">Jede %1$d. Woche an %2$d beliebigen Tagen wiederholen</string>
+    <string name="mdf_formatted_frequency_month_1">Jeden Monat an folgenden Tagen wiederholen: %1$s</string>
+    <string name="mdf_formatted_frequency_month_2">Jeden Monat an folgenden Tagen wiederholen: %1$s</string>
+    <string name="mdf_formatted_frequency_month_X">Jeden %1$d Monat an folgenden Tagen wiederholen: %2$s</string>
+    <string name="mdf_formatted_frequency_month_1_ntimes_1">Jeden Monat an 1 beliebigen Tag wiederholen</string>
+    <string name="mdf_formatted_frequency_month_2_ntimes_1">Jeden 2. Monat an 1 beliebigen Tag wiederholen</string>
+    <string name="mdf_formatted_frequency_month_X_ntimes_1">Jeden %1$d. Monat an 1 beliebigen Tag wiederholen</string>
+    <string name="mdf_formatted_frequency_month_1_ntimes_X">Jeden Monat an %1$d beliebigen Tagen wiederholen</string>
+    <string name="mdf_formatted_frequency_month_2_ntimes_X">Jeden 2. Monat an %1$d beliebigen Tagen wiederholen</string>
+    <string name="mdf_formatted_frequency_month_X_ntimes_X">Jeden %1$d. Monat an %2$d beliebigen Tagen wiederholen</string>
+    <string name="mdf_formatted_frequency_year_1">Jedes Jahr wiederholen</string>
+    <string name="mdf_formatted_frequency_year_2">Jedes 2. Jahr wiederholen</string>
+    <string name="mdf_formatted_frequency_year_X">Jedes %1$d. Jahr wiederholen</string>
+
+    <string name="mdf_formatted_separator">"; "</string>
+    <string name="mdf_formatted_list_separator">", "</string>
+    <string name="mdf_formatted_last_list_separator">" und "</string>
+    <string name="mdf_formatted_added_start_date">beginnend am %1$s</string>
+    <string name="mdf_formatted_added_end_date">bis %1$s wiederholen</string>
+    <string name="mdf_formatted_added_end_never">für immer wiederholen</string>
+    <string name="mdf_formatted_added_end_times">%1$d Mal wiederholen</string>
+
+</resources>

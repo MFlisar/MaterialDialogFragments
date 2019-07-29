@@ -17,7 +17,7 @@ import kotlinx.android.parcel.Parcelize
 data class DialogList(
         // base setup
         override val id: Int,
-        override val title: Text,
+        override val title: Text?,
         val items: List<Item>,
         val text: Text? = null,
         val selectionMode: SelectionMode = SelectionMode.None,

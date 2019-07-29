@@ -14,7 +14,7 @@ import java.util.*
 class DialogInput(
         // base setup
     override val id: Int,
-    override val title: Text,
+    override val title: Text?,
     val input: InputField,
     override val posButton: Text = Text.TextRes(android.R.string.ok),
     override val negButton: Text? = null,

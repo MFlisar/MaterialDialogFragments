@@ -7,5 +7,5 @@ import com.michaelflisar.dialogs.events.BaseDialogEvent
  */
 
 interface DialogFragmentCallback {
-    fun onDialogResultAvailable(event: BaseDialogEvent)
+    fun onDialogResultAvailable(event: BaseDialogEvent): Boolean
 }
