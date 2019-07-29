@@ -12,7 +12,7 @@ object DialogSetup {
     /**
      * define how the result of a dialog is send and where it is send to
      */
-    var DEFAULT_SEND_RESULT_TYPE = SendResultType.First()
+    var DEFAULT_SEND_RESULT_TYPE: SendResultType = SendResultType.First()
 
     /**
      * provide a custom dialog result handler - it will get ALL results
@@ -36,5 +36,5 @@ object DialogSetup {
     /**
      * provide a custom logger
      */
-    var logger : DialogLogger? = null
+    var logger: DialogLogger? = null
 }
