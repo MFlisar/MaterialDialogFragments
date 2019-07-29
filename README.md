@@ -1,7 +1,8 @@
-# material-dialogfragments
+# material-dialogfragments  [![Release](https://jitpack.io/v/MFlisar/material-dialogfragments.svg)](https://jitpack.io/#MFlisar/material-dialogfragments)
+
 Common dialog fragments based on https://github.com/afollestad/material-dialogs
 
-Including some special dialogs lile a custom color dialog, text and number dialogs, multi text and number dialogs, a fast adapter recycler view dialog and maybe more to come.
+Including some special dialogs (separates into their own optional modules) like a custom color dialog, text and number dialogs, multi text and number dialogs, a fast adapter recycler view dialog, an ads dialog and maybe even more to come.
 
 ### Gradle (via [JitPack.io](https://jitpack.io/))
 
@@ -15,7 +16,10 @@ repositories {
 ```groovy
 dependencies {
 
-	// core - contains DialogInfo, DialogList, DialogProgress
+	// --------
+	// core - DialogInfo, DialogList, DialogProgress
+	// --------
+	
 	implementation "com.github.MFlisar.material-dialogfragments:dialogs:<LATEST-VERSION>"
 	
 	// --------
