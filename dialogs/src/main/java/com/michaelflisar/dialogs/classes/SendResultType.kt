@@ -1,11 +1,11 @@
 package com.michaelflisar.dialogs.classes
 
-sealed class SendResultType() {
+sealed class SendResultType {
 
     /**
      * result is send to the activity of the dialog AND to all fragments (including sub fragments, sub sub fragments, ...) of this activity
      */
-    class All(val stopAfterFirstHandled: Boolean) : SendResultType()
+    class All(val excludeCallingFragment: Boolean, val stopAfterFirstHandled: Boolean) : SendResultType()
 
     /**
      * result is ONLY send to parent fragment of the dialog

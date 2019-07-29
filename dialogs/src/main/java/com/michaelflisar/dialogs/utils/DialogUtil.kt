@@ -15,15 +15,15 @@ import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
 object DialogUtil {
 
     fun trySendResult(
-        event: BaseDialogEvent,
-        fragment: Fragment,
-        sendResultType: SendResultType = DialogSetup.DEFAULT_SEND_RESULT_TYPE
+            event: BaseDialogEvent,
+            fragment: Fragment,
+            sendResultType: SendResultType = DialogSetup.DEFAULT_SEND_RESULT_TYPE
     ) {
         var stopAfterFirstHandled = true
         val allCallbacks = when (sendResultType) {
             is SendResultType.All -> {
                 stopAfterFirstHandled = sendResultType.stopAfterFirstHandled
-                getAllCallbackHandlers(fragment)
+                getAllCallbackHandlers(fragment, sendResultType.excludeCallingFragment)
             }
             is SendResultType.ParentFragment -> convertFragmentToCallbackList(fragment.parentFragment)
             is SendResultType.TargetFragment -> convertFragmentToCallbackList(fragment.targetFragment)
@@ -41,7 +41,7 @@ object DialogUtil {
             }
             is SendResultType.Manual -> ArrayList<DialogFragmentCallback>()
         }
-            .filterNotNull()
+                .filterNotNull()
 
         for (c in allCallbacks) {
             val handled = c.onDialogResultAvailable(event)
@@ -71,7 +71,7 @@ object DialogUtil {
         return result
     }
 
-    private fun getAllCallbackHandlers(fragment: Fragment): ArrayList<DialogFragmentCallback> {
+    private fun getAllCallbackHandlers(fragment: Fragment, excludeFragment: Boolean): ArrayList<DialogFragmentCallback> {
         val result = ArrayList<DialogFragmentCallback>()
         (fragment.activity as? DialogFragmentCallback)?.let {
             result.add(it)
@@ -79,8 +79,9 @@ object DialogUtil {
         // 2) we recursively get all fragments of the activity and add them to the callbacks list
         fragment.activity?.let {
             result.addAll(getFragments(it)
-                .filter { it is DialogFragmentCallback }
-                .map { it as DialogFragmentCallback }
+                    .filter { it is DialogFragmentCallback }
+                    .filter { !excludeFragment || it != fragment }
+                    .map { it as DialogFragmentCallback }
             )
         }
         return result
@@ -88,11 +89,11 @@ object DialogUtil {
 
     private fun convertActivityToCallbackList(activity: Activity?): ArrayList<DialogFragmentCallback> {
         return (activity as? DialogFragmentCallback)?.let { ArrayList<DialogFragmentCallback>().apply { add(it) } }
-            ?: ArrayList()
+                ?: ArrayList()
     }
 
     private fun convertFragmentToCallbackList(fragment: Fragment?): ArrayList<DialogFragmentCallback> {
         return (fragment as? DialogFragmentCallback)?.let { ArrayList<DialogFragmentCallback>().apply { add(it) } }
-            ?: ArrayList()
+                ?: ArrayList()
     }
 }
