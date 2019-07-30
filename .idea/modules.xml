@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/dialogs/dialogs.iml" filepath="$PROJECT_DIR$/dialogs/dialogs.iml" />
       <module fileurl="file://$PROJECT_DIR$/dialogs-color/dialogs-color.iml" filepath="$PROJECT_DIR$/dialogs-color/dialogs-color.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dialogs-color/dialogs-color.iml" filepath="$PROJECT_DIR$/dialogs-color/dialogs-color.iml" />
       <module fileurl="file://$PROJECT_DIR$/dialogs-datetime/dialogs-datetime.iml" filepath="$PROJECT_DIR$/dialogs-datetime/dialogs-datetime.iml" />
       <module fileurl="file://$PROJECT_DIR$/dialogs-fastadapter/dialogs-fastadapter.iml" filepath="$PROJECT_DIR$/dialogs-fastadapter/dialogs-fastadapter.iml" />
       <module fileurl="file://$PROJECT_DIR$/dialogs-frequency/dialogs-frequency.iml" filepath="$PROJECT_DIR$/dialogs-frequency/dialogs-frequency.iml" />

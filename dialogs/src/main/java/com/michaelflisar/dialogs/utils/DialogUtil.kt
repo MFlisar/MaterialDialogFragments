@@ -44,7 +44,7 @@ object DialogUtil {
         }
                 .filterNotNull()
                 .filter {
-                    excludedFilter?.invoke(it) ?: true
+                    excludedFilter?.invoke(it)?.not() ?: true
                 }
 
         for (c in allCallbacks) {
