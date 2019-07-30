@@ -17,13 +17,14 @@ object DialogUtil {
     fun trySendResult(
             event: BaseDialogEvent,
             fragment: Fragment,
-            sendResultType: SendResultType = DialogSetup.DEFAULT_SEND_RESULT_TYPE
+            sendResultType: SendResultType = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
+            excludedFilter: ((DialogFragmentCallback) -> Boolean)? = null
     ) {
         var stopAfterFirstHandled = true
         val allCallbacks = when (sendResultType) {
             is SendResultType.All -> {
                 stopAfterFirstHandled = sendResultType.stopAfterFirstHandled
-                getAllCallbackHandlers(fragment, sendResultType.excludeCallingFragment)
+                getAllCallbackHandlers(fragment)
             }
             is SendResultType.ParentFragment -> convertFragmentToCallbackList(fragment.parentFragment)
             is SendResultType.TargetFragment -> convertFragmentToCallbackList(fragment.targetFragment)
@@ -42,6 +43,9 @@ object DialogUtil {
             is SendResultType.Manual -> ArrayList<DialogFragmentCallback>()
         }
                 .filterNotNull()
+                .filter {
+                    excludedFilter?.invoke(it) ?: true
+                }
 
         for (c in allCallbacks) {
             val handled = c.onDialogResultAvailable(event)
@@ -71,7 +75,7 @@ object DialogUtil {
         return result
     }
 
-    private fun getAllCallbackHandlers(fragment: Fragment, excludeFragment: Boolean): ArrayList<DialogFragmentCallback> {
+    private fun getAllCallbackHandlers(fragment: Fragment): ArrayList<DialogFragmentCallback> {
         val result = ArrayList<DialogFragmentCallback>()
         (fragment.activity as? DialogFragmentCallback)?.let {
             result.add(it)
@@ -80,7 +84,6 @@ object DialogUtil {
         fragment.activity?.let {
             result.addAll(getFragments(it)
                     .filter { it is DialogFragmentCallback }
-                    .filter { !excludeFragment || it != fragment }
                     .map { it as DialogFragmentCallback }
             )
         }

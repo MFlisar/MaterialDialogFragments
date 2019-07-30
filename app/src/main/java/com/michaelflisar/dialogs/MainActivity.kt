@@ -55,13 +55,13 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
     /*
      * optionally handle the results of the dialog - use the event.id to find out where the event comes from
      */
-    override fun onDialogResultAvailable(event: BaseDialogEvent) {
+    override fun onDialogResultAvailable(event: BaseDialogEvent): Boolean {
 
         // we have enabled this manually in this demo, by default cancel events are not send!
         // useful if you want to close the parent activity if a special dialog is cancelled or do something else based on this event
         if (event is DialogCancelledEvent) {
             Toast.makeText(this, "Dialog (ID ${event.id}) cancelled via touch outside or back button press!", Toast.LENGTH_LONG).show()
-            return
+            return true
         }
 
         // depending on your dialog setup distinguish between event.posClicked(), event.neutrClicked() and event.negClicked()
@@ -97,12 +97,13 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                 "Date time event\nSelected date: $date"
             }
             is DialogFrequencyEvent -> {
-                val frequency = event.data?.frequency?.toReadableString()
+                val frequency = event.data?.frequency?.toReadableString(this)
                 "Frequency event\nSelected frequency: $frequency"
             }
-            else -> null
+            else -> return false
         }
         Toast.makeText(this, "Event: ${event.id}\n$data", Toast.LENGTH_LONG).show()
+        return true
     }
 
     // -------------------
