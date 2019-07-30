@@ -28,6 +28,27 @@ open class DialogInfoFragment : BaseDialogFragment<DialogInfo>() {
             dlg.setSetupArgs(setup)
             return dlg
         }
+
+        const val PLACEHOLDER_BODY_STYLE_EXTRA = "##BODY_EXTRA_STYLES##"
+        const val PLACEHOLDER_BODY = "##BODY##"
+
+        const val HTML_BASE = "<html>\n" +
+                "<head>\n" +
+                "<style>\n" +
+                "body { font-size: 18pt; margin: 0px; background-color: transparent; $PLACEHOLDER_BODY_STYLE_EXTRA}\n" +
+                "h1 { margin-left: 0px; font-size: 14pt; label-decoration: underline; font-weight: bold; }\n" +
+                "h2 { margin-left: 0px; font-size: 13pt; font-weight: bold; }\n" +
+                "h3 { font-size: 11pt; font-weight: normal;}\n" +
+                "h4 { font-size: 10pt; font-weight: normal;}\n" +
+                "p { font-size: 12pt; }\n" +
+                "code { font-size: 10pt; }\n" +
+                "li { margin-left: 0px; font-size: 12pt;}\n" +
+                "ul { padding-left: 30px;}\n" +
+                "ol { padding-left: 30px;}\n" +
+                "</style>\n" +
+                "</head>\n" +
+                "<body>$PLACEHOLDER_BODY</body>\n" +
+                "</html>"
     }
 
     private var posButtonText: String? = null
@@ -129,31 +150,19 @@ open class DialogInfoFragment : BaseDialogFragment<DialogInfo>() {
                 color = " color: white;"
             }
             val wv: WebView = dialog.getCustomView().findViewById(R.id.wv)
-            var t = "<html><head>" +
-                    "<style type=\"label/css\">" +
-                    "body { font-size: 12pt;" + color + " margin: 0px; background-color: transparent; }" +
-                    "h1 { margin-left: 0px; font-size: 14pt; label-decoration: underline; font-weight: bold; }" +
-                    "h2 { margin-left: 0px; font-size: 13pt; font-weight: bold; }" +
-                    "h3 { font-size: 11pt; font-weight: normal;}" +
-                    "h4 { font-size: 10pt; font-weight: normal;}" +
-                    "p { font-size: 12pt; }" +
-                    "code { font-size: 10pt; }" +
-                    "li { margin-left: 0px; font-size: 12pt;}" +
-                    "ul { padding-left: 30px;}" +
-                    "ol { padding-left: 30px;}" +
-                    "</style>" +
-                    "</head><body>"
 
-            t += setup.text.get(activity!!)
+            var body = setup.text.get(activity!!)
             setup.warning?.let {
                 val warningHexColor = Integer.toHexString(setup.warningColor)
                 val contentExtra = it.get(activity!!)
-                t += "<p><font color=\"#$warningHexColor\">$contentExtra</font></p>"
+                body += "<p><font color=\"#$warningHexColor\">$contentExtra</font></p>"
             }
 
-            t += "</body></html>"
+            val html = HTML_BASE
+                    .replace(PLACEHOLDER_BODY_STYLE_EXTRA, color)
+                    .replace(PLACEHOLDER_BODY, body)
 
-            wv.loadData(t, "text/html; charset=UTF-8", "UTF-8");
+            wv.loadData(html, "text/html; charset=UTF-8", "UTF-8");
 //            wv.loadData(t, "label/html; charset=UTF-8", "UTF-8")
             wv.setBackgroundColor(Color.TRANSPARENT)
         }
