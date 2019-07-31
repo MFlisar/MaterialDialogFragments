@@ -34,11 +34,6 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        // should be done in an application once
-        // optionally we can enable cancel events, but then we must handle them in onDialogResultAvailable as well
-        // this defines the default value => EVERY SETUP allows to overwrite this default value for a single dialog!
-        DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT = true
-
         val itemAdapter = initRecyclerView()
         addInfoDialogItems(itemAdapter)
         addInputDialogItems(itemAdapter)
@@ -50,6 +45,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         addDateTimeDialogItems(itemAdapter)
         addFrequencyDialogItems(itemAdapter)
         addDebugDialogItems(itemAdapter)
+        addAdsDialogItems(itemAdapter)
     }
 
     /*
@@ -99,6 +95,20 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
             is DialogFrequencyEvent -> {
                 val frequency = event.data?.frequency?.toReadableString(this)
                 "Frequency event\nSelected frequency: $frequency"
+            }
+            is DialogAdsEvent -> {
+                val data = event.data
+                when (data) {
+                    is DialogAdsEvent.Data.RewardReceived -> {
+                        "Reward received - amount: ${data.amount}"
+                    }
+                    is DialogAdsEvent.Data.InterstitialShown -> {
+                        "Interstitial shown"
+                    }
+                    is DialogAdsEvent.Data.ClosedByUser -> {
+                        "Closed by user"
+                    }
+                }
             }
             else -> return false
         }
@@ -459,6 +469,83 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     )
                 }
         )
+    }
+
+    private fun addAdsDialogItems(adapter: ItemAdapter<IItem<*>>) {
+
+        // this setup makes sure, that only test ads are shown!
+        // This means we do not need valid ad ids in this demo either
+        val TEST_SETUP = DialogAds.TestSetup()
+        // this is the sample google ad mob app id for test ads - the same is defined in this apps manifest
+        // should be your real app id in a real app of course
+        val appId = R.string.sample_admob_app_id
+        // we do not need a valid ad id for test ads - the TestSetup will provide the correct ad ids for test ads automatically in this example
+        val emptyAdId = ""
+
+        // the policy will automatically handle and update it's state if shouldShow is called
+        // for the example we use the show always policy
+        val policy = DialogAds.ShowPolicy.Always
+        // following policies exist as well:
+        // DialogAds.ShowPolicy.OnceDaily
+        // DialogAds.ShowPolicy.EveryXTime(5)
+
+        adapter.add(
+                HeaderItem("Ad dialog demos"),
+                DemoItem("Banner dialog", "Shows a simple dialog with a banner - can be closed after 10s") {
+                    if (policy.shouldShow(this)) {
+                        DialogAds(
+                                100,
+                                "Ad Banner Dialog".asText(),
+                                info = "This dialog will not be shown if you buy the pro version!".asText(),
+                                appId = appId.asText(),
+                                bannerSetup = DialogAds.BannerSetup(
+                                        emptyAdId.asText() // this should be the banner ad id in a real app
+                                ),
+                                testSetup = TEST_SETUP
+                        )
+                                .create()
+                                .show(this)
+                    }
+                },
+                DemoItem("Reward dialog", "Shows a simple dialog with a button to show a rewarded ad - can be closed after 10s in case the ad can not be loaded") {
+                    if (policy.shouldShow(this)) {
+                        DialogAds(
+                                101,
+                                "Ad Reward Dialog".asText(),
+                                info = "This dialog will not be shown if you buy the pro version!".asText(),
+                                appId = appId.asText(),
+                                bigAdSetup = DialogAds.BigAdSetup(
+                                        emptyAdId.asText(), // this should be the reward ad id in a real app
+                                        "Show me the ad".asText(),
+                                        DialogAds.BigAdType.Reward
+                                ),
+                                testSetup = TEST_SETUP
+                        )
+                                .create()
+                                .show(this)
+                    }
+                },
+                DemoItem("Interstitial dialog", "Shows a simple dialog with a button to show an interstitial ad - can be closed after 10s in case the ad can not be loaded") {
+                    if (policy.shouldShow(this)) {
+                        DialogAds(
+                                102,
+                                "Ad Interstitial Dialog".asText(),
+                                info = "This dialog will not be shown if you buy the pro version!".asText(),
+                                appId = appId.asText(),
+                                bigAdSetup = DialogAds.BigAdSetup(
+                                        emptyAdId.asText(), // this should be the interstitial ad id in a real app
+                                        "Show me the ad".asText(),
+                                        DialogAds.BigAdType.Interstitial
+                                ),
+                                testSetup = TEST_SETUP
+                        )
+                                .create()
+                                .show(this)
+                    }
+                }
+        )
+
+//
     }
 
 }

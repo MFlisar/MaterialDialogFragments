@@ -41,11 +41,11 @@ internal class DialogMonthDayFragment : BaseDialogFragment<DialogMonthDay>(), Ad
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
-            monthDayType = savedInstanceState.getParcelable("monthDayType")
+            monthDayType = savedInstanceState.getParcelable("monthDayType")!!
             dayNumber = savedInstanceState.getInt("dayNumber")
             dayNumberBeginning = savedInstanceState.getBoolean("dayNumberBeginning")
             weekdayNumber = savedInstanceState.getInt("weekdayNumber")
-            weekDay = savedInstanceState.getParcelable("weekDay")
+            weekDay = savedInstanceState.getParcelable("weekDay")!!
         }
     }
 

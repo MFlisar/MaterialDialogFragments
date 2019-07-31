@@ -48,7 +48,7 @@ open class DialogDateTimeFragment : BaseDialogFragment<DialogDateTime>() {
                     setup.maxDateTime,
                     date,
                     setup.requireFutureDateTime
-                ) { dialog, datetime ->
+                ) { _, datetime ->
                     date = datetime
                 }
             }
@@ -57,7 +57,7 @@ open class DialogDateTimeFragment : BaseDialogFragment<DialogDateTime>() {
                     date,
                     setup.requireFutureDateTime,
                     setup.show24HoursView
-                ) { dialog, datetime ->
+                ) { _, datetime ->
                     date = datetime
                 }
             }
@@ -67,7 +67,7 @@ open class DialogDateTimeFragment : BaseDialogFragment<DialogDateTime>() {
                     date,
                     setup.requireFutureDateTime,
                     setup.show24HoursView
-                ) { dialog, datetime ->
+                ) { _, datetime ->
                     date = datetime
                 }
             }

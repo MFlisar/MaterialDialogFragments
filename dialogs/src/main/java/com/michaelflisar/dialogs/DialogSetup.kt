@@ -20,7 +20,7 @@ object DialogSetup {
     var resultHandler: ((event: Any) -> Unit)? = null
 
     /**
-     * define if your app currently used a dark or a light theme
+     * define if your app currently uses a dark or a light theme
      */
     var useDarkTheme: (() -> Boolean) = { false }
 
@@ -29,12 +29,12 @@ object DialogSetup {
      */
     var SEND_CANCEL_EVENT_BY_DEFAULT: Boolean = false
 
-    fun sendResult(result: Any) {
-        resultHandler?.invoke(result)
-    }
-
     /**
      * provide a custom logger
      */
     var logger: DialogLogger? = null
+
+    internal fun sendResult(result: Any) {
+        resultHandler?.invoke(result)
+    }
 }

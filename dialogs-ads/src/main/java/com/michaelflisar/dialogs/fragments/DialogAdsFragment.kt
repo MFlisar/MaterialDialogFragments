@@ -213,6 +213,7 @@ class DialogAdsFragment : BaseDialogFragment<DialogAds>() {
     private fun createRewardedVideoAdListener(type: DialogAds.AdType): RewardedVideoAdListener {
         return object : RewardedVideoAdListener {
             override fun onRewardedVideoAdClosed() {
+                finishDialog(null, DialogAdsEvent.Data.ClosedByUser(errorBanner, errorBigAd))
             }
 
             override fun onRewardedVideoAdLeftApplication() {
