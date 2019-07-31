@@ -56,13 +56,7 @@ Usage is very simply, you only need to do following:
 
 * you create a dialog with the corresponding setup class like e.g.:
 
-        DialogInfo(
-			1,
-			"Info Title".asText(),
-			"Some info label".asText()
-		)
-				.create()
-				.show(this)
+    https://github.com/MFlisar/material-dialogfragments/blob/152d242099000fde822b25c78e49f8cbe6f91588/app/src/main/java/com/michaelflisar/dialogs/MainActivity.kt#L145-L151
 				
 * in the `DialogFragmentCallback` you can handle the result now like following:
 
