@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
@@ -22,6 +24,7 @@ import com.michaelflisar.dialogs.base.BaseDialogFragment
 import com.michaelflisar.dialogs.events.DialogAdsEvent
 import com.michaelflisar.dialogs.setups.DialogAds
 import com.michaelflisar.dialogs.ads.R
+import com.michaelflisar.dialogs.classes.SendResultType
 
 class DialogAdsFragment : BaseDialogFragment<DialogAds>() {
 
@@ -364,6 +367,30 @@ class DialogAdsFragment : BaseDialogFragment<DialogAds>() {
         super.onSaveInstanceState(outState)
         if (timeLeft > 0) {
             outState.putInt("timeLeft", timeLeft)
+        }
+    }
+
+    // additioanl show methods with policy
+
+    fun show(
+            activity: FragmentActivity,
+            policy: DialogAds.ShowPolicy,
+            customSendResultType: SendResultType? = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
+            tag: String = this::class.java.name
+    ) {
+        if (policy.shouldShow(activity)) {
+            super.show(activity, customSendResultType, tag)
+        }
+    }
+
+    fun show(
+            parent: Fragment,
+            policy: DialogAds.ShowPolicy,
+            customSendResultType: SendResultType? = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
+            tag: String = this::class.java.name
+    ) {
+        if (policy.shouldShow(parent.requireContext())) {
+            super.show(parent, customSendResultType, tag)
         }
     }
 }

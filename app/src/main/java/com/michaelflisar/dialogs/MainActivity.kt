@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         // event.data?.let {
         //    // some data is available for sure, either because pos button was clicked or because dialog setup defines, that data should be reported
         // }
-        
+
         val data = when (event) {
             is DialogInfoEvent -> "Info dialog closed - ID = ${event.id}"
             is DialogInputEvent -> {
@@ -492,56 +492,50 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         adapter.add(
                 HeaderItem("Ad dialog demos"),
                 DemoItem("Banner dialog", "Shows a simple dialog with a banner - can be closed after 10s") {
-                    if (policy.shouldShow(this)) {
-                        DialogAds(
-                                100,
-                                "Ad Banner Dialog".asText(),
-                                info = "This dialog will not be shown if you buy the pro version!".asText(),
-                                appId = appId.asText(),
-                                bannerSetup = DialogAds.BannerSetup(
-                                        emptyAdId.asText() // this should be the banner ad id in a real app
-                                ),
-                                testSetup = TEST_SETUP
-                        )
-                                .create()
-                                .show(this)
-                    }
+                    DialogAds(
+                            100,
+                            "Ad Banner Dialog".asText(),
+                            info = "This dialog will not be shown if you buy the pro version!".asText(),
+                            appId = appId.asText(),
+                            bannerSetup = DialogAds.BannerSetup(
+                                    emptyAdId.asText() // this should be the banner ad id in a real app
+                            ),
+                            testSetup = TEST_SETUP
+                    )
+                            .create()
+                            .show(this, policy)
                 },
                 DemoItem("Reward dialog", "Shows a simple dialog with a button to show a rewarded ad - can be closed after 10s in case the ad can not be loaded") {
-                    if (policy.shouldShow(this)) {
-                        DialogAds(
-                                101,
-                                "Ad Reward Dialog".asText(),
-                                info = "This dialog will not be shown if you buy the pro version!".asText(),
-                                appId = appId.asText(),
-                                bigAdSetup = DialogAds.BigAdSetup(
-                                        emptyAdId.asText(), // this should be the reward ad id in a real app
-                                        "Show me the ad".asText(),
-                                        DialogAds.BigAdType.Reward
-                                ),
-                                testSetup = TEST_SETUP
-                        )
-                                .create()
-                                .show(this)
-                    }
+                    DialogAds(
+                            101,
+                            "Ad Reward Dialog".asText(),
+                            info = "This dialog will not be shown if you buy the pro version!".asText(),
+                            appId = appId.asText(),
+                            bigAdSetup = DialogAds.BigAdSetup(
+                                    emptyAdId.asText(), // this should be the reward ad id in a real app
+                                    "Show me the ad".asText(),
+                                    DialogAds.BigAdType.Reward
+                            ),
+                            testSetup = TEST_SETUP
+                    )
+                            .create()
+                            .show(this, policy)
                 },
                 DemoItem("Interstitial dialog", "Shows a simple dialog with a button to show an interstitial ad - can be closed after 10s in case the ad can not be loaded") {
-                    if (policy.shouldShow(this)) {
-                        DialogAds(
-                                102,
-                                "Ad Interstitial Dialog".asText(),
-                                info = "This dialog will not be shown if you buy the pro version!".asText(),
-                                appId = appId.asText(),
-                                bigAdSetup = DialogAds.BigAdSetup(
-                                        emptyAdId.asText(), // this should be the interstitial ad id in a real app
-                                        "Show me the ad".asText(),
-                                        DialogAds.BigAdType.Interstitial
-                                ),
-                                testSetup = TEST_SETUP
-                        )
-                                .create()
-                                .show(this)
-                    }
+                    DialogAds(
+                            102,
+                            "Ad Interstitial Dialog".asText(),
+                            info = "This dialog will not be shown if you buy the pro version!".asText(),
+                            appId = appId.asText(),
+                            bigAdSetup = DialogAds.BigAdSetup(
+                                    emptyAdId.asText(), // this should be the interstitial ad id in a real app
+                                    "Show me the ad".asText(),
+                                    DialogAds.BigAdType.Interstitial
+                            ),
+                            testSetup = TEST_SETUP
+                    )
+                            .create()
+                            .show(this, policy)
                 }
         )
 

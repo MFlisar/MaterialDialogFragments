@@ -25,7 +25,7 @@ class DialogProgress internal constructor(
         override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT
         ) : BaseDialogSetup {
 
-    override fun create(): DialogFragment<DialogProgress> = DialogProgressFragment.create(this)
+    override fun create() = DialogProgressFragment.create(this)
 
     companion object {
         private var dialog: IProgressDialogFragment? = null

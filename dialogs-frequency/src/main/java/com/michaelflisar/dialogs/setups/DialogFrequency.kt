@@ -35,5 +35,5 @@ class DialogFrequency(
 
 ) : BaseDialogSetup {
 
-    override fun create(): DialogFragment<DialogFrequency> = DialogFrequencyFragment.create(this)
+    override fun create() = DialogFrequencyFragment.create(this)
 }

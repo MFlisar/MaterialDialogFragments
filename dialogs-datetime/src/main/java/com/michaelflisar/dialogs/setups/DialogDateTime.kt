@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.dialogs.fragments.DialogDateTimeFragment
 import com.michaelflisar.dialogs.interfaces.DialogFragment
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -40,7 +41,7 @@ class DialogDateTime(
     val show24HoursView: Boolean = true
 ) : BaseDialogSetup {
 
-    override fun create(): DialogFragment<DialogDateTime> = com.michaelflisar.dialogs.fragments.DialogDateTimeFragment.create(this)
+    override fun create() = DialogDateTimeFragment.create(this)
 
     enum class Type {
         DateOnly,

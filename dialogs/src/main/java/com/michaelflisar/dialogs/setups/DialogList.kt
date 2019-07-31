@@ -42,7 +42,7 @@ data class DialogList(
 
 ) : BaseDialogSetup {
 
-    override fun create(): DialogFragment<DialogList> = DialogListFragment.create(this)
+    override fun create() = DialogListFragment.create(this)
 
     enum class SelectionMode {
         None,

@@ -12,7 +12,7 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 ```
-2. add the compile statement to your module's `build.gradle`:
+2. add the implementation statement(s) to your module's `build.gradle`:
 ```groovy
 dependencies {
 
@@ -48,7 +48,7 @@ dependencies {
 
 Usage is very simply, you only need to do following:
 
-* `Activities` or `Fragments` using the dialog fragments must implement the simple `DialogFragmentCallback`
+* `Activities` or `Fragments` using the dialog fragments must implement the simple `DialogFragmentCallback` interface:
 
         interface DialogFragmentCallback {
 			fun onDialogResultAvailable(event: BaseDialogEvent): Boolean
@@ -56,7 +56,13 @@ Usage is very simply, you only need to do following:
 
 * you create a dialog with the corresponding setup class like e.g.:
 
-    https://github.com/MFlisar/material-dialogfragments/blob/152d242099000fde822b25c78e49f8cbe6f91588/app/src/main/java/com/michaelflisar/dialogs/MainActivity.kt#L145-L151
+        DialogInfo(
+			1,
+			"Info Title".asText(),
+			"Some info label".asText()
+		)
+				.create()
+				.show(this)
 				
 * in the `DialogFragmentCallback` you can handle the result now like following:
 

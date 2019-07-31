@@ -45,7 +45,7 @@ class DialogInfo(
         val warningTextSizeFactor: Float = 1f
 ) : BaseDialogSetup {
 
-    override fun create(): DialogFragment<DialogInfo> = DialogInfoFragment.create(this)
+    override fun create() = DialogInfoFragment.create(this)
 
     fun useDarkTheme() = darkTheme ?: DialogSetup.useDarkTheme()
 

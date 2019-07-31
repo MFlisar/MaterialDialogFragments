@@ -5,6 +5,7 @@ import android.os.Parcelable
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.dialogs.fragments.DialogNumberPickerFragment
 import com.michaelflisar.dialogs.interfaces.DialogFragment
 import kotlinx.android.parcel.Parcelize
 
@@ -30,7 +31,7 @@ class DialogNumberPicker(
         val additonalValues: ArrayList<NumberField> = arrayListOf()
 ) : BaseDialogSetup {
 
-    override fun create(): DialogFragment<DialogNumberPicker> = com.michaelflisar.dialogs.fragments.DialogNumberPickerFragment.create(this)
+    override fun create() = DialogNumberPickerFragment.create(this)
 
     @Parcelize
     class NumberField(val label: Text?, val initialValue: Int) : Parcelable

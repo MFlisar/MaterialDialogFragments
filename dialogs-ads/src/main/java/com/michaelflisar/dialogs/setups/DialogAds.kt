@@ -37,7 +37,7 @@ class DialogAds(
     val timeToShowDialogAfterError: Int = 10
 ) : BaseDialogSetup {
 
-    override fun create(): DialogFragment<DialogAds> = DialogAdsFragment.create(this)
+    override fun create() = DialogAdsFragment.create(this)
 
     internal fun getAdId(context: Context, type: AdType): String {
         return when (type) {

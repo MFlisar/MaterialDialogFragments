@@ -26,5 +26,5 @@ internal class DialogMonthDay(
 
 ) : BaseDialogSetup {
 
-    override fun create(): DialogFragment<DialogMonthDay> = DialogMonthDayFragment.create(this)
+    override fun create() = DialogMonthDayFragment.create(this)
 }

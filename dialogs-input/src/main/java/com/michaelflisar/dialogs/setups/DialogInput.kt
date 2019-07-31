@@ -6,6 +6,7 @@ import android.text.InputType
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.dialogs.fragments.DialogInputFragment
 import com.michaelflisar.dialogs.interfaces.DialogFragment
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -34,7 +35,7 @@ class DialogInput(
     val additonalInputs: ArrayList<InputField> = arrayListOf()
 ) : BaseDialogSetup {
 
-    override fun create(): DialogFragment<DialogInput> = com.michaelflisar.dialogs.fragments.DialogInputFragment.create(this)
+    override fun create() = DialogInputFragment.create(this)
 
     @Parcelize
     class InputField(val label: Text? = null, val initialText: Text? = null, val hint: Text? = null, val allowEmptyText: Boolean = false) : Parcelable
