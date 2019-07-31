@@ -67,9 +67,9 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         // event.data?.let {
         //    // some data is available for sure, either because pos button was clicked or because dialog setup defines, that data should be reported
         // }
-
+        
         val data = when (event) {
-            is DialogInfoEvent -> "Info dialog closed"
+            is DialogInfoEvent -> "Info dialog closed - ID = ${event.id}"
             is DialogInputEvent -> {
                 if (event.neutrClicked()) {
                     "Input dialog closed\nClosed by neutral button click"

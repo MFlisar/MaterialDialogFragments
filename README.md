@@ -43,3 +43,42 @@ dependencies {
 	// implementation 'com.github.MFlisar:material-dialogfragments:<LATEST-VERSION>'
 }
 ```
+
+### Usage
+
+Usage is very simply, you only need to do following:
+
+* `Activities` or `Fragments` using the dialog fragments must implement the simple `DialogFragmentCallback`
+
+        interface DialogFragmentCallback {
+			fun onDialogResultAvailable(event: BaseDialogEvent): Boolean
+		}
+
+* you create a dialog with the corresponding setup class like e.g.:
+
+        DialogInfo(
+			1,
+			"Info Title".asText(),
+			"Some info label".asText()
+		)
+				.create()
+				.show(this)
+				
+* in the `DialogFragmentCallback` you can handle the result now like following:
+
+        override fun onDialogResultAvailable(event: BaseDialogEvent): Boolean {
+		    return when (event) {
+				is DialogInfoEvent -> {
+					Toast.makeText(this, "Info dialog closed - ID = ${event.id}", Toast.LENGTH_SHORT).show()
+					true
+				} else false
+			}
+		}
+				
+That's all. Optionally you can set up some global settings like following, preferably in your application class once only:
+
+    DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT = true
+	
+The `DialogSetup` offers some other settings as well.
+
+Check the demo app for more informations.
