@@ -3,6 +3,7 @@ package com.michaelflisar.dialogs.events
 import android.os.Bundle
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.Constants
+import com.michaelflisar.dialogs.classes.SimpleBaseDialogSetup
 
 /**
  * Created by flisar on 15.11.2016.
@@ -10,7 +11,7 @@ import com.michaelflisar.dialogs.classes.Constants
 
 open class BaseDialogEvent(val extras: Bundle?, val id: Int, private val buttonIndex: Int?) {
 
-    constructor(setup: BaseDialogSetup, buttonIndex: Int?) : this(setup.extra, setup.id, buttonIndex)
+    constructor(setup: SimpleBaseDialogSetup, buttonIndex: Int?) : this(setup.extra, setup.id, buttonIndex)
 
     fun hasExtra(key: String) = extras?.containsKey(key) ?: false
 

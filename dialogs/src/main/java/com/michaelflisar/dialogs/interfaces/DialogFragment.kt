@@ -8,12 +8,13 @@ import androidx.fragment.app.FragmentActivity
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.SendResultType
+import com.michaelflisar.dialogs.classes.SimpleBaseDialogSetup
 import com.michaelflisar.dialogs.events.BaseDialogEvent
 import com.michaelflisar.dialogs.events.DialogCancelledEvent
 import com.michaelflisar.dialogs.helper.BaseDialogFragmentHandler
 import com.michaelflisar.dialogs.utils.DialogUtil
 
-open class DialogFragment<T : BaseDialogSetup> : ExtendedFragment() {
+open class DialogFragment<T : SimpleBaseDialogSetup> : ExtendedFragment() {
 
     companion object {
         const val ARG_SETUP = "setup"
