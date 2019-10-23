@@ -1,4 +1,4 @@
-package com.michaelflisar.dialogs.classes
+package com.michaelflisar.dialogs.adapters
 
 import android.content.Context
 import android.os.Build
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
-internal class NoPaddingArrayAdapter<T>(
+class NoPaddingArrayAdapter<T>(
         context: Context,
         layoutId: Int,
         items: List<T>?,

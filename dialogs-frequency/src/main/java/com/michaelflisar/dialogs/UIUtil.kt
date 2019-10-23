@@ -4,7 +4,7 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
 import com.michaelflisar.dialogs.base.BaseDialogFragment
-import com.michaelflisar.dialogs.classes.NoPaddingArrayAdapter
+import com.michaelflisar.dialogs.adapters.NoPaddingArrayAdapter
 import com.michaelflisar.dialogs.classes.SendResultType
 import com.michaelflisar.dialogs.classes.asText
 import com.michaelflisar.dialogs.frequency.R
@@ -23,10 +23,10 @@ internal object UIUtil {
     ) {
         if (init) {
             val adapter = NoPaddingArrayAdapter(
-                spinner.context,
-                android.R.layout.simple_spinner_dropdown_item,
-                items,
-                alignTextRight
+                    spinner.context,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    items,
+                    alignTextRight
             )
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
