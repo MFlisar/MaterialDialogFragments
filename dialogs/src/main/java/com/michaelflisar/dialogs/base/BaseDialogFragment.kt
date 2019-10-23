@@ -2,7 +2,6 @@ package com.michaelflisar.dialogs.base
 
 import android.app.Dialog
 import android.os.Bundle
-import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.SimpleBaseDialogSetup
 import com.michaelflisar.dialogs.helper.BaseDialogFragmentHandler
 import com.michaelflisar.dialogs.interfaces.DialogFragment

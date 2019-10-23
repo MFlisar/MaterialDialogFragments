@@ -6,7 +6,6 @@ import androidx.fragment.app.ExtendedFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.michaelflisar.dialogs.DialogSetup
-import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.SendResultType
 import com.michaelflisar.dialogs.classes.SimpleBaseDialogSetup
 import com.michaelflisar.dialogs.events.BaseDialogEvent
@@ -36,7 +35,7 @@ open class DialogFragment<T : SimpleBaseDialogSetup> : ExtendedFragment() {
         pSetup = null
     }
 
-    fun setSetupArgs(setup: BaseDialogSetup) {
+    fun setSetupArgs(setup: SimpleBaseDialogSetup) {
         val args = arguments ?: Bundle()
         args.putParcelable(ARG_SETUP, setup)
         arguments = args
