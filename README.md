@@ -1,4 +1,4 @@
-# material-dialogfragments  [![Release](https://jitpack.io/v/MFlisar/material-dialogfragments.svg)](https://jitpack.io/#MFlisar/material-dialogfragments)
+# MaterialDialogFragments  [![Release](https://jitpack.io/v/MFlisar/material-dialogfragments.svg)](https://jitpack.io/#MFlisar/mMaterialDialogFragments)
 
 Common dialog fragments based on https://github.com/afollestad/material-dialogs
 
@@ -20,27 +20,27 @@ dependencies {
 	// core - DialogInfo, DialogList, DialogProgress
 	// --------
 	
-	implementation "com.github.MFlisar.material-dialogfragments:dialogs:<LATEST-VERSION>"
+	implementation "com.github.MFlisar.MaterialDialogFragments:dialogs:<LATEST-VERSION>"
 	
 	// --------
 	// optional
 	// --------
 	
 	// input - DialogInput, DialogNumber, DialogNumberPicker
-	implementation "com.github.MFlisar.material-dialogfragments:dialogs-input:<LATEST-VERSION>"
+	implementation "com.github.MFlisar.MaterialDialogFragments:dialogs-input:<LATEST-VERSION>"
 	
 	// specials	
-	implementation "com.github.MFlisar.material-dialogfragments:dialogs-datetime:<LATEST-VERSION>"
-	implementation "com.github.MFlisar.material-dialogfragments:dialogs-fastadapter:<LATEST-VERSION>"	
-	implementation "com.github.MFlisar.material-dialogfragments:dialogs-color:<LATEST-VERSION>"
-	implementation "com.github.MFlisar.material-dialogfragments:dialogs-frequency:<LATEST-VERSION>"
-	implementation "com.github.MFlisar.material-dialogfragments:dialogs-ads:<LATEST-VERSION>"
+	implementation "com.github.MFlisar.MaterialDialogFragments:dialogs-datetime:<LATEST-VERSION>"
+	implementation "com.github.MFlisar.MaterialDialogFragments:dialogs-fastadapter:<LATEST-VERSION>"	
+	implementation "com.github.MFlisar.MaterialDialogFragments:dialogs-color:<LATEST-VERSION>"
+	implementation "com.github.MFlisar.MaterialDialogFragments:dialogs-frequency:<LATEST-VERSION>"
+	implementation "com.github.MFlisar.MaterialDialogFragments:dialogs-ads:<LATEST-VERSION>"
 
 	// --------
 	// alternatively, to include ALL modules at once
 	// --------
 	
-	// implementation 'com.github.MFlisar:material-dialogfragments:<LATEST-VERSION>'
+	// implementation 'com.github.MFlisar:MaterialDialogFragments:<LATEST-VERSION>'
 }
 ```
 
