@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.michaelflisar.dialogs.app.BuildConfig
 import com.michaelflisar.dialogs.app.R
 import com.michaelflisar.dialogs.app.databinding.ActivityMainBinding
 import com.michaelflisar.dialogs.classes.asText
@@ -465,6 +466,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             this,
                             "Back",
                             true,
+                            BuildConfig.DEBUG,
                             "Debug dialog"
                     )
                 }

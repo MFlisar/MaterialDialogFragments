@@ -90,9 +90,9 @@ object DebugDialog {
     // Dialog
     // ------------
 
-    fun showDialog(items: List<Entry<*>>, activity: FragmentActivity, backButtonText: String, withNumbering: Boolean, customTitle: String? = null) {
+    fun showDialog(items: List<Entry<*>>, activity: FragmentActivity, backButtonText: String, withNumbering: Boolean, isDebug: Boolean, customTitle: String? = null) {
 
-        val visibleItems = items.filter { BuildConfig.DEBUG || it.visibleInRelease }
+        val visibleItems = items.filter { isDebug || it.visibleInRelease }
 
         val dialog = MaterialDialog(activity)
         val adapter = DebugAdapter(visibleItems, activity, dialog, DialogSetup.useDarkTheme(), withNumbering)
