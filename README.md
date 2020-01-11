@@ -4,6 +4,13 @@ Common dialog fragments based on https://github.com/afollestad/material-dialogs
 
 Including some special dialogs (separates into their own optional modules) like a custom color dialog, text and number dialogs, multi text and number dialogs, a fast adapter recycler view dialog, an ads dialog and maybe even more to come.
 
+### Screenshots
+
+
+|:-------------------------:|:-------------------------:|:-------------------------:|
+| ![Info Dialog](images/info_dialog.jpg?raw=true "Title") Simple info dialog | ![Info Dialog](images/info_dialog2.jpg?raw=true "Title") Info dialog with Timeout + Warning | ![Info Dialog](images/info_dialog3.jpg?raw=true "Title") Info dialog with HTML content |
+
+
 ### Gradle (via [JitPack.io](https://jitpack.io/))
 
 1. add jitpack to your project's `build.gradle`:
