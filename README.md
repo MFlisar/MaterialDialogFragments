@@ -6,9 +6,15 @@ Including some special dialogs (separates into their own optional modules) like 
 
 ### Screenshots
 
-|:-------------------------:|:-------------------------:|:-------------------------:|
-| ![Info Dialog](images/info_dialog.jpg?raw=true "Title") Simple info dialog | ![Info Dialog](images/info_dialog2.jpg?raw=true "Title") Info dialog with Timeout + Warning | ![Info Dialog](images/info_dialog3.jpg?raw=true "Title") Info dialog with HTML content |
 
+| | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|
+| ![Dialog](images/info_dialog.jpg?raw=true "Title") Simple info dialog | ![Dialog](images/info_dialog2.jpg?raw=true "Title") Info dialog with Timeout + Warning | ![Dialog](images/info_dialog3.jpg?raw=true "Title") Info dialog with HTML content |
+| ![Dialog](images/list_dialog.jpg?raw=true "Title") Simple list dialog | ![Dialog](images/list_dialog2.jpg?raw=true "Title") Multi select list dialog with images | ![Dialog](images/info_dialog3.jpg?raw=true "Title") Multi select list dialog with custom check marks |
+| ![Dialog](images/list_dialog4.jpg?raw=true "Title") Multi click list dialog | ![Dialog](images/list_dialog5.jpg?raw=true "Title") Custom parcelable data list dialog | ![Dialog](images/color_dialog.jpg?raw=true "Title") Color picker dialog |
+| ![Dialog](images/datetime_dialog.jpg?raw=true "Title") Datetime dialog | ![Dialog](images/edittext_dialog.jpg?raw=true "Title") EditText dialog | ![Dialog](images/edittext_dialog2.jpg?raw=true "Title") Multi EditText dialog |
+| ![Dialog](images/number_dialog.jpg?raw=true "Title") Number dialog | ![Dialog](images/number_dialog2.jpg?raw=true "Title") Custom number dialog | ![Dialog](images/number_dialog3.jpg?raw=true "Title") Multi number dialog |
+| ![Dialog](images/progress_dialog.jpg?raw=true "Title") Progress dialog | ![Dialog](images/frequency_dialog.jpg?raw=true "Title") Frequency dialog | ![Dialog](images/debug_dialog.jpg?raw=true "Title") Debug settings dialog |
 
 ### Gradle (via [JitPack.io](https://jitpack.io/))
 
