@@ -7,6 +7,7 @@ Including some special dialogs (separates into their own optional modules) like 
 ### Screenshots
 
 
+| | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
 | ![Info Dialog](images/info_dialog.jpg?raw=true "Title") Simple info dialog | ![Info Dialog](images/info_dialog2.jpg?raw=true "Title") Info dialog with Timeout + Warning | ![Info Dialog](images/info_dialog3.jpg?raw=true "Title") Info dialog with HTML content |
 
