@@ -12,7 +12,7 @@ Event handling between dialogs and activity/fragment is done by this library!.
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
 | ![Dialog](images/info_dialog.jpg?raw=true "Dialog") Simple info dialog | ![Dialog](images/info_dialog2.jpg?raw=true "Dialog") Info dialog with Timeout + Warning | ![Dialog](images/info_dialog3.jpg?raw=true "Dialog") Info dialog with HTML content |
-| ![Dialog](images/list_dialog.jpg?raw=true "Dialog") Simple list dialog | ![Dialog](images/list_dialog2.jpg?raw=true "Dialog") Multi select list dialog with images | ![Dialog](images/info_dialog3.jpg?raw=true "Dialog") Multi select list dialog with custom check marks |
+| ![Dialog](images/list_dialog.jpg?raw=true "Dialog") Simple list dialog | ![Dialog](images/list_dialog2.jpg?raw=true "Dialog") Multi select list dialog with images | ![Dialog](images/list_dialog3.jpg?raw=true "Dialog") Multi select list dialog with custom check marks |
 | ![Dialog](images/list_dialog4.jpg?raw=true "Dialog") Multi click list dialog | ![Dialog](images/list_dialog5.jpg?raw=true "Dialog") Custom parcelable data list dialog | ![Dialog](images/color_dialog.jpg?raw=true "Dialog") Color picker dialog |
 | ![Dialog](images/datetime_dialog.jpg?raw=true "Dialog") Datetime dialog | ![Dialog](images/edittext_dialog.jpg?raw=true "Dialog") EditText dialog | ![Dialog](images/edittext_dialog2.jpg?raw=true "Dialog") Multi EditText dialog |
 | ![Dialog](images/number_dialog.jpg?raw=true "Dialog") Number dialog | ![Dialog](images/number_dialog2.jpg?raw=true "Dialog") Custom number dialog | ![Dialog](images/number_dialog3.jpg?raw=true "Dialog") Multi number dialog |
