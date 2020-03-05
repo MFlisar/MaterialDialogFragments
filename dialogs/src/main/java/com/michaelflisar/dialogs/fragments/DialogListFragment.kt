@@ -33,6 +33,8 @@ open class DialogListFragment : BaseDialogFragment<DialogList>() {
 
     private var mAdapter: TextImageRVAdapter? = null
 
+    private fun getItems() = setup.items
+
     fun updateItems(items: List<DialogList.Item>, setupUpdater: ((setup: DialogList) -> DialogList)? = null) {
 
         var newSetup = setup.copy(items = items)
