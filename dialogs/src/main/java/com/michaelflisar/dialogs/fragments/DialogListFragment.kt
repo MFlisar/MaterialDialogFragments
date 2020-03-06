@@ -45,8 +45,10 @@ open class DialogListFragment : BaseDialogFragment<DialogList>() {
 
         dialog?.let {
             val itemArray = createItems()
-            onSetCallback(null, itemArray, it as MaterialDialog)
-            onSetAdapterOrItems(null, itemArray, it as MaterialDialog)
+            val dlg = it as MaterialDialog
+            dlg.clearPositiveListeners()
+            onSetCallback(null, itemArray, dlg)
+            onSetAdapterOrItems(null, itemArray, dlg)
         }
     }
 
