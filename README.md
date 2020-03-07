@@ -2,11 +2,13 @@
 
 Common dialog fragments based on https://github.com/afollestad/material-dialogs
 
-Including some special dialogs (separated into their own optional modules) like a custom color dialog, text and number dialogs, multi text and number dialogs, a fast adapter recycler view dialog, an ads dialog and maybe even more to come.
+**Features**
 
-Event handling between dialogs and activity / fragment is done by this library! Check out the demo to see how simple such dialogs can be achieved and see how those dialogs save their state on screen rotation and how simple the communication with the parent activity / fragment is.
-
-Additionally you can also decide if you want to show your dialogs as normal dialogs or bottom sheets.
+* handles fragments save/restore states for you automatically
+* includes mechanism to handle dialog events (even after screen restoration) inside activity and/or fragments
+* includes some special dialogs (extracted in own modules) like e.g. a custom color dialog, text and number dialogs, multi text and number dialogs, a fast adapter recycler view dialog, an ads dialog - maybe even more to come
+* also supports to show dialogs as dialog or bottom sheet
+* easily extendable - create you own dialogs, simply check out the extension modules
 
 ### Screenshots
 
