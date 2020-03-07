@@ -6,10 +6,10 @@ import android.os.Parcelable
 import android.view.View
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
+import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.enums.IconSize
 import com.michaelflisar.dialogs.fragments.DialogListFragment
-import com.michaelflisar.dialogs.interfaces.DialogFragment
 import com.michaelflisar.dialogs.interfaces.IParcelableTextImageProvider
 import kotlinx.android.parcel.Parcelize
 
@@ -27,6 +27,7 @@ data class DialogList(
         override val cancelable: Boolean = true,
         override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
         override val extra: Bundle? = null,
+        override val style: DialogStyle = DialogStyle.Dialog,
 
         // special setup
         val multiClick: Boolean = false,

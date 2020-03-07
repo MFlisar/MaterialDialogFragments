@@ -3,7 +3,7 @@ package com.michaelflisar.dialogs
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.adapters.NoPaddingArrayAdapter
 import com.michaelflisar.dialogs.classes.SendResultType
 import com.michaelflisar.dialogs.classes.asText
@@ -17,7 +17,7 @@ internal object UIUtil {
         onItemSelectedListener: AdapterView.OnItemSelectedListener,
         init: Boolean,
         spinner: Spinner,
-        items: List<String>,
+        items: MutableList<String>,
         selectedIndex: Int,
         alignTextRight: Boolean
     ) {
@@ -40,14 +40,14 @@ internal object UIUtil {
     }
 
     fun setEditText(
-        fragment: BaseDialogFragment<*>,
-        init: Boolean,
-        editText: EditText,
-        value: String,
-        dateTime: Long?,
-        dialogId: Int,
-        title: String?,
-        maxNumber: Int?
+            fragment: MaterialDialogFragment<*>,
+            init: Boolean,
+            editText: EditText,
+            value: String,
+            dateTime: Long?,
+            dialogId: Int,
+            title: String?,
+            maxNumber: Int?
     ) {
         if (init) {
             editText.apply {

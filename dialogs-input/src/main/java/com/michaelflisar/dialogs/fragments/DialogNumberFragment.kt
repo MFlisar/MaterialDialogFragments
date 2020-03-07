@@ -9,12 +9,15 @@ import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.setActionButtonEnabled
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
-import com.michaelflisar.dialogs.*
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
+import com.michaelflisar.dialogs.message
+import com.michaelflisar.dialogs.negativeButton
+import com.michaelflisar.dialogs.neutralButton
+import com.michaelflisar.dialogs.positiveButton
 import com.michaelflisar.dialogs.setups.DialogNumber
 import com.michaelflisar.dialogs.utils.KeyboardUtils
 
-class DialogNumberFragment : BaseDialogFragment<DialogNumber>() {
+class DialogNumberFragment : MaterialDialogFragment<DialogNumber>() {
 
     companion object {
 
@@ -35,8 +38,11 @@ class DialogNumberFragment : BaseDialogFragment<DialogNumber>() {
         } else
             input = setup.initialValue
 
-        val dialog = MaterialDialog(activity!!)
-                .positiveButton(setup.posButton) {
+        // create dialog with correct style, title and cancelable flags
+        val dialog = setup.createMaterialDialog(activity!!, this)
+
+        dialog
+                .positiveButton(setup) {
                     input = it.getInputField().text.toString().toInt()
                     if ((setup.min != null && input!! < setup.min!!) || (setup.max != null && input!! > setup.max!!)) {
                         setup.errorMessage?.get(activity!!)?.let {
@@ -45,54 +51,39 @@ class DialogNumberFragment : BaseDialogFragment<DialogNumber>() {
                         }
                     } else {
                         sendEvent(
-                            com.michaelflisar.dialogs.events.DialogNumberEvent(
-                                setup,
-                                WhichButton.POSITIVE.ordinal,
-                                com.michaelflisar.dialogs.events.DialogNumberEvent.Data(input!!)
-                            )
+                                com.michaelflisar.dialogs.events.DialogNumberEvent(
+                                        setup,
+                                        WhichButton.POSITIVE.ordinal,
+                                        com.michaelflisar.dialogs.events.DialogNumberEvent.Data(input!!)
+                                )
                         )
                         val activity = activity
                         KeyboardUtils.hideKeyboard(activity, it.currentFocus)
                         dismiss()
                     }
                 }
-                .cancelable(true)
                 .noAutoDismiss()
-
-        setup.title?.let {
-            dialog.title(it)
-        }
-
-        setup.negButton?.let {
-            dialog.negativeButton(it) {
-                sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEGATIVE.ordinal, null))
-                dismiss()
-            }
-        }
-
-        setup.neutrButton?.let {
-            dialog.neutralButton(it) {
-                sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-            }
-        }
-
-        setup.text?.let {
-            dialog.message(it)
-        }
-
-        dialog.input(
-                waitForPositiveButton = false,
-                hint = setup.hint?.get(activity!!) ?: "",
-                prefill = input?.toString() ?: "",
-                inputType = InputType.TYPE_CLASS_NUMBER) { materialDialog: MaterialDialog, charSequence: CharSequence ->
-            val valid = charSequence.toString().length > 0
-            if (valid) {
-                input = charSequence.toString().toInt()
-            } else {
-                input = null
-            }
-            materialDialog.setActionButtonEnabled(WhichButton.POSITIVE, valid)
-        }
+                .negativeButton(setup) {
+                    sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                    dismiss()
+                }
+                .neutralButton(setup) {
+                    sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+                }
+                .message(setup.text)
+                .input(
+                        waitForPositiveButton = false,
+                        hint = setup.hint?.get(activity!!) ?: "",
+                        prefill = input?.toString() ?: "",
+                        inputType = InputType.TYPE_CLASS_NUMBER) { materialDialog: MaterialDialog, charSequence: CharSequence ->
+                    val valid = charSequence.toString().length > 0
+                    if (valid) {
+                        input = charSequence.toString().toInt()
+                    } else {
+                        input = null
+                    }
+                    materialDialog.setActionButtonEnabled(WhichButton.POSITIVE, valid)
+                }
 
         val editText = dialog.getInputField()
         if (setup.selectText) {
@@ -101,7 +92,6 @@ class DialogNumberFragment : BaseDialogFragment<DialogNumber>() {
                 editText.selectAll()
             }
         }
-
 
         return dialog
     }

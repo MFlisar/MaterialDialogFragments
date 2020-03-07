@@ -16,13 +16,13 @@ import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.michaelflisar.dialogs.*
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.events.DialogInputEvent
 import com.michaelflisar.dialogs.input.R
 import com.michaelflisar.dialogs.setups.DialogInput
 import com.michaelflisar.dialogs.utils.KeyboardUtils
 
-class DialogInputFragment : BaseDialogFragment<DialogInput>() {
+class DialogInputFragment : MaterialDialogFragment<DialogInput>() {
 
     companion object {
 
@@ -50,9 +50,10 @@ class DialogInputFragment : BaseDialogFragment<DialogInput>() {
             inputTexts.addAll(inputFields.map { it.initialText?.get(activity!!) ?: "" })
         }
 
-        val dialog: MaterialDialog
+        // create dialog with correct style, title and cancelable flags
+        val dialog = setup.createMaterialDialog(activity!!, this)
+
         if (inputTexts.size == 1) {
-            dialog = MaterialDialog(activity!!)
 
             inputFields[0].label?.let {
                 dialog.message(it)
@@ -64,73 +65,62 @@ class DialogInputFragment : BaseDialogFragment<DialogInput>() {
                             allowEmpty = inputFields[0].allowEmptyText,
                             hint = inputFields[0].hint?.get(activity!!) ?: "",
                             prefill = inputTexts[0],
-                            inputType = setup.inputType
+                            inputType = inputFields[0].inputType
                     ) { materialDialog: MaterialDialog, charSequence: CharSequence ->
                         inputTexts[0] = charSequence.toString()
                         val valid = inputFields[0].allowEmptyText || inputTexts[0].isNotEmpty()
                         materialDialog.setActionButtonEnabled(WhichButton.POSITIVE, valid)
                     }
-            dialog.positiveButton(setup.posButton) {
-                finishAndSendEvent(it)
-            }
+                    .positiveButton(setup) {
+                        finishAndSendEvent(it)
+                    }
         } else {
-            dialog = MaterialDialog(activity!!)
+            // TODO: replace layout with RecyclerView + Items to support any time of items
+            dialog
                     .customView(R.layout.dialog_multi_input, scrollable = true)
-            dialog.positiveButton(setup.posButton) {
-                val customView = it.getCustomView()
-                val editText1: EditText = customView.findViewById(R.id.etText1)
-                val editText2: EditText = customView.findViewById(R.id.etText2)
-                inputTexts[0] = editText1.text.toString()
-                inputTexts[1] = editText2.text.toString()
-                finishAndSendEvent(it)
-            }
+                    .positiveButton(setup) {
+                        val customView = it.getCustomView()
+                        val editText1: EditText = customView.findViewById(R.id.etText1)
+                        val editText2: EditText = customView.findViewById(R.id.etText2)
+                        editText1.inputType = inputFields[0].inputType
+                        editText1.inputType = inputFields[1].inputType
+                        inputTexts[0] = editText1.text.toString()
+                        inputTexts[1] = editText2.text.toString()
+                        finishAndSendEvent(it)
+                    }
         }
 
         dialog
-                .cancelable(setup.cancelable)
                 .noAutoDismiss()
-
-        isCancelable = setup.cancelable
-
-        setup.title?.let {
-            dialog.title(it)
-        }
-
-        setup.neutrButton?.let {
-            dialog
-                    .neutralButton(it) {
-                        when (setup.neutralButtonMode) {
-                            DialogInput.NeutralButtonMode.SendEvent -> {
-                                sendEvent(
+                .neutralButton(setup) {
+                    when (setup.neutralButtonMode) {
+                        DialogInput.NeutralButtonMode.SendEvent -> {
+                            sendEvent(
                                     DialogInputEvent(
-                                        setup,
-                                        WhichButton.NEUTRAL.ordinal,
-                                        null
+                                            setup,
+                                            WhichButton.NEUTRAL.ordinal,
+                                            null
                                     )
-                                )
-                                dismiss()
-                            }
-                            DialogInput.NeutralButtonMode.InsertText -> {
-                                setup.textToInsertOnNeutralButtonClick?.get(activity!!)?.let {
-                                    dialog.getInputField().append(it)
-                                }
+                            )
+                            dismiss()
+                        }
+                        DialogInput.NeutralButtonMode.InsertText -> {
+                            setup.textToInsertOnNeutralButtonClick?.get(activity!!)?.let {
+                                dialog.getInputField().append(it)
                             }
                         }
                     }
-        }
-        setup.negButton?.let {
-            dialog
-                .negativeButton(it) {
+                }
+                .negativeButton(setup) {
                     sendEvent(
-                        DialogInputEvent(
-                            setup,
-                            WhichButton.NEGATIVE.ordinal,
-                            null
-                        )
+                            DialogInputEvent(
+                                    setup,
+                                    WhichButton.NEGATIVE.ordinal,
+                                    null
+                            )
                     )
                     dismiss()
                 }
-        }
 
         val editTexts = ArrayList<EditText>()
         val textViews = ArrayList<TextView?>()
@@ -218,11 +208,11 @@ class DialogInputFragment : BaseDialogFragment<DialogInput>() {
 
     private fun finishAndSendEvent(materialDialog: MaterialDialog) {
         sendEvent(
-            DialogInputEvent(
-                setup,
-                WhichButton.POSITIVE.ordinal,
-                DialogInputEvent.Data(inputTexts)
-            )
+                DialogInputEvent(
+                        setup,
+                        WhichButton.POSITIVE.ordinal,
+                        DialogInputEvent.Data(inputTexts)
+                )
         )
         if (activity != null) {
             KeyboardUtils.hideKeyboardWithZeroFlag(activity, materialDialog.currentFocus)

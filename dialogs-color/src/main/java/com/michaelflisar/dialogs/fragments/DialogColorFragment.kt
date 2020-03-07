@@ -12,14 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.tabs.TabLayout
 import com.michaelflisar.dialogs.adapter.ColorAdapter
 import com.michaelflisar.dialogs.adapter.MainColorAdapter
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.color.R
 import com.michaelflisar.dialogs.events.DialogColorEvent
 import com.michaelflisar.dialogs.negativeButton
@@ -29,7 +28,7 @@ import com.michaelflisar.dialogs.utils.ColorUtil
 import com.michaelflisar.dialogs.utils.RecyclerViewUtil
 import com.rarepebble.colorpicker.ColorPickerView
 
-class DialogColorFragment : BaseDialogFragment<DialogColor>() {
+class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
 
     companion object {
 
@@ -65,32 +64,27 @@ class DialogColorFragment : BaseDialogFragment<DialogColor>() {
             selectedColorGroupIndex = ColorUtil.getNearestColorGroup(activity!!, setup.color)
         }
 
-        val dialog = MaterialDialog(activity!!)
-                .customView(
-                        R.layout.dialog_color,
-                        scrollable = false,
-                        noVerticalPadding = true
-                )
+        // create dialog with correct style, title and cancelable flags
+        val dialog = setup.createMaterialDialog(activity!!, this)
+
+        dialog.customView(
+                R.layout.dialog_color,
+                scrollable = false,
+                noVerticalPadding = true
+        )
                 .positiveButton(R.string.dialogs_save) {
                     val c = colorPicker.color
                     sendEvent(DialogColorEvent(setup, WhichButton.POSITIVE.ordinal, DialogColorEvent.Data(selectedColorGroupIndex, c)))
                     dismiss()
                 }
-                .cancelable(true)
                 .noAutoDismiss()
-
-        setup.negButton?.let {
-            dialog.negativeButton(it) {
-                sendEvent(DialogColorEvent(setup, WhichButton.NEGATIVE.ordinal, null))
-                dismiss()
-            }
-        }
-
-        setup.neutrButton?.let {
-            dialog.neutralButton(it) {
-                sendEvent(DialogColorEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-            }
-        }
+                .negativeButton(setup) {
+                    sendEvent(DialogColorEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                    dismiss()
+                }
+                .neutralButton(setup) {
+                    sendEvent(DialogColorEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+                }
 
         val view = dialog.getCustomView()
 

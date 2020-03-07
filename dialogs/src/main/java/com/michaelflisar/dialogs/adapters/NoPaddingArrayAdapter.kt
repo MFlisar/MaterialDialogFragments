@@ -11,7 +11,7 @@ import android.widget.TextView
 class NoPaddingArrayAdapter<T>(
         context: Context,
         layoutId: Int,
-        items: List<T>?,
+        items: MutableList<T>,
         private val alignTextRight: Boolean = false
 ) : ArrayAdapter<T>(context, layoutId, items) {
 

@@ -117,7 +117,7 @@ class TextImageRVAdapter(
                 holder.image.drawable.colorFilter = imageColorFilter
             }
             if (imageColorFilterColor != null && holder.image.drawable != null) {
-                holder.image.drawable.setColorFilter(imageColorFilterColor!!, imageColorFilterMode!!)
+                holder.image.drawable.setColorFilter(imageColorFilterColor!!, imageColorFilterMode)
             }
         } else {
             holder.image.visibility = noImageVisibility

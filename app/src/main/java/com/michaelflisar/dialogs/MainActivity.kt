@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.michaelflisar.dialogs.app.BuildConfig
 import com.michaelflisar.dialogs.app.R
 import com.michaelflisar.dialogs.app.databinding.ActivityMainBinding
+import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.classes.asText
 import com.michaelflisar.dialogs.debug.DebugDialog
 import com.michaelflisar.dialogs.enums.IconSize
@@ -121,6 +122,13 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
     // helper functions for content setup
     // -------------------
 
+    private fun getStyleFromCheckbox(): DialogStyle {
+        if (binding.cbUseBottomSheetDialog.isChecked) {
+            return DialogStyle.BottomSheet()
+        } else
+            return DialogStyle.Dialog
+    }
+
     private fun initRecyclerView(): ItemAdapter<IItem<*>> {
         val itemAdapter = ItemAdapter<IItem<*>>()
         val adapter = FastAdapter.with(itemAdapter)
@@ -146,7 +154,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     DialogInfo(
                             10,
                             "Info Title".asText(),
-                            "Some info label".asText()
+                            "Some info label".asText(),
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -159,7 +168,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             warning = "Attention: Dangerous action!".asText(),
                             warningSeparator = "\n\n",
                             cancelable = false,
-                            timerPosButton = 10
+                            timerPosButton = 10,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -169,7 +179,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             12,
                             "Info Title".asText(),
                             "<b>Header</b></br>Some text with a bold html text title inside text and some <font color=\"#FF0000\">red colored text</font> inside it.</br></br><b>Header2</b></br>This version of <font color=\"#00FF00\">InfoDialog</font> supports <u>all</u> html tags that are supported by a WebView &#128526;.".asText(),
-                            textIsHtml = true
+                            textIsHtml = true,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -183,7 +194,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     DialogInput(
                             20,
                             "Insert your name".asText(),
-                            DialogInput.InputField("Please insert your full name".asText(), null, "E.g. Max Musterman".asText(), true)
+                            DialogInput.InputField("Please insert your full name".asText(), null, "E.g. Max Musterman".asText(), true),
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -193,7 +205,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             21,
                             "Insert your name".asText(),
                             DialogInput.InputField("First name".asText(), null, "E.g. Max".asText()),
-                            additonalInputs = arrayListOf(DialogInput.InputField("Last name".asText(), null, "E.g. Musterman".asText()))
+                            additonalInputs = arrayListOf(DialogInput.InputField("Last name".asText(), null, "E.g. Musterman".asText())),
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -205,7 +218,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             DialogInput.InputField(null, null, "My name is %s".asText()),
                             neutralButtonMode = DialogInput.NeutralButtonMode.InsertText,
                             neutrButton = "Insert %s".asText(),
-                            textToInsertOnNeutralButtonClick = "%s".asText()
+                            textToInsertOnNeutralButtonClick = "%s".asText(),
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -220,7 +234,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     DialogList(
                             30,
                             "Simple list".asText(),
-                            DialogList.itemsString(List(50) { "Item ${it + 1}" })
+                            DialogList.itemsString(List(50) { "Item ${it + 1}" }),
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -231,7 +246,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             "Multi select".asText(),
                             DialogList.itemsString(List(50) { "Item ${it + 1}" }, List(50) { R.mipmap.ic_launcher }),
                             selectionMode = DialogList.SelectionMode.Multi,
-                            iconSize = IconSize.Medium
+                            iconSize = IconSize.Medium,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -243,7 +259,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             DialogList.itemsString(List(50) { "Item ${it + 1}" }, List(50) { R.mipmap.ic_launcher }),
                             selectionMode = DialogList.SelectionMode.Multi,
                             hideDefaultCheckMarkIcon = true,
-                            checkMark = R.drawable.custom_check_mark
+                            checkMark = R.drawable.custom_check_mark,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -256,7 +273,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             text = "Some information about this dialog".asText(),
                             multiClick = true,
                             iconColorTint = Color.RED,
-                            iconColorTintMode = PorterDuff.Mode.SRC_ATOP
+                            iconColorTintMode = PorterDuff.Mode.SRC_ATOP,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -275,7 +293,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             hint = "Insert your age...".asText(),
                             min = 0,
                             max = 100,
-                            errorMessage = "Please insert a value between 0 and 100".asText()
+                            errorMessage = "Please insert a value between 0 and 100".asText(),
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -288,7 +307,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             "Select your age [0, 100]".asText(),
                             min = 0,
                             max = 100,
-                            step = 1
+                            step = 1,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -302,7 +322,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             min = 0,
                             max = 100,
                             step = 5,
-                            valueFormatRes = R.string.number_age_formatter
+                            valueFormatRes = R.string.number_age_formatter,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -319,7 +340,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             additonalValues = arrayListOf(
                                     DialogNumberPicker.NumberField("Value 2".asText(), 20),
                                     DialogNumberPicker.NumberField("Value 3".asText(), 30)
-                            )
+                            ),
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -333,10 +355,11 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                 DemoItem("Progress demo", "Show a progress dialog for 5s") {
                     DialogProgress(
                             50,
-                            "Loading".asText(),
-                            "Data is loading...".asText(),
+                            title = "Loading".asText(),
+                            text = "Data is loading...".asText(),
                             negButton = "Cancel".asText(),
-                            dismissOnNegative = true
+                            dismissOnNegative = true,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -370,7 +393,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                                             "Select app".asText(),
                                             clickable = true,
                                             dismissOnClick = true,
-                                            filterable = true
+                                            filterable = true,
+                                            style = getStyleFromCheckbox()
                                     )
                             )
                     )
@@ -386,7 +410,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     DialogColor(
                             70,
                             "Select color".asText(),
-                            color = Color.BLUE
+                            color = Color.BLUE,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -396,7 +421,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             71,
                             "Select color".asText(),
                             color = ColorUtil.COLORS_RED.getMainColor(this), // returns main (500) red material color
-                            showAlpha = true
+                            showAlpha = true,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -410,7 +436,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                 DemoItem("Datetime demo", "Show a date time dialog") {
                     DialogDateTime(
                             80,
-                            "DateTime".asText()
+                            "DateTime".asText(),
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -424,7 +451,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                 DemoItem("Frequency demo", "Show a frequency dialog") {
                     DialogFrequency(
                             90,
-                            "Frequency".asText()
+                            "Frequency".asText(),
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this)
@@ -502,7 +530,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                             bannerSetup = DialogAds.BannerSetup(
                                     emptyAdId.asText() // this should be the banner ad id in a real app
                             ),
-                            testSetup = TEST_SETUP
+                            testSetup = TEST_SETUP,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this, policy)
@@ -518,7 +547,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                                     "Show me the ad".asText(),
                                     DialogAds.BigAdType.Reward
                             ),
-                            testSetup = TEST_SETUP
+                            testSetup = TEST_SETUP,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this, policy)
@@ -534,7 +564,8 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                                     "Show me the ad".asText(),
                                     DialogAds.BigAdType.Interstitial
                             ),
-                            testSetup = TEST_SETUP
+                            testSetup = TEST_SETUP,
+                            style = getStyleFromCheckbox()
                     )
                             .create()
                             .show(this, policy)

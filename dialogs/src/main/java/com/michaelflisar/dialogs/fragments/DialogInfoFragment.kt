@@ -9,18 +9,20 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.webkit.WebView
 import androidx.appcompat.widget.AppCompatButton
-import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
-import com.michaelflisar.dialogs.*
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.core.R
 import com.michaelflisar.dialogs.events.DialogInfoEvent
+import com.michaelflisar.dialogs.message
+import com.michaelflisar.dialogs.negativeButton
+import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.setups.DialogInfo
+import com.michaelflisar.dialogs.textView
 
-open class DialogInfoFragment : BaseDialogFragment<DialogInfo>() {
+open class DialogInfoFragment : MaterialDialogFragment<DialogInfo>() {
 
     companion object {
         fun create(setup: DialogInfo): DialogInfoFragment {
@@ -88,18 +90,13 @@ open class DialogInfoFragment : BaseDialogFragment<DialogInfo>() {
 
         }
 
-        val dialog = MaterialDialog(activity!!)
-                .cancelable(setup.cancelable)
-        this.isCancelable = setup.cancelable
+        // create dialog with correct style, title and cancelable flags
+        val dialog = setup.createMaterialDialog(activity!!, this)
 
         if (setup.textIsHtml) {
             dialog.customView(R.layout.dialog_webview, scrollable = false)
         } else {
             dialog.message(setup.text)
-        }
-
-        setup.title?.let {
-            dialog.title(it)
         }
 
         if (posButtonText != null) {
@@ -114,18 +111,15 @@ open class DialogInfoFragment : BaseDialogFragment<DialogInfo>() {
             }
         }
 
-        setup.negButton?.let {
-            dialog.negativeButton(it) {
-                onClick(WhichButton.NEGATIVE)
-                dismiss()
-            }
-        }
+        dialog
+                .negativeButton(setup) {
+                    onClick(WhichButton.NEGATIVE)
+                    dismiss()
+                }
+                .neutralButton(setup) {
+                    onClick(WhichButton.NEUTRAL)
+                }
 
-        setup.neutrButton?.let {
-            dialog.neutralButton(it) {
-                onClick(WhichButton.NEUTRAL)
-            }
-        }
 
         if (!setup.textIsHtml && setup.warning != null) {
             val content = dialog.textView()!!.getText().toString()

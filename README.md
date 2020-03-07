@@ -6,6 +6,8 @@ Including some special dialogs (separated into their own optional modules) like 
 
 Event handling between dialogs and activity / fragment is done by this library! Check out the demo to see how simple such dialogs can be achieved and see how those dialogs save their state on screen rotation and how simple the communication with the parent activity / fragment is.
 
+Additionally you can also decide if you want to show your dialogs as normal dialogs or bottom sheets.
+
 ### Screenshots
 
 | | | |

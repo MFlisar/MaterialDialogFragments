@@ -2,15 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dialogs/dialogs.iml" filepath="$PROJECT_DIR$/dialogs/dialogs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dialogs-ads/dialogs-ads.iml" filepath="$PROJECT_DIR$/dialogs-ads/dialogs-ads.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dialogs-color/dialogs-color.iml" filepath="$PROJECT_DIR$/dialogs-color/dialogs-color.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dialogs-datetime/dialogs-datetime.iml" filepath="$PROJECT_DIR$/dialogs-datetime/dialogs-datetime.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dialogs-fastadapter/dialogs-fastadapter.iml" filepath="$PROJECT_DIR$/dialogs-fastadapter/dialogs-fastadapter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dialogs-frequency/dialogs-frequency.iml" filepath="$PROJECT_DIR$/dialogs-frequency/dialogs-frequency.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dialogs-input/dialogs-input.iml" filepath="$PROJECT_DIR$/dialogs-input/dialogs-input.iml" />
-      <module fileurl="file://$PROJECT_DIR$/material-dialogfragments.iml" filepath="$PROJECT_DIR$/material-dialogfragments.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="material-dialogfragments/app" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs/dialogs.iml" filepath="$PROJECT_DIR$/dialogs/dialogs.iml" group="material-dialogfragments/dialogs" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs-ads/dialogs-ads.iml" filepath="$PROJECT_DIR$/dialogs-ads/dialogs-ads.iml" group="material-dialogfragments/dialogs-ads" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs-color/dialogs-color.iml" filepath="$PROJECT_DIR$/dialogs-color/dialogs-color.iml" group="material-dialogfragments/dialogs-color" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs-datetime/dialogs-datetime.iml" filepath="$PROJECT_DIR$/dialogs-datetime/dialogs-datetime.iml" group="material-dialogfragments/dialogs-datetime" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs-fastadapter/dialogs-fastadapter.iml" filepath="$PROJECT_DIR$/dialogs-fastadapter/dialogs-fastadapter.iml" group="material-dialogfragments/dialogs-fastadapter" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs-frequency/dialogs-frequency.iml" filepath="$PROJECT_DIR$/dialogs-frequency/dialogs-frequency.iml" group="material-dialogfragments/dialogs-frequency" />
+      <module fileurl="file://$PROJECT_DIR$/dialogs-input/dialogs-input.iml" filepath="$PROJECT_DIR$/dialogs-input/dialogs-input.iml" group="material-dialogfragments/dialogs-input" />
+      <module fileurl="file://$PROJECT_DIR$/material-dialogfragments.iml" filepath="$PROJECT_DIR$/material-dialogfragments.iml" group="material-dialogfragments" />
     </modules>
   </component>
 </project>

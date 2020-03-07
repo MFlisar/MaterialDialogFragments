@@ -10,13 +10,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.michaelflisar.dialogs.*
 import com.michaelflisar.dialogs.adapters.DayOfMonthItem
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.classes.*
 import com.michaelflisar.dialogs.enums.*
 import com.michaelflisar.dialogs.events.*
@@ -33,8 +32,8 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
 
-class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterView.OnItemSelectedListener,
-    CompoundButton.OnCheckedChangeListener, DialogFragmentCallback {
+class DialogFrequencyFragment : MaterialDialogFragment<DialogFrequency>(), AdapterView.OnItemSelectedListener,
+        CompoundButton.OnCheckedChangeListener, DialogFragmentCallback {
 
     companion object {
 
@@ -56,13 +55,13 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
-            lastFrequency = savedInstanceState.getParcelable("lastFrequency")
+            lastFrequency = savedInstanceState.getParcelable("lastFrequency")!!
         } else {
             lastFrequency = setup.frequency
         }
     }
 
-    override fun onDialogResultAvailable(event: BaseDialogEvent) : Boolean {
+    override fun onDialogResultAvailable(event: BaseDialogEvent): Boolean {
         when (event.id) {
             setup.dialogStartDateId -> {
                 if (event is DialogDateTimeEvent) {
@@ -125,40 +124,39 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
 
         val hasToolbar = true
 
-        val dialog = MaterialDialog(activity!!)
-            //
-            .customView(
+        // create dialog with correct style, title and cancelable flags
+        val dialog = setup.createMaterialDialog(activity!!, this, !hasToolbar)
+
+        dialog.customView(
                 R.layout.dialog_frequency,
                 scrollable = false,
                 noVerticalPadding = hasToolbar
-            )
-            .positiveButton(setup.posButton) {
-                val result = lastFrequency.calculateFrequency(activity!!)
-                when (result) {
-                    is FrequencySetup.FrequencyResult.Error -> {
-                        DialogInfo(
-                            -1,
-                            R.string.mdf_error_title.asText(),
-                            result.error.asText()
-                        )
-                            .create()
-                            .show(activity!!)
-                    }
-                    is FrequencySetup.FrequencyResult.Success -> {
-                        sendEvent(
-                            DialogFrequencyEvent(
-                                setup,
-                                WhichButton.POSITIVE.ordinal,
-                                DialogFrequencyEvent.Data(result.frequency)
+        )
+                .positiveButton(setup) {
+                    val result = lastFrequency.calculateFrequency(activity!!)
+                    when (result) {
+                        is FrequencySetup.FrequencyResult.Error -> {
+                            DialogInfo(
+                                    -1,
+                                    R.string.mdf_error_title.asText(),
+                                    result.error.asText()
                             )
-                        )
-                        dismiss()
+                                    .create()
+                                    .show(activity!!)
+                        }
+                        is FrequencySetup.FrequencyResult.Success -> {
+                            sendEvent(
+                                    DialogFrequencyEvent(
+                                            setup,
+                                            WhichButton.POSITIVE.ordinal,
+                                            DialogFrequencyEvent.Data(result.frequency)
+                                    )
+                            )
+                            dismiss()
+                        }
                     }
                 }
-            }
-            .cancelable(setup.cancelable)
-            .noAutoDismiss()
-        this.isCancelable = setup.cancelable
+                .noAutoDismiss()
 
         if (!hasToolbar) {
             setup.title?.let {
@@ -166,18 +164,14 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
             }
         }
 
-        setup.negButton?.let {
-            dialog.negativeButton(it) {
-                sendEvent(DialogFrequencyEvent(setup, WhichButton.NEGATIVE.ordinal, null))
-                dismiss()
-            }
-        }
-
-        setup.neutrButton?.let {
-            dialog.neutralButton(it) {
-                sendEvent(DialogFrequencyEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-            }
-        }
+        dialog
+                .negativeButton(setup) {
+                    sendEvent(DialogFrequencyEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                    dismiss()
+                }
+                .neutralButton(setup) {
+                    sendEvent(DialogFrequencyEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+                }
 
         binding = DataBindingUtil.bind(dialog.getCustomView())!!
 
@@ -193,12 +187,12 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
 
         // 1) Update type spinner
         UIUtil.setAdapter(
-            this,
-            init,
-            binding.spFrequencyType,
-            setup.validFrequencyUnits.map { activity!!.getString(it.labelTypeRes) },
-            lastFrequency.unit.ordinal,
-            setup.title != null
+                this,
+                init,
+                binding.spFrequencyType,
+                setup.validFrequencyUnits.map { activity!!.getString(it.labelTypeRes) }.toMutableList(),
+                lastFrequency.unit.ordinal,
+                setup.title != null
         )
 
         // no title => we move the toolbar spinner to the left and make it fill it's parent
@@ -210,12 +204,12 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
         // 2) Update repeat type spinner
         val enableRepeatType = lastFrequency.unit.supportIrregularRepeat
         UIUtil.setAdapter(
-            this,
-            init,
-            binding.spRepeatType,
-            setup.validRepeatTypes.map { activity!!.getString(it.typeRes) },
-            lastFrequency.repeatType.ordinal,
-            false
+                this,
+                init,
+                binding.spRepeatType,
+                setup.validRepeatTypes.map { activity!!.getString(it.typeRes) }.toMutableList(),
+                lastFrequency.repeatType.ordinal,
+                false
         )
         binding.spRepeatType.isEnabled = enableRepeatType
 
@@ -226,14 +220,14 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
         binding.tvAfterEveryXTimes.setText(lastFrequency.unit.labelAfterEveryXTime)
         binding.llEveryXTimes.visibility = if (showEveryXTimes) View.VISIBLE else View.GONE
         UIUtil.setEditText(
-            this,
-            init,
-            binding.etEveryXTimes,
-            lastFrequency.everyXUnit.toString(),
-            null,
-            setup.dialogEveryXUnitId,
-            getString(R.string.mdf_dialog_title_select_number),
-            null
+                this,
+                init,
+                binding.etEveryXTimes,
+                lastFrequency.everyXUnit.toString(),
+                null,
+                setup.dialogEveryXUnitId,
+                getString(R.string.mdf_dialog_title_select_number),
+                null
         )
 
         // 4) Update n times views (irregular repeat type)
@@ -251,14 +245,14 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
             FrequencyUnit.Year -> null
         }
         UIUtil.setEditText(
-            this,
-            init,
-            binding.etNTimes,
-            lastFrequency.nTimesFactor.toString(),
-            null,
-            setup.dialogNTimesFactorId,
-            getString(R.string.mdf_dialog_title_select_number),
-            max
+                this,
+                init,
+                binding.etNTimes,
+                lastFrequency.nTimesFactor.toString(),
+                null,
+                setup.dialogNTimesFactorId,
+                getString(R.string.mdf_dialog_title_select_number),
+                max
         )
 
         // 5) Update week day views
@@ -267,13 +261,13 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
         binding.llWeekDays2.visibility = if (showWeekDays) View.VISIBLE else View.GONE
         val weekDays = WeekDay.sorted()
         val btWeekDays = listOf(
-            binding.btWeekDay1,
-            binding.btWeekDay2,
-            binding.btWeekDay3,
-            binding.btWeekDay4,
-            binding.btWeekDay5,
-            binding.btWeekDay6,
-            binding.btWeekDay7
+                binding.btWeekDay1,
+                binding.btWeekDay2,
+                binding.btWeekDay3,
+                binding.btWeekDay4,
+                binding.btWeekDay5,
+                binding.btWeekDay6,
+                binding.btWeekDay7
         )
         if (init) {
             for (i in 0 until 7) {
@@ -297,10 +291,10 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
                 }
 
                 override fun onClick(
-                    v: View,
-                    position: Int,
-                    fastAdapter: FastAdapter<DayOfMonthItem>,
-                    item: DayOfMonthItem
+                        v: View,
+                        position: Int,
+                        fastAdapter: FastAdapter<DayOfMonthItem>,
+                        item: DayOfMonthItem
                 ) {
                     itemAdapter.remove(position)
                     lastFrequency.monthDays.remove(item.day)
@@ -312,11 +306,11 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
             binding.btAddDay.setOnClickListener {
                 // TODO: add not allowed month days
                 DialogMonthDay(
-                    setup.dialogMonthDayId,
-                    R.string.mdf_dialog_title_add_day.asText(),
-                    monthDay = MonthDay.DayOfMonth(1)
+                        setup.dialogMonthDayId,
+                        R.string.mdf_dialog_title_add_day.asText(),
+                        monthDay = MonthDay.DayOfMonth(1)
                 )
-                    .create().show(this, SendResultType.ParentFragment)
+                        .create().show(this, SendResultType.ParentFragment)
             }
         }
 
@@ -325,22 +319,22 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
         binding.llStart.visibility = if (showStartDate) View.VISIBLE else View.GONE
         if (showStartDate) {
             UIUtil.setAdapter(
-                this,
-                init,
-                binding.spStart,
-                StartType.values().map { activity!!.getString(it.typeRes) },
-                lastFrequency.startType.ordinal,
-                false
+                    this,
+                    init,
+                    binding.spStart,
+                    StartType.values().map { activity!!.getString(it.typeRes) }.toMutableList(),
+                    lastFrequency.startType.ordinal,
+                    false
             )
             UIUtil.setEditText(
-                this,
-                init,
-                binding.etStart,
-                Frequency.formatMillis(lastFrequency.startDate.timeInMillis),
-                lastFrequency.startDate.timeInMillis,
-                setup.dialogStartDateId,
-                null,
-                null
+                    this,
+                    init,
+                    binding.etStart,
+                    Frequency.formatMillis(lastFrequency.startDate.timeInMillis),
+                    lastFrequency.startDate.timeInMillis,
+                    setup.dialogStartDateId,
+                    null,
+                    null
             )
             val showStartEditText = lastFrequency.startType == StartType.SelectDate
             binding.etStart.visibility = if (showStartEditText) View.VISIBLE else View.GONE
@@ -351,12 +345,12 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
         binding.llEnd.visibility = if (showEndType) View.VISIBLE else View.GONE
         if (showEndType) {
             UIUtil.setAdapter(
-                this,
-                init,
-                binding.spEnd,
-                EndType.values().map { activity!!.getString(it.typeRes) },
-                lastFrequency.endType.ordinal,
-                false
+                    this,
+                    init,
+                    binding.spEnd,
+                    EndType.values().map { activity!!.getString(it.typeRes) }.toMutableList(),
+                    lastFrequency.endType.ordinal,
+                    false
             )
             val endDate = if (lastFrequency.endType == EndType.UntilDate) lastFrequency.endDate else null
             val endTime = if (lastFrequency.endType == EndType.UntilTimes) lastFrequency.endTimes else null
@@ -374,14 +368,14 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
             } else null
 
             UIUtil.setEditText(
-                this,
-                init,
-                binding.etEnd,
-                value ?: "",
-                datetime,
-                setup.dialogEndDateId,
-                endTime?.let { getString(R.string.mdf_dialog_title_select_number) },
-                null
+                    this,
+                    init,
+                    binding.etEnd,
+                    value ?: "",
+                    datetime,
+                    setup.dialogEndDateId,
+                    endTime?.let { getString(R.string.mdf_dialog_title_select_number) },
+                    null
             )
 
             binding.etEnd.visibility = if (showEndEditText) View.VISIBLE else View.GONE
@@ -392,9 +386,9 @@ class DialogFrequencyFragment : BaseDialogFragment<DialogFrequency>(), AdapterVi
         val info = when (frequency) {
             is FrequencySetup.FrequencyResult.Error -> frequency.error
             is FrequencySetup.FrequencyResult.Success -> frequency.frequency.toReadableString(
-                activity!!,
-                setup.askForStart,
-                setup.askForEnd
+                    activity!!,
+                    setup.askForStart,
+                    setup.askForEnd
             )
         }
         binding.tvInfo.text = info

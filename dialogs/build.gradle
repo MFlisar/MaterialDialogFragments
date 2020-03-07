@@ -56,4 +56,5 @@ dependencies {
     // ------------------------
 
     api "com.afollestad.material-dialogs:core:${versions.materialDialogs}"
+    api "com.afollestad.material-dialogs:bottomsheets:${versions.materialDialogs}"
 }

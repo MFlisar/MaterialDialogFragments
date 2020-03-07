@@ -5,6 +5,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
+import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.classes.Text
 import kotlinx.android.parcel.Parcelize
 
@@ -20,6 +21,7 @@ abstract class DialogFastAdapter(
     override val cancelable: Boolean = internalSetup.cancelable
     override val extra: Bundle? = internalSetup.extra
     override val sendCancelEvent: Boolean = internalSetup.sendCancelEvent
+    override val style: DialogStyle = internalSetup.style
 
     @Parcelize
     class InternalSetup(
@@ -32,6 +34,7 @@ abstract class DialogFastAdapter(
             val cancelable: Boolean = true,
             val extra: Bundle? = null,
             val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
+            val style: DialogStyle = DialogStyle.Dialog,
 
             // special setup
             val clickable: Boolean = false,

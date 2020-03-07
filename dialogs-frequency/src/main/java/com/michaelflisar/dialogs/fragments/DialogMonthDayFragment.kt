@@ -5,21 +5,23 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
-import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
-import com.michaelflisar.dialogs.*
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.UIUtil
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.classes.MonthDay
 import com.michaelflisar.dialogs.enums.MonthDayType
 import com.michaelflisar.dialogs.enums.WeekDay
 import com.michaelflisar.dialogs.events.DialogMonthDayEvent
 import com.michaelflisar.dialogs.frequency.R
 import com.michaelflisar.dialogs.frequency.databinding.DialogMonthDayBinding
+import com.michaelflisar.dialogs.negativeButton
+import com.michaelflisar.dialogs.neutralButton
+import com.michaelflisar.dialogs.positiveButton
 import com.michaelflisar.dialogs.setups.DialogMonthDay
 
-internal class DialogMonthDayFragment : BaseDialogFragment<DialogMonthDay>(), AdapterView.OnItemSelectedListener {
+internal class DialogMonthDayFragment : MaterialDialogFragment<DialogMonthDay>(), AdapterView.OnItemSelectedListener {
 
     companion object {
 
@@ -51,42 +53,35 @@ internal class DialogMonthDayFragment : BaseDialogFragment<DialogMonthDay>(), Ad
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val dialog = MaterialDialog(activity!!)
-            .customView(
+        // create dialog with correct style, title and cancelable flags
+        val dialog = setup.createMaterialDialog(activity!!, this)
+
+        dialog.customView(
                 R.layout.dialog_month_day,
                 scrollable = false,
                 horizontalPadding = true
-            )
-            .positiveButton(setup.posButton) {
-                sendEvent(
-                    DialogMonthDayEvent(
-                        setup,
-                        WhichButton.POSITIVE.ordinal,
-                        DialogMonthDayEvent.Data(createMonthDay())
+        )
+                .positiveButton(setup) {
+                    sendEvent(
+                            DialogMonthDayEvent(
+                                    setup,
+                                    WhichButton.POSITIVE.ordinal,
+                                    DialogMonthDayEvent.Data(createMonthDay())
+                            )
                     )
-                )
-                dismiss()
-            }
-            .cancelable(setup.cancelable)
-            .noAutoDismiss()
-        this.isCancelable = setup.cancelable
+                    dismiss()
+                }
+                .noAutoDismiss()
 
-        setup.title?.let {
-            dialog.title(it)
-        }
+        dialog
+                .negativeButton(setup) {
+                    sendEvent(DialogMonthDayEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                    dismiss()
+                }
 
-        setup.negButton?.let {
-            dialog.negativeButton(it) {
-                sendEvent(DialogMonthDayEvent(setup, WhichButton.NEGATIVE.ordinal, null))
-                dismiss()
-            }
-        }
-
-        setup.neutrButton?.let {
-            dialog.neutralButton(it) {
-                sendEvent(DialogMonthDayEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-            }
-        }
+                .neutralButton(setup) {
+                    sendEvent(DialogMonthDayEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+                }
 
         binding = DataBindingUtil.bind(dialog.getCustomView())!!
 
@@ -98,12 +93,12 @@ internal class DialogMonthDayFragment : BaseDialogFragment<DialogMonthDay>(), Ad
 
         // 1) MonthDayType spinner
         UIUtil.setAdapter(
-            this,
-            init,
-            binding.spMonthDayType,
-            MonthDayType.values().map { activity!!.getString(it.typeRes) },
-            monthDayType.ordinal,
-            false
+                this,
+                init,
+                binding.spMonthDayType,
+                MonthDayType.values().map { activity!!.getString(it.typeRes) }.toMutableList(),
+                monthDayType.ordinal,
+                false
         )
 
         // 2) Day numbers spinner
@@ -112,12 +107,12 @@ internal class DialogMonthDayFragment : BaseDialogFragment<DialogMonthDay>(), Ad
             dayNumbers.add(i)
         }
         UIUtil.setAdapter(
-            this,
-            init,
-            binding.spDayNumber,
-            dayNumbers.map { activity!!.getString(R.string.mdf_day_n, it + 1) },
-            dayNumber,
-            false
+                this,
+                init,
+                binding.spDayNumber,
+                dayNumbers.map { activity!!.getString(R.string.mdf_day_n, it + 1) }.toMutableList(),
+                dayNumber,
+                false
         )
         binding.spDayNumber.visibility = if (monthDayType == MonthDayType.DayOfMonth) View.VISIBLE else View.GONE
 
@@ -126,24 +121,24 @@ internal class DialogMonthDayFragment : BaseDialogFragment<DialogMonthDay>(), Ad
         dayNumberBeginningValues.add(R.string.mdf_day_from_start)
         dayNumberBeginningValues.add(R.string.mdf_day_from_end)
         UIUtil.setAdapter(
-            this,
-            init,
-            binding.spDayNumberBeginning,
-            dayNumberBeginningValues.map { activity!!.getString(it) },
-            if (dayNumberBeginning) 0 else 1,
-            false
+                this,
+                init,
+                binding.spDayNumberBeginning,
+                dayNumberBeginningValues.map { activity!!.getString(it) }.toMutableList(),
+                if (dayNumberBeginning) 0 else 1,
+                false
         )
         binding.spDayNumberBeginning.visibility =
-            if (monthDayType == MonthDayType.DayOfMonth) View.VISIBLE else View.GONE
+                if (monthDayType == MonthDayType.DayOfMonth) View.VISIBLE else View.GONE
 
         // 4) WeekDay spinner
         UIUtil.setAdapter(
-            this,
-            init,
-            binding.spWeekday,
-            WeekDay.sorted().map { it.longName() },
-            WeekDay.sorted().indexOf(weekDay),
-            false
+                this,
+                init,
+                binding.spWeekday,
+                WeekDay.sorted().map { it.longName() }.toMutableList(),
+                WeekDay.sorted().indexOf(weekDay),
+                false
         )
         binding.spWeekday.visibility = if (monthDayType == MonthDayType.DayOfWeek) View.VISIBLE else View.GONE
 
@@ -153,12 +148,12 @@ internal class DialogMonthDayFragment : BaseDialogFragment<DialogMonthDay>(), Ad
             weekDayNumbers.add(i)
         }
         UIUtil.setAdapter(
-            this,
-            init,
-            binding.spWeekdayNumber,
-            weekDayNumbers.map { activity!!.getString(R.string.mdf_weekday_n, it + 1) },
-            weekdayNumber,
-            false
+                this,
+                init,
+                binding.spWeekdayNumber,
+                weekDayNumbers.map { activity!!.getString(R.string.mdf_weekday_n, it + 1) }.toMutableList(),
+                weekdayNumber,
+                false
         )
         binding.spWeekdayNumber.visibility = if (monthDayType == MonthDayType.DayOfWeek) View.VISIBLE else View.GONE
 

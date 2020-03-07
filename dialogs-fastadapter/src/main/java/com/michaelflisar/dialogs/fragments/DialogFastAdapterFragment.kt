@@ -15,7 +15,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.events.DialogFastAdapterEvent
 import com.michaelflisar.dialogs.fastadapter.R
@@ -29,7 +29,7 @@ import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import java.util.*
 
-abstract class DialogFastAdapterFragment : BaseDialogFragment<DialogFastAdapter>() {
+abstract class DialogFastAdapterFragment : MaterialDialogFragment<DialogFastAdapter>() {
 
     companion object {
 
@@ -66,32 +66,26 @@ abstract class DialogFastAdapterFragment : BaseDialogFragment<DialogFastAdapter>
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val dialog = MaterialDialog(activity!!)
-                .customView(
-                        if (setup.internalSetup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview,
-                        scrollable = false,
-                        noVerticalPadding = setup.internalSetup.withToolbar
-                )
-                .positiveButton(setup.posButton) {
+        // create dialog with correct style, title and cancelable flags
+        val dialog = setup.createMaterialDialog(activity!!, this)
+
+        dialog.customView(
+                if (setup.internalSetup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview,
+                scrollable = false,
+                noVerticalPadding = setup.internalSetup.withToolbar
+        )
+                .positiveButton(setup) {
                     onHandleClick(null, WhichButton.POSITIVE.ordinal, null)
                     dismiss()
                 }
-                .cancelable(setup.cancelable)
                 .noAutoDismiss()
-        this.isCancelable = setup.cancelable
-
-        setup.negButton?.let {
-            dialog.negativeButton(it) {
-                sendEvent(DialogFastAdapterEvent(setup, WhichButton.NEGATIVE.ordinal, null))
-                dismiss()
-            }
-        }
-
-        setup.neutrButton?.let {
-            dialog.neutralButton(it) {
-                sendEvent(DialogFastAdapterEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-            }
-        }
+                .negativeButton(setup) {
+                    sendEvent(DialogFastAdapterEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                    dismiss()
+                }
+                .neutralButton(setup) {
+                    sendEvent(DialogFastAdapterEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+                }
 
         if (!setup.internalSetup.withToolbar) {
             setup.title?.let {

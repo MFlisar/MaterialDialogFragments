@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
+import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.fragments.DialogInfoFragment
 import kotlinx.android.parcel.Parcelize
@@ -34,6 +35,7 @@ class DialogInfo(
         override val extra: Bundle? = null,
         override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
         val darkTheme: Boolean? = null,
+        override val style: DialogStyle = DialogStyle.Dialog,
 
         // special setup
         val textIsHtml: Boolean = false,

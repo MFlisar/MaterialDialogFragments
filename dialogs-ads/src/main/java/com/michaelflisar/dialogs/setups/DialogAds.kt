@@ -9,32 +9,32 @@ import com.michaelflisar.dialogs.Utils
 import com.michaelflisar.dialogs.ads.BuildConfig
 import com.michaelflisar.dialogs.ads.R
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
+import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.fragments.DialogAdsFragment
-import com.michaelflisar.dialogs.interfaces.DialogFragment
 import kotlinx.android.parcel.Parcelize
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 @Parcelize
 class DialogAds(
-    // base setup
-    override val id: Int,
-    override val title: Text? = null,
-    override val posButton: Text = Text.TextRes(R.string.mdf_close_dialog),
-    override val negButton: Text? = null,
-    override val neutrButton: Text? = null,
-    override val cancelable: Boolean = false,
-    override val extra: Bundle? = null,
-    override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
+        // base setup
+        override val id: Int,
+        override val title: Text? = null,
+        override val posButton: Text = Text.TextRes(R.string.mdf_close_dialog),
+        override val negButton: Text? = null,
+        override val neutrButton: Text? = null,
+        override val cancelable: Boolean = false,
+        override val extra: Bundle? = null,
+        override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
+        override val style: DialogStyle = DialogStyle.Dialog,
 
-    // special setup
-    val info: Text,
-    val appId: Text,
-    val bannerSetup: BannerSetup? = null,
-    val bigAdSetup: BigAdSetup? = null,
-    val testSetup: TestSetup? = null,
-    val timeToShowDialogAfterError: Int = 10
+        // special setup
+        val info: Text,
+        val appId: Text,
+        val bannerSetup: BannerSetup? = null,
+        val bigAdSetup: BigAdSetup? = null,
+        val testSetup: TestSetup? = null,
+        val timeToShowDialogAfterError: Int = 10
 ) : BaseDialogSetup {
 
     override fun create() = DialogAdsFragment.create(this)
@@ -78,16 +78,16 @@ class DialogAds(
 
     @Parcelize
     class BigAdSetup(
-        val adId: Text,
-        val showAdButtonText: Text,
-        val type: BigAdType
+            val adId: Text,
+            val showAdButtonText: Text,
+            val type: BigAdType
     ) : Parcelable
 
     @Parcelize
     class TestSetup(
-        val addDeviceIdAsTestDeviceId: Boolean = true,
-        val useGooglesTestIds: Boolean = true,
-        val testDeviceIds: List<Text> = emptyList()
+            val addDeviceIdAsTestDeviceId: Boolean = true,
+            val useGooglesTestIds: Boolean = true,
+            val testDeviceIds: List<Text> = emptyList()
 
     ) : Parcelable {
 
@@ -115,8 +115,8 @@ class DialogAds(
                     return true
                 } else {
                     if (last.get(Calendar.YEAR) < now.get(Calendar.YEAR) ||
-                        last.get(Calendar.MONTH) < now.get(Calendar.MONTH) ||
-                        last.get(Calendar.DAY_OF_MONTH) < now.get(Calendar.DAY_OF_MONTH)
+                            last.get(Calendar.MONTH) < now.get(Calendar.MONTH) ||
+                            last.get(Calendar.DAY_OF_MONTH) < now.get(Calendar.DAY_OF_MONTH)
                     ) {
                         Utils.saveLastShowPolicyDate(context, now, preference)
                         DialogSetup.logger?.debug("Showing ad dialog because of policy ${this::class.java.simpleName}!")
@@ -132,10 +132,10 @@ class DialogAds(
         @Parcelize
         class EveryXTime(val times: Int) : ShowPolicy() {
             override fun shouldShow(context: Context, preference: String?): Boolean {
-                var currentTimes =  Utils.getLastPolicyCounter(context, preference)
+                var currentTimes = Utils.getLastPolicyCounter(context, preference)
                 currentTimes++
-                if (currentTimes < times ) {
-                    Utils.setLastPolicyCounter(context, preference, currentTimes )
+                if (currentTimes < times) {
+                    Utils.setLastPolicyCounter(context, preference, currentTimes)
                     DialogSetup.logger?.debug("SKIPPED showing ad dialog because of policy ${this::class.java.simpleName} (currentTimes = $currentTimes, policy times = $times)!")
                     return false
                 } else {

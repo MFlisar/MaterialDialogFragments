@@ -6,7 +6,6 @@ import com.michaelflisar.dialogs.classes.*
 import com.michaelflisar.dialogs.enums.FrequencyUnit
 import com.michaelflisar.dialogs.enums.RepeatType
 import com.michaelflisar.dialogs.fragments.DialogFrequencyFragment
-import com.michaelflisar.dialogs.interfaces.DialogFragment
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -20,6 +19,7 @@ class DialogFrequency(
     override val cancelable: Boolean = true,
     override val extra: Bundle? = null,
     override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
+    override val style: DialogStyle = DialogStyle.Dialog,
 
     // special setup
     val frequency: FrequencySetup = FrequencySetup(FrequencyUnit.Day),

@@ -12,15 +12,18 @@ import com.afollestad.materialdialogs.list.customListAdapter
 import com.afollestad.materialdialogs.list.getRecyclerView
 import com.afollestad.materialdialogs.list.listItems
 import com.afollestad.materialdialogs.list.listItemsMultiChoice
-import com.michaelflisar.dialogs.*
 import com.michaelflisar.dialogs.adapters.TextImageItem
 import com.michaelflisar.dialogs.adapters.TextImageRVAdapter
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.events.DialogListEvent
 import com.michaelflisar.dialogs.interfaces.ITextImageProvider
+import com.michaelflisar.dialogs.message
+import com.michaelflisar.dialogs.negativeButton
+import com.michaelflisar.dialogs.neutralButton
+import com.michaelflisar.dialogs.positiveButton
 import com.michaelflisar.dialogs.setups.DialogList
 
-open class DialogListFragment : BaseDialogFragment<DialogList>() {
+open class DialogListFragment : MaterialDialogFragment<DialogList>() {
 
     companion object {
 
@@ -81,30 +84,22 @@ open class DialogListFragment : BaseDialogFragment<DialogList>() {
     }
 
     private fun internalOnCreateDialog(savedInstanceState: Bundle?, itemArray: List<Any>): Dialog {
-        var dialog = MaterialDialog(activity!!)
-            .cancelable(true)
-            .noAutoDismiss()
 
-        dialog = onSetCallback(savedInstanceState, itemArray, dialog)
+        // create dialog with correct style, title and cancelable flags
+        var dialog = setup.createMaterialDialog(activity!!, this)
 
-        setup.title?.let {
-            dialog.title(it)
-        }
+        dialog.noAutoDismiss()
+        onSetCallback(savedInstanceState, itemArray, dialog)
 
-        dialog.positiveButton(setup.posButton)
-
-        setup.negButton?.let {
-            dialog.negativeButton(it) {
-                sendEvent(DialogListEvent(setup, WhichButton.NEGATIVE.ordinal, null))
-                dismiss()
-            }
-        }
-
-        setup.neutrButton?.let {
-            dialog.neutralButton(it) {
-                sendEvent(DialogListEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-            }
-        }
+        dialog
+                .positiveButton(setup)
+                .negativeButton(setup) {
+                    sendEvent(DialogListEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                    dismiss()
+                }
+                .neutralButton(setup) {
+                    sendEvent(DialogListEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+                }
 
         setup.text?.let {
             dialog.message(it)
@@ -113,53 +108,52 @@ open class DialogListFragment : BaseDialogFragment<DialogList>() {
         dialog = onSetAdapterOrItems(savedInstanceState, itemArray, dialog)
 
         dialog.getRecyclerView().let {
-            it.setVerticalScrollBarEnabled(true)
-            it.setScrollBarStyle(ListView.SCROLLBARS_OUTSIDE_OVERLAY)
+            it.isVerticalScrollBarEnabled = true
+            it.scrollBarStyle = ListView.SCROLLBARS_OUTSIDE_OVERLAY
         }
 
         return dialog
     }
 
     protected open fun onSetCallback(
-        savedInstanceState: Bundle?,
-        itemArray: List<Any>,
-        dialog: MaterialDialog
-    ): MaterialDialog {
+            savedInstanceState: Bundle?,
+            itemArray: List<Any>,
+            dialog: MaterialDialog
+    ) {
         dialog.positiveButton {
             if (setup.selectionMode == DialogList.SelectionMode.Multi) {
                 if (mAdapter != null) {
                     val indizes = mAdapter!!.selection.toList()
                     val items = indizes.map { itemArray[it] }
                     sendEvent(
-                        DialogListEvent(
-                            setup,
-                            WhichButton.POSITIVE.ordinal,
-                            DialogListEvent.Data(indizes, items)
-                        )
+                            DialogListEvent(
+                                    setup,
+                                    WhichButton.POSITIVE.ordinal,
+                                    DialogListEvent.Data(indizes, items)
+                            )
                     )
                 }
             }
             dismiss()
         }
-        return dialog
     }
 
     @SuppressLint("CheckResult")
     protected open fun onSetAdapterOrItems(
-        savedInstanceState: Bundle?,
-        itemArray: List<Any>,
-        dialog: MaterialDialog
+            savedInstanceState: Bundle?,
+            itemArray: List<Any>,
+            dialog: MaterialDialog
     ): MaterialDialog {
 
         if (itemArray.size == 0) {
             // create an empty dialog, type of list does not matter
             dialog
-                .listItems(
-                    items = arrayListOf(),
-                    waitForPositiveButton = false,
-                    selection = { _: MaterialDialog, index: Int, _: String ->
-                        sendEvent(DialogListEvent(setup, null, DialogListEvent.Data(index, itemArray[index])))
-                    })
+                    .listItems(
+                            items = arrayListOf(),
+                            waitForPositiveButton = false,
+                            selection = { _: MaterialDialog, index: Int, _: CharSequence ->
+                                sendEvent(DialogListEvent(setup, null, DialogListEvent.Data(index, itemArray[index])))
+                            })
         } else {
             val item = itemArray.first()
 
@@ -180,17 +174,17 @@ open class DialogListFragment : BaseDialogFragment<DialogList>() {
 
                     @Suppress("UNCHECKED_CAST")
                     mAdapter = TextImageRVAdapter(
-                        itemArray as List<ITextImageProvider>,
-                        false,
-                        setup.iconSize,
-                        imageColorFilterColor = setup.iconColorTint,
-                        imageColorFilterMode = setup.iconColorTintMode,
-                        noImageVisibility = setup.noImageVisibility,
-                        onlyShowIconIfSelected = setup.onlyShowIconIfItemIsSelected,
-                        selection = initialSelection,
-                        hideDefaultCheckMark = setup.hideDefaultCheckMarkIcon,
-                        checkMark = setup.checkMark,
-                        mode = setup.selectionMode
+                            itemArray as List<ITextImageProvider>,
+                            false,
+                            setup.iconSize,
+                            imageColorFilterColor = setup.iconColorTint,
+                            imageColorFilterMode = setup.iconColorTintMode,
+                            noImageVisibility = setup.noImageVisibility,
+                            onlyShowIconIfSelected = setup.onlyShowIconIfItemIsSelected,
+                            selection = initialSelection,
+                            hideDefaultCheckMark = setup.hideDefaultCheckMarkIcon,
+                            checkMark = setup.checkMark,
+                            mode = setup.selectionMode
                     ) { _, _, _, pos ->
                         if (setup.selectionMode == DialogList.SelectionMode.Multi) {
                             mAdapter!!.toggleMultiSelect(pos)
@@ -216,33 +210,33 @@ open class DialogListFragment : BaseDialogFragment<DialogList>() {
 
                     if (setup.selectionMode == DialogList.SelectionMode.Multi) {
                         dialog
-                            .listItemsMultiChoice(
-                                items = stringItems,
-                                initialSelection = setup.initialMultiSelection,
-                                allowEmptySelection = true,
-                                selection = { _: MaterialDialog, index: IntArray, item: List<String> ->
-                                    sendEvent(DialogListEvent(setup, null, DialogListEvent.Data(index.toList(), item)))
-                                    if (!setup.multiClick) {
-                                        dismiss()
-                                    }
-                                })
+                                .listItemsMultiChoice(
+                                        items = stringItems,
+                                        initialSelection = setup.initialMultiSelection,
+                                        allowEmptySelection = true,
+                                        selection = { _: MaterialDialog, index: IntArray, item: List<CharSequence> ->
+                                            sendEvent(DialogListEvent(setup, null, DialogListEvent.Data(index.toList(), item)))
+                                            if (!setup.multiClick) {
+                                                dismiss()
+                                            }
+                                        })
                     } else {
                         dialog
-                            .listItems(
-                                items = stringItems,
-                                waitForPositiveButton = false,
-                                selection = { _: MaterialDialog, index: Int, _: String ->
-                                    sendEvent(
-                                        DialogListEvent(
-                                            setup,
-                                            null,
-                                            DialogListEvent.Data(index, itemArray[index])
-                                        )
-                                    )
-                                    if (!setup.multiClick) {
-                                        dismiss()
-                                    }
-                                })
+                                .listItems(
+                                        items = stringItems,
+                                        waitForPositiveButton = false,
+                                        selection = { _: MaterialDialog, index: Int, _: CharSequence ->
+                                            sendEvent(
+                                                    DialogListEvent(
+                                                            setup,
+                                                            null,
+                                                            DialogListEvent.Data(index, itemArray[index])
+                                                    )
+                                            )
+                                            if (!setup.multiClick) {
+                                                dismiss()
+                                            }
+                                        })
                     }
                 }
             }

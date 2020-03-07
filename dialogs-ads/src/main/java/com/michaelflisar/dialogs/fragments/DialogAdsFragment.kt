@@ -9,7 +9,6 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.customview.customView
@@ -19,14 +18,14 @@ import com.google.android.gms.ads.reward.RewardItem
 import com.google.android.gms.ads.reward.RewardedVideoAd
 import com.google.android.gms.ads.reward.RewardedVideoAdListener
 import com.michaelflisar.dialogs.*
+import com.michaelflisar.dialogs.ads.R
 import com.michaelflisar.dialogs.ads.databinding.DialogAdsBinding
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
+import com.michaelflisar.dialogs.classes.SendResultType
 import com.michaelflisar.dialogs.events.DialogAdsEvent
 import com.michaelflisar.dialogs.setups.DialogAds
-import com.michaelflisar.dialogs.ads.R
-import com.michaelflisar.dialogs.classes.SendResultType
 
-class DialogAdsFragment : BaseDialogFragment<DialogAds>() {
+class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
 
     companion object {
 
@@ -68,38 +67,27 @@ class DialogAdsFragment : BaseDialogFragment<DialogAds>() {
             }
         }
 
-        val dialog = MaterialDialog(activity!!)
+        // create dialog with correct style, title and cancelable flags
+        val dialog = setup.createMaterialDialog(activity!!, this)
 
         dialog
-            .customView(
-                R.layout.dialog_ads,
-                horizontalPadding = true
-            )
-            .positiveButton(setup.posButton) {
-                finishDialog(WhichButton.POSITIVE, DialogAdsEvent.Data.ClosedByUser(errorBanner, errorBigAd))
-            }
-            .cancelable(setup.cancelable)
-        this.isCancelable = setup.cancelable
+                .customView(
+                        R.layout.dialog_ads,
+                        horizontalPadding = true
+                )
+                .positiveButton(setup) {
+                    finishDialog(WhichButton.POSITIVE, DialogAdsEvent.Data.ClosedByUser(errorBanner, errorBigAd))
+                }
+                .negativeButton(setup) {
+                    finishDialog(WhichButton.NEGATIVE, DialogAdsEvent.Data.ClosedByUser(errorBanner, errorBigAd))
+                }
+                .neutralButton(setup) {
+                    finishDialog(WhichButton.NEUTRAL, DialogAdsEvent.Data.ClosedByUser(errorBanner, errorBigAd))
+                }
 
         posButton = dialog.getActionButton(WhichButton.POSITIVE)
-
-        setup.title?.let {
-            dialog.title(it)
-        }
-
-        setup.negButton?.let {
-            dialog.negativeButton(it) {
-                finishDialog(WhichButton.NEGATIVE, DialogAdsEvent.Data.ClosedByUser(errorBanner, errorBigAd))
-            }
-            negButton = dialog.getActionButton(WhichButton.NEGATIVE)
-        }
-
-        setup.neutrButton?.let {
-            dialog.neutralButton(it) {
-                finishDialog(WhichButton.NEUTRAL, DialogAdsEvent.Data.ClosedByUser(errorBanner, errorBigAd))
-            }
-            neutrButton = dialog.getActionButton(WhichButton.NEUTRAL)
-        }
+        negButton = if (setup.negButton != null) dialog.getActionButton(WhichButton.NEGATIVE) else null
+        neutrButton = if (setup.neutrButton != null) dialog.getActionButton(WhichButton.NEUTRAL) else null
 
         if (timeLeft > 0) {
             posButton!!.isEnabled = false
@@ -329,8 +317,8 @@ class DialogAdsFragment : BaseDialogFragment<DialogAds>() {
                 startTimer(R.string.mdf_dialogs_info_error_ad_timeout, R.string.mdf_dialogs_info_error_ad_timeout_over)
             } else {
                 startTimer(
-                    R.string.mdf_dialogs_info_ad_ready_banner_timeout,
-                    R.string.mdf_dialogs_info_ad_ready_banner_timeout_over
+                        R.string.mdf_dialogs_info_ad_ready_banner_timeout,
+                        R.string.mdf_dialogs_info_ad_ready_banner_timeout_over
                 )
             }
         }

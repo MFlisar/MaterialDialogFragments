@@ -7,22 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.classes.Text
-import com.michaelflisar.dialogs.input.R
 import com.michaelflisar.dialogs.helper.RepeatListener
+import com.michaelflisar.dialogs.input.R
 import com.michaelflisar.dialogs.negativeButton
 import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.positiveButton
 import com.michaelflisar.dialogs.setups.DialogNumberPicker
-import com.michaelflisar.dialogs.title
 import java.util.*
 
-open class DialogNumberPickerFragment : BaseDialogFragment<DialogNumberPicker>(), View.OnClickListener {
+open class DialogNumberPickerFragment : MaterialDialogFragment<DialogNumberPicker>(), View.OnClickListener {
 
     companion object {
 
@@ -59,38 +57,30 @@ open class DialogNumberPickerFragment : BaseDialogFragment<DialogNumberPicker>()
             viewDatas[i - 1].setValue(values[i - 1])
         }
 
-        val dialog = MaterialDialog(activity!!)
-                .customView(layout, scrollable = values.size > 1)
+        // create dialog with correct style, title and cancelable flags
+        val dialog = setup.createMaterialDialog(activity!!, this)
+
+        dialog.customView(layout, scrollable = values.size > 1)
                 .positiveButton {
                     sendEvent(
-                        com.michaelflisar.dialogs.events.DialogNumberEvent(
-                            setup,
-                            WhichButton.POSITIVE.ordinal,
-                            com.michaelflisar.dialogs.events.DialogNumberEvent.Data(getEventValues(viewDatas))
-                        )
+                            com.michaelflisar.dialogs.events.DialogNumberEvent(
+                                    setup,
+                                    WhichButton.POSITIVE.ordinal,
+                                    com.michaelflisar.dialogs.events.DialogNumberEvent.Data(getEventValues(viewDatas))
+                            )
                     )
                     dismiss()
                 }
-                .cancelable(true)
 
-        setup.title?.let {
-            dialog.title(it)
-        }
-
-        dialog.positiveButton(setup.posButton)
-
-        setup.negButton?.let {
-            dialog.negativeButton(it) {
-                sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEGATIVE.ordinal, null))
-                dismiss()
-            }
-        }
-
-        setup.neutrButton?.let {
-            dialog.neutralButton(it) {
-                sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-            }
-        }
+        dialog
+                .positiveButton(setup)
+                .negativeButton(setup) {
+                    sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                    dismiss()
+                }
+                .neutralButton(setup) {
+                    sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+                }
 
         val view = dialog.getCustomView()
         updateView(view)

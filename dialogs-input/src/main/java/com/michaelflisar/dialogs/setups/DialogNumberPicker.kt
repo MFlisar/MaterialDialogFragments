@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.os.Parcelable
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
+import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.fragments.DialogNumberPickerFragment
-import com.michaelflisar.dialogs.interfaces.DialogFragment
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -22,6 +22,7 @@ class DialogNumberPicker(
         override val cancelable: Boolean = true,
         override val extra: Bundle? = null,
         override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
+        override val style: DialogStyle = DialogStyle.Dialog,
 
         // special setup
         val min: Int? = null,

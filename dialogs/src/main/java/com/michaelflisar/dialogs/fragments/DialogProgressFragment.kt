@@ -5,8 +5,7 @@ import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
-import com.michaelflisar.dialogs.setups.DialogProgress
-import com.michaelflisar.dialogs.base.BaseDialogFragment
+import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.core.R
 import com.michaelflisar.dialogs.events.DialogProgressEvent
@@ -14,10 +13,10 @@ import com.michaelflisar.dialogs.helper.EventQueue
 import com.michaelflisar.dialogs.interfaces.IProgressDialogFragment
 import com.michaelflisar.dialogs.negativeButton
 import com.michaelflisar.dialogs.neutralButton
+import com.michaelflisar.dialogs.setups.DialogProgress
 import com.michaelflisar.dialogs.textView
-import com.michaelflisar.dialogs.title
 
-class DialogProgressFragment : BaseDialogFragment<DialogProgress>(), IProgressDialogFragment {
+class DialogProgressFragment : MaterialDialogFragment<DialogProgress>(), IProgressDialogFragment {
 
     companion object {
         fun create(setup: DialogProgress): DialogProgressFragment {
@@ -98,7 +97,8 @@ class DialogProgressFragment : BaseDialogFragment<DialogProgress>(), IProgressDi
             setup.text?.get(activity!!)
         }
 
-        val dialog = MaterialDialog(activity!!)
+        // create dialog with correct style, title and cancelable flags
+        val dialog = setup.createMaterialDialog(activity!!, this)
 
         if (text != null)
             dialog.message(text = text.toString())
@@ -106,31 +106,15 @@ class DialogProgressFragment : BaseDialogFragment<DialogProgress>(), IProgressDi
         dialog.customView(if (setup.horizontal) R.layout.dialog_progress_horizontal else R.layout.dialog_progress)
                 .cancelable(false)
                 .noAutoDismiss()
-
-        setup.negButton?.let {
-            dialog
-                    .negativeButton(it) {
-                        sendEvent(DialogProgressEvent(setup, WhichButton.NEGATIVE.ordinal, DialogProgressEvent.Data(setup.dismissOnNegative, false)))
-                        if (setup.dismissOnNegative) {
-                            dismissAllowingStateLoss()
-                        }
+                .negativeButton(setup) {
+                    sendEvent(DialogProgressEvent(setup, WhichButton.NEGATIVE.ordinal, DialogProgressEvent.Data(setup.dismissOnNegative, false)))
+                    if (setup.dismissOnNegative) {
+                        dismissAllowingStateLoss()
                     }
-        }
-
-        setup.neutrButton?.let {
-            dialog.neutralButton(it) {
-                sendEvent(DialogProgressEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-            }
-        }
-
-        setup.title?.let {
-            dialog.title(it)
-        }
-
-        dialog.setCancelable(false)
-        dialog.setCanceledOnTouchOutside(false)
-
-        isCancelable = false
+                }
+                .neutralButton(setup) {
+                    sendEvent(DialogProgressEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+                }
 
         return dialog
     }
