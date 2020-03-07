@@ -48,7 +48,7 @@ interface SimpleBaseDialogSetup : Parcelable {
 
         // 2) apply title
         if (applyTitle) {
-            title?.let { dialog.title(it) }
+            dialog.title(this)
         }
 
         // 3) apply cancelable

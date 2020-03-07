@@ -67,7 +67,7 @@ abstract class DialogFastAdapterFragment : MaterialDialogFragment<DialogFastAdap
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         // create dialog with correct style, title and cancelable flags
-        val dialog = setup.createMaterialDialog(activity!!, this)
+        val dialog = setup.createMaterialDialog(activity!!, this, !setup.internalSetup.withToolbar)
 
         dialog.customView(
                 if (setup.internalSetup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview,
@@ -87,11 +87,6 @@ abstract class DialogFastAdapterFragment : MaterialDialogFragment<DialogFastAdap
                     sendEvent(DialogFastAdapterEvent(setup, WhichButton.NEUTRAL.ordinal, null))
                 }
 
-        if (!setup.internalSetup.withToolbar) {
-            setup.title?.let {
-                dialog.title(it)
-            }
-        }
         updateBuilder(dialog)
         val view = dialog.getCustomView()
 

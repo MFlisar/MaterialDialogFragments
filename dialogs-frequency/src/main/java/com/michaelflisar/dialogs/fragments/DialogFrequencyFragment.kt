@@ -158,12 +158,6 @@ class DialogFrequencyFragment : MaterialDialogFragment<DialogFrequency>(), Adapt
                 }
                 .noAutoDismiss()
 
-        if (!hasToolbar) {
-            setup.title?.let {
-                dialog.title(it)
-            }
-        }
-
         dialog
                 .negativeButton(setup) {
                     sendEvent(DialogFrequencyEvent(setup, WhichButton.NEGATIVE.ordinal, null))

@@ -26,18 +26,19 @@ fun MaterialDialog.textView(): TextView? = findViewById(R.id.md_text_message)
 
 fun MaterialDialog.titleView(): TextView? = findViewById(R.id.md_text_title)
 
-fun MaterialDialog.title(text: Text?): MaterialDialog {
-    when (text) {
-        is Text.TextString -> title(text = text.text)
-        is Text.TextRes -> title(text.res)
-    }
-    return this
-}
-
 fun MaterialDialog.message(text: Text?): MaterialDialog {
     when (text) {
         is Text.TextString -> message(text = text.text)
         is Text.TextRes -> message(text.res)
+    }
+    return this
+}
+
+fun MaterialDialog.title(setup: SimpleBaseDialogSetup): MaterialDialog {
+    val text = setup.title
+    when (text) {
+        is Text.TextString -> title(text = text.text)
+        is Text.TextRes -> title(text.res)
     }
     return this
 }
@@ -76,7 +77,7 @@ fun MaterialDialog.negativeButton(setup: SimpleBaseDialogSetup, click: DialogCal
 
 internal fun Context.getThemeReference(attribute: Int): Int {
     val typeValue = TypedValue()
-    getTheme().resolveAttribute(attribute, typeValue, false)
+    theme.resolveAttribute(attribute, typeValue, false)
     return if (typeValue.type == TypedValue.TYPE_REFERENCE) {
         typeValue.data
     } else {
