@@ -20,7 +20,7 @@ class DayOfMonthItem(
     class ViewHolder(view: View) : FastAdapter.ViewHolder<DayOfMonthItem>(view) {
         val binding: ItemDayOfMonthBinding = DataBindingUtil.bind(view)!!
 
-        override fun bindView(item: DayOfMonthItem, payloads: MutableList<Any>) {
+        override fun bindView(item: DayOfMonthItem, payloads: List<Any>) {
             binding.tvText.text = item.day.toReadableString(binding.root.context, false)
         }
 

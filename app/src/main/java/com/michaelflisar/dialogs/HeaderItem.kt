@@ -26,7 +26,7 @@ class HeaderItem(
             binding = DataBindingUtil.bind(view)!!
         }
 
-        override fun bindView(item: HeaderItem, payloads: MutableList<Any>) {
+        override fun bindView(item: HeaderItem, payloads: List<Any>) {
             binding.title.text = item.title
         }
 

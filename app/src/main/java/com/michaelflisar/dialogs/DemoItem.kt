@@ -29,7 +29,7 @@ class DemoItem(
             binding = DataBindingUtil.bind(view)!!
         }
 
-        override fun bindView(item: DemoItem, payloads: MutableList<Any>) {
+        override fun bindView(item: DemoItem, payloads: List<Any>) {
             binding.title.text = item.title
             binding.desc.text = item.desc
         }

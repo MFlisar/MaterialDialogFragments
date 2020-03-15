@@ -22,7 +22,7 @@ ext {
 
             materialDialogs: "3.3.0",
             materialize    : "1.2.1",
-            fastAdapter    : "4.1.2",
+            fastAdapter    : "5.0.0",
             colorPicker    : "2.4.1",
 
             playServices   : "18.1.1"

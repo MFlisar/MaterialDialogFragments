@@ -20,7 +20,7 @@ class SimpleAppItem(
     class ViewHolder(view: View) : FastAdapter.ViewHolder<SimpleAppItem>(view) {
         var binding: ItemSimpleAppBinding = DataBindingUtil.bind(view)!!
 
-        override fun bindView(item: SimpleAppItem, payloads: MutableList<Any>) {
+        override fun bindView(item: SimpleAppItem, payloads: List<Any>) {
             binding.tvAppName.text = item.app.name
             binding.tvPackageName.text = item.app.packageName
             binding.ivIcon.setImageDrawable(item.app.resolveInfo?.loadIcon(binding.root.context.packageManager))
