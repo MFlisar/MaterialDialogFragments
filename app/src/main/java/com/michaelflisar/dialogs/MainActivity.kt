@@ -12,7 +12,7 @@ import com.michaelflisar.dialogs.app.BuildConfig
 import com.michaelflisar.dialogs.app.R
 import com.michaelflisar.dialogs.app.databinding.ActivityMainBinding
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.dialogs.classes.asText
+import com.michaelflisar.text.asText
 import com.michaelflisar.dialogs.debug.DebugDialog
 import com.michaelflisar.dialogs.enums.IconSize
 import com.michaelflisar.dialogs.events.*

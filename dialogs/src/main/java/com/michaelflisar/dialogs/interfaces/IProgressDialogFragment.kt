@@ -1,6 +1,6 @@
 package com.michaelflisar.dialogs.interfaces
 
-import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.text.Text
 
 interface IProgressDialogFragment {
     fun update(event: Text)

@@ -82,7 +82,7 @@ internal class DialogMonthDayFragment : MaterialDialogFragment<DialogMonthDay>()
                     sendEvent(DialogMonthDayEvent(setup, WhichButton.NEUTRAL.ordinal, null))
                 }
 
-        binding = DialogMonthDayBinding.bind(dialog.getCustomView())!!
+        binding = DialogMonthDayBinding.bind(dialog.getCustomView())
 
         updateView(true)
         return dialog

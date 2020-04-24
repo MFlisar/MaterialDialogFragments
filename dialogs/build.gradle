@@ -52,6 +52,12 @@ dependencies {
     implementation "com.google.android.material:material:${androidx.material}"
 
     // ------------------------
+    // Text Class
+    // ------------------------
+
+    api "com.github.MFlisar:AndroidText:${versions.androidText}"
+
+    // ------------------------
     // MaterialDialogs
     // ------------------------
 

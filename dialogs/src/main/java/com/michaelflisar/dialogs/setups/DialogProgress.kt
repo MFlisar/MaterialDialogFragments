@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogProgressFragment
 import com.michaelflisar.dialogs.interfaces.IProgressDialogFragment
 import kotlinx.android.parcel.Parcelize
@@ -17,7 +17,7 @@ class DialogProgress constructor(
         val text: Text?,
         val horizontal: Boolean = true,
         val dismissOnNegative: Boolean = false,
-        override val posButton: Text = Text.TextRes(android.R.string.ok),
+        override val posButton: Text = Text.Resource(android.R.string.ok),
         override val negButton: Text? = null,
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = false,

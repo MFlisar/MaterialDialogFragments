@@ -9,6 +9,7 @@ import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.bottomsheets.setPeekHeight
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.title
+import com.michaelflisar.text.Text
 
 interface SimpleBaseDialogSetup : Parcelable {
 

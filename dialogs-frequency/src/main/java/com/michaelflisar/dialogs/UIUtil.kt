@@ -6,7 +6,7 @@ import android.widget.Spinner
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.adapters.NoPaddingArrayAdapter
 import com.michaelflisar.dialogs.classes.SendResultType
-import com.michaelflisar.dialogs.classes.asText
+import com.michaelflisar.text.asText
 import com.michaelflisar.dialogs.frequency.R
 import com.michaelflisar.dialogs.setups.DialogDateTime
 import com.michaelflisar.dialogs.setups.DialogNumber

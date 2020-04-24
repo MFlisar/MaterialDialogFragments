@@ -6,7 +6,7 @@ import android.os.Parcelable
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.text.Text
 import kotlinx.android.parcel.Parcelize
 
 abstract class DialogFastAdapter(
@@ -28,7 +28,7 @@ abstract class DialogFastAdapter(
             // base setup
             val id: Int,
             val title: Text?,
-            val posButton: Text = Text.TextRes(android.R.string.ok),
+            val posButton: Text = Text.Resource(android.R.string.ok),
             val negButton: Text? = null,
             val neutrButton: Text? = null,
             val cancelable: Boolean = true,

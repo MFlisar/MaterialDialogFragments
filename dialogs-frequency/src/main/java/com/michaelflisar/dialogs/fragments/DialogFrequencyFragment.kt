@@ -27,6 +27,7 @@ import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
 import com.michaelflisar.dialogs.setups.DialogFrequency
 import com.michaelflisar.dialogs.setups.DialogInfo
 import com.michaelflisar.dialogs.setups.DialogMonthDay
+import com.michaelflisar.text.asText
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
@@ -166,7 +167,7 @@ class DialogFrequencyFragment : MaterialDialogFragment<DialogFrequency>(), Adapt
                     sendEvent(DialogFrequencyEvent(setup, WhichButton.NEUTRAL.ordinal, null))
                 }
 
-        binding = DialogFrequencyBinding.bind(dialog.getCustomView())!!
+        binding = DialogFrequencyBinding.bind(dialog.getCustomView())
 
         if (hasToolbar) {
             binding.toolbar.title = setup.title?.get(activity!!)

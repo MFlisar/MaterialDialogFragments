@@ -7,8 +7,8 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.DialogCallback
 import com.afollestad.materialdialogs.MaterialDialog
 import com.michaelflisar.dialogs.classes.SimpleBaseDialogSetup
-import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.core.R
+import com.michaelflisar.text.Text
 
 // --------------
 // MaterialDialog
@@ -28,8 +28,8 @@ fun MaterialDialog.titleView(): TextView? = findViewById(R.id.md_text_title)
 
 fun MaterialDialog.message(text: Text?): MaterialDialog {
     when (text) {
-        is Text.TextString -> message(text = text.text)
-        is Text.TextRes -> message(text.res)
+        is Text.String -> message(text = text.text)
+        is Text.Resource -> message(text.res)
     }
     return this
 }
@@ -37,8 +37,8 @@ fun MaterialDialog.message(text: Text?): MaterialDialog {
 fun MaterialDialog.title(setup: SimpleBaseDialogSetup): MaterialDialog {
     val text = setup.title
     when (text) {
-        is Text.TextString -> title(text = text.text)
-        is Text.TextRes -> title(text.res)
+        is Text.String -> title(text = text.text)
+        is Text.Resource -> title(text.res)
     }
     return this
 }
@@ -46,8 +46,8 @@ fun MaterialDialog.title(setup: SimpleBaseDialogSetup): MaterialDialog {
 fun MaterialDialog.positiveButton(setup: SimpleBaseDialogSetup, click: DialogCallback? = null): MaterialDialog {
     val button = setup.posButton
     when (button) {
-        is Text.TextString -> positiveButton(text = button.text, click = click)
-        is Text.TextRes -> positiveButton(res = button.res, click = click)
+        is Text.String -> positiveButton(text = button.text, click = click)
+        is Text.Resource -> positiveButton(res = button.res, click = click)
     }
     return this
 }
@@ -56,8 +56,8 @@ fun MaterialDialog.neutralButton(setup: SimpleBaseDialogSetup, click: DialogCall
     @Suppress("DEPRECATION")
     val button = setup.neutrButton
     when (button) {
-        is Text.TextString -> neutralButton(text = button.text, click = click)
-        is Text.TextRes -> neutralButton(res = button.res, click = click)
+        is Text.String -> neutralButton(text = button.text, click = click)
+        is Text.Resource -> neutralButton(res = button.res, click = click)
     }
     return this
 }
@@ -65,8 +65,8 @@ fun MaterialDialog.neutralButton(setup: SimpleBaseDialogSetup, click: DialogCall
 fun MaterialDialog.negativeButton(setup: SimpleBaseDialogSetup, click: DialogCallback? = null): MaterialDialog {
     val button = setup.negButton
     when (button) {
-        is Text.TextString -> negativeButton(text = button.text, click = click)
-        is Text.TextRes -> negativeButton(res = button.res, click = click)
+        is Text.String -> negativeButton(text = button.text, click = click)
+        is Text.Resource -> negativeButton(res = button.res, click = click)
     }
     return this
 }

@@ -20,6 +20,8 @@ ext {
             gradlePlugin   : "3.6.0",
             mavenVersion   : "2.1",
 
+            androidText    : "0.2",
+
             materialDialogs: "3.3.0",
             materialize    : "1.2.1",
             fastAdapter    : "5.0.0",

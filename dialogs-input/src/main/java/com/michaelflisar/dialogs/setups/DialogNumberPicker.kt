@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogNumberPickerFragment
 import kotlinx.android.parcel.Parcelize
 
@@ -16,7 +16,7 @@ class DialogNumberPicker(
         override val title: Text?,
         val initialValue: Int = 0,
         val text: Text? = null,
-        override val posButton: Text = Text.TextRes(android.R.string.ok),
+        override val posButton: Text = Text.Resource(android.R.string.ok),
         override val negButton: Text? = null,
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = true,

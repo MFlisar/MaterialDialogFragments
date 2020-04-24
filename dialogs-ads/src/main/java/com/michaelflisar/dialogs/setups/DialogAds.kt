@@ -10,7 +10,7 @@ import com.michaelflisar.dialogs.ads.BuildConfig
 import com.michaelflisar.dialogs.ads.R
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogAdsFragment
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -20,7 +20,7 @@ class DialogAds(
         // base setup
         override val id: Int,
         override val title: Text? = null,
-        override val posButton: Text = Text.TextRes(R.string.mdf_close_dialog),
+        override val posButton: Text = Text.Resource(R.string.mdf_close_dialog),
         override val negButton: Text? = null,
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = false,

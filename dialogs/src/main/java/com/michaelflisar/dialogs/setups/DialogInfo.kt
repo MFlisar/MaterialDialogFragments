@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogInfoFragment
 import kotlinx.android.parcel.Parcelize
 
@@ -28,7 +28,7 @@ class DialogInfo(
         override val id: Int,
         override val title: Text?,
         val text: Text,
-        override val posButton: Text = Text.TextRes(android.R.string.ok),
+        override val posButton: Text = Text.Resource(android.R.string.ok),
         override val negButton: Text? = null,
         override val neutrButton: Text?  = null,
         override val cancelable: Boolean = true,

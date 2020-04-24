@@ -6,7 +6,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
-import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.core.R
 import com.michaelflisar.dialogs.events.DialogProgressEvent
 import com.michaelflisar.dialogs.helper.EventQueue

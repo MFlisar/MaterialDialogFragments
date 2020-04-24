@@ -16,7 +16,7 @@ import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
-import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.events.DialogFastAdapterEvent
 import com.michaelflisar.dialogs.fastadapter.R
 import com.michaelflisar.dialogs.negativeButton

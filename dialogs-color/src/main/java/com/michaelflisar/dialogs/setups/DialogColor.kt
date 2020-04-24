@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogColorFragment
 import kotlinx.android.parcel.Parcelize
 
@@ -20,7 +20,7 @@ class DialogColor(
         override val style: DialogStyle = DialogStyle.Dialog,
 
         // special setup
-        override val posButton: Text = Text.TextRes(R.string.ok),
+        override val posButton: Text = Text.Resource(R.string.ok),
         override val negButton: Text? = null,
         override val neutrButton: Text?  = null,
         override val cancelable: Boolean = true,

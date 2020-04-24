@@ -7,10 +7,10 @@ import android.view.View
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.dialogs.classes.Text
 import com.michaelflisar.dialogs.enums.IconSize
 import com.michaelflisar.dialogs.fragments.DialogListFragment
 import com.michaelflisar.dialogs.interfaces.IParcelableTextImageProvider
+import com.michaelflisar.text.Text
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -21,7 +21,7 @@ data class DialogList(
         val items: List<Item>,
         val text: Text? = null,
         val selectionMode: SelectionMode = SelectionMode.None,
-        override val posButton: Text = Text.TextRes(android.R.string.ok),
+        override val posButton: Text = Text.Resource(android.R.string.ok),
         override val negButton: Text? = null,
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = true,

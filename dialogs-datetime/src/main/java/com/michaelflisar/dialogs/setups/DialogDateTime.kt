@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogDateTimeFragment
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -25,7 +25,7 @@ class DialogDateTime(
         // base setup
         override val id: Int,
         override val title: Text? = null,
-        override val posButton: Text = Text.TextRes(android.R.string.ok),
+        override val posButton: Text = Text.Resource(android.R.string.ok),
         override val negButton: Text? = null,
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = true,

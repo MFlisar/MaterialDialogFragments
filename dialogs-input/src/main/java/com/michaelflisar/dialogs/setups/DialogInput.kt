@@ -6,7 +6,7 @@ import android.text.InputType
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.dialogs.classes.Text
+import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogInputFragment
 import kotlinx.android.parcel.Parcelize
 import java.util.*
@@ -17,7 +17,7 @@ class DialogInput(
         override val id: Int,
         override val title: Text?,
         val input: InputField,
-        override val posButton: Text = Text.TextRes(android.R.string.ok),
+        override val posButton: Text = Text.Resource(android.R.string.ok),
         override val negButton: Text? = null,
         override val neutrButton: Text? = null,
         override val cancelable: Boolean = true,
