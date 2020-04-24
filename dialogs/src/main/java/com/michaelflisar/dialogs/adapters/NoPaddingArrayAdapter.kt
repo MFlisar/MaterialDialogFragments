@@ -15,7 +15,7 @@ class NoPaddingArrayAdapter<T>(
         private val alignTextRight: Boolean = false
 ) : ArrayAdapter<T>(context, layoutId, items) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getView(position, convertView, parent)
         view.setPadding(0, view.paddingTop, view.paddingRight, view.paddingBottom)
         if (alignTextRight) {

@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.CompoundButton
 import androidx.appcompat.widget.Toolbar
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.WhichButton
@@ -167,7 +166,7 @@ class DialogFrequencyFragment : MaterialDialogFragment<DialogFrequency>(), Adapt
                     sendEvent(DialogFrequencyEvent(setup, WhichButton.NEUTRAL.ordinal, null))
                 }
 
-        binding = DataBindingUtil.bind(dialog.getCustomView())!!
+        binding = DialogFrequencyBinding.bind(dialog.getCustomView())!!
 
         if (hasToolbar) {
             binding.toolbar.title = setup.title?.get(activity!!)

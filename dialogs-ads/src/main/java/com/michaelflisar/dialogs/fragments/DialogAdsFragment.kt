@@ -6,7 +6,6 @@ import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.WhichButton
@@ -95,7 +94,7 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
             neutrButton?.isEnabled = false
         }
 
-        binding = DataBindingUtil.bind(dialog.getCustomView())!!
+        binding = DialogAdsBinding.bind(dialog.getCustomView())!!
         onBindingReady()
         return dialog
     }

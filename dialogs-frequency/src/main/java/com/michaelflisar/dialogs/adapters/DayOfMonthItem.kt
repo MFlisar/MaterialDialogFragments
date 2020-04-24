@@ -1,7 +1,6 @@
 package com.michaelflisar.dialogs.adapters
 
 import android.view.View
-import androidx.databinding.DataBindingUtil
 import com.michaelflisar.dialogs.classes.MonthDay
 import com.michaelflisar.dialogs.frequency.R
 import com.michaelflisar.dialogs.frequency.databinding.ItemDayOfMonthBinding
@@ -9,7 +8,7 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 
 class DayOfMonthItem(
-    val day: MonthDay
+        val day: MonthDay
 ) : AbstractItem<DayOfMonthItem.ViewHolder>() {
 
     override val type = R.id.fast_adapter_item_day_of_month
@@ -18,7 +17,7 @@ class DayOfMonthItem(
     override fun getViewHolder(v: View) = ViewHolder(v)
 
     class ViewHolder(view: View) : FastAdapter.ViewHolder<DayOfMonthItem>(view) {
-        val binding: ItemDayOfMonthBinding = DataBindingUtil.bind(view)!!
+        val binding: ItemDayOfMonthBinding = ItemDayOfMonthBinding.bind(view)!!
 
         override fun bindView(item: DayOfMonthItem, payloads: List<Any>) {
             binding.tvText.text = item.day.toReadableString(binding.root.context, false)

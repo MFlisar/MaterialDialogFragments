@@ -1,7 +1,6 @@
 package com.michaelflisar.dialogs
 
 import android.view.View
-import androidx.databinding.DataBindingUtil
 import com.michaelflisar.dialogs.app.R
 import com.michaelflisar.dialogs.app.databinding.HeaderItemBinding
 import com.mikepenz.fastadapter.FastAdapter
@@ -23,7 +22,7 @@ class HeaderItem(
         private val binding: HeaderItemBinding
 
         init {
-            binding = DataBindingUtil.bind(view)!!
+            binding = HeaderItemBinding.bind(view)
         }
 
         override fun bindView(item: HeaderItem, payloads: List<Any>) {

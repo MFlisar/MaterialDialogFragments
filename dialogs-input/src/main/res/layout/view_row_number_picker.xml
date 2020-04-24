@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="horizontal">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <include
+        android:id="@+id/viewButtonSubtract"
+        layout="@layout/view_button_subtract" />
 
-        <include
-            android:id="@+id/viewButtonSubtract"
-            layout="@layout/view_button_subtract" />
+    <TextView
+        android:id="@+id/tvNumber"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="2"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <TextView
-            android:id="@+id/tvNumber"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_gravity="center"
-            android:gravity="center_horizontal"
-            android:layout_height="wrap_content" />
+    <include
+        android:id="@+id/viewButtonAdd"
+        layout="@layout/view_button_add" />
 
-        <include
-            android:id="@+id/viewButtonAdd"
-            layout="@layout/view_button_add" />
-
-    </LinearLayout>
-
-</layout>
+</LinearLayout>

@@ -1,7 +1,6 @@
 package com.michaelflisar.dialogs.fastAdapter
 
 import android.view.View
-import androidx.databinding.DataBindingUtil
 import com.michaelflisar.dialogs.app.R
 import com.michaelflisar.dialogs.classes.App
 import com.mikepenz.fastadapter.FastAdapter
@@ -18,7 +17,7 @@ class SimpleAppItem(
     override fun getViewHolder(v: View): ViewHolder = ViewHolder(v)
 
     class ViewHolder(view: View) : FastAdapter.ViewHolder<SimpleAppItem>(view) {
-        var binding: ItemSimpleAppBinding = DataBindingUtil.bind(view)!!
+        var binding: ItemSimpleAppBinding = ItemSimpleAppBinding.bind(view)
 
         override fun bindView(item: SimpleAppItem, payloads: List<Any>) {
             binding.tvAppName.text = item.app.name

@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import androidx.databinding.DataBindingUtil
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
@@ -83,7 +82,7 @@ internal class DialogMonthDayFragment : MaterialDialogFragment<DialogMonthDay>()
                     sendEvent(DialogMonthDayEvent(setup, WhichButton.NEUTRAL.ordinal, null))
                 }
 
-        binding = DataBindingUtil.bind(dialog.getCustomView())!!
+        binding = DialogMonthDayBinding.bind(dialog.getCustomView())!!
 
         updateView(true)
         return dialog

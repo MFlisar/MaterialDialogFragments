@@ -5,7 +5,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.michaelflisar.dialogs.core.R
@@ -127,7 +126,7 @@ class DebugAdapter(val items: List<DebugDialog.Entry<*>>, val context: Context, 
         val binding: RowAdapterDebugBinding
 
         init {
-            binding = DataBindingUtil.bind(view)!!
+            binding = RowAdapterDebugBinding.bind(view)!!
 //            binding.label.setCheckMarkDrawable(if (adapter.darkTheme) R.drawable.ic_check_white_24dp else R.drawable.ic_check_black_24dp)
             binding.root.setOnClickListener(this)
         }

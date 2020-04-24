@@ -1,7 +1,6 @@
 package com.michaelflisar.dialogs
 
 import android.view.View
-import androidx.databinding.DataBindingUtil
 import com.michaelflisar.dialogs.app.R
 import com.michaelflisar.dialogs.app.databinding.DemoItemBinding
 import com.mikepenz.fastadapter.FastAdapter
@@ -26,7 +25,7 @@ class DemoItem(
         private val binding: DemoItemBinding
 
         init {
-            binding = DataBindingUtil.bind(view)!!
+            binding = DemoItemBinding.bind(view)
         }
 
         override fun bindView(item: DemoItem, payloads: List<Any>) {

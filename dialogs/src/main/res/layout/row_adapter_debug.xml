@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground">
 
-    <FrameLayout
+    <CheckedTextView
+        android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?selectableItemBackground">
+        android:layout_marginStart="@dimen/md_listitem_margin_left"
+        android:layout_marginLeft="@dimen/md_listitem_margin_left"
+        android:layout_marginEnd="@dimen/md_dialog_frame_margin_horizontal"
+        android:layout_marginRight="@dimen/md_dialog_frame_margin_horizontal"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/md_listitem_height"
+        android:textSize="@dimen/md_listitem_textsize" />
 
-        <CheckedTextView
-            android:id="@+id/text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/md_listitem_margin_left"
-            android:layout_marginLeft="@dimen/md_listitem_margin_left"
-            android:layout_marginEnd="@dimen/md_dialog_frame_margin_horizontal"
-            android:layout_marginRight="@dimen/md_dialog_frame_margin_horizontal"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/md_listitem_height"
-            android:textSize="@dimen/md_listitem_textsize" />
-
-    </FrameLayout>
-
-</layout>
+</FrameLayout>

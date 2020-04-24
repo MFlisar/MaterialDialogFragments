@@ -1,42 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <Spinner
+        android:id="@+id/spMonthDayType"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:orientation="vertical">
+        android:layout_height="wrap_content" />
 
-        <Spinner
-            android:id="@+id/spMonthDayType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <Spinner
+        android:id="@+id/spDayNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <Spinner
-            android:id="@+id/spDayNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <Spinner
+        android:id="@+id/spDayNumberBeginning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <Spinner
-            android:id="@+id/spDayNumberBeginning"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <Spinner
+        android:id="@+id/spWeekday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <Spinner
-            android:id="@+id/spWeekday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <Spinner
+        android:id="@+id/spWeekdayNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <Spinner
-            android:id="@+id/spWeekdayNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/tvInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-</layout>
+</LinearLayout>

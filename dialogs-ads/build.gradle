@@ -12,7 +12,7 @@ group = 'com.github.MFlisar'
 android {
     compileSdkVersion setup.compileSdk
 
-    dataBinding.enabled = true
+    viewBinding.enabled = true
 
     defaultConfig {
         minSdkVersion setup.minSdk
