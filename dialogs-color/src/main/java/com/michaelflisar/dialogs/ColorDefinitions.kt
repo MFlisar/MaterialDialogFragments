@@ -1,30 +1,17 @@
-package com.michaelflisar.dialogs.utils;
+package com.michaelflisar.dialogs
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
-import android.view.View;
+import com.michaelflisar.dialogs.color.R
+import com.michaelflisar.dialogs.classes.GroupedColor
 
-import com.michaelflisar.dialogs.color.R;
 
-import androidx.core.content.ContextCompat;
+object ColorDefinitions {
 
-public class ColorUtil {
-    public static final float[] COLOR_FILTER_NEGATIVE = {
-            -1.0f, 0, 0, 0, 255, // red
-            0, -1.0f, 0, 0, 255, // green
-            0, 0, -1.0f, 0, 255, // blue
-            0, 0, 0, 1.0f, 0  // alpha
-    };
-
-    public static final double DARKNESS_FACTOR_BORDER = 0.2f;
-
-    public static GroupedColor COLORS_BW = new GroupedColor(0, R.string.black_white,
+    val COLORS_BW = GroupedColor(0, R.string.black_white,
             R.color.md_black_1000,
             R.color.md_white_1000
-    );
+    )
 
-    public static GroupedColor COLORS_AMBER = new GroupedColor(5, R.string.amber,
+    val COLORS_AMBER = GroupedColor(5, R.string.amber,
             R.color.md_amber_50,
             R.color.md_amber_100,
             R.color.md_amber_200,
@@ -39,9 +26,8 @@ public class ColorUtil {
             R.color.md_amber_A200,
             R.color.md_amber_A400,
             R.color.md_amber_A700
-    );
-
-    public static GroupedColor COLORS_BLUE = new GroupedColor(5, R.string.blue,
+    )
+    val COLORS_BLUE = GroupedColor(5, R.string.blue,
             R.color.md_blue_50,
             R.color.md_blue_100,
             R.color.md_blue_200,
@@ -56,9 +42,8 @@ public class ColorUtil {
             R.color.md_blue_A200,
             R.color.md_blue_A400,
             R.color.md_blue_A700
-    );
-
-    public static GroupedColor COLORS_BLUE_GREY = new GroupedColor(5, R.string.blue_grey,
+    )
+    val COLORS_BLUE_GREY = GroupedColor(5, R.string.blue_grey,
             R.color.md_blue_grey_50,
             R.color.md_blue_grey_100,
             R.color.md_blue_grey_200,
@@ -69,9 +54,8 @@ public class ColorUtil {
             R.color.md_blue_grey_700,
             R.color.md_blue_grey_800,
             R.color.md_blue_grey_900
-    );
-
-    public static GroupedColor COLORS_BROWN = new GroupedColor(5, R.string.brown,
+    )
+    val COLORS_BROWN = GroupedColor(5, R.string.brown,
             R.color.md_brown_50,
             R.color.md_brown_100,
             R.color.md_brown_200,
@@ -82,9 +66,8 @@ public class ColorUtil {
             R.color.md_brown_700,
             R.color.md_brown_800,
             R.color.md_brown_900
-    );
-
-    public static GroupedColor COLORS_CYAN = new GroupedColor(5, R.string.cyan,
+    )
+    val COLORS_CYAN = GroupedColor(5, R.string.cyan,
             R.color.md_cyan_50,
             R.color.md_cyan_100,
             R.color.md_cyan_200,
@@ -99,9 +82,8 @@ public class ColorUtil {
             R.color.md_cyan_A200,
             R.color.md_cyan_A400,
             R.color.md_cyan_A700
-    );
-
-    public static GroupedColor COLORS_DEEP_ORANGE = new GroupedColor(5, R.string.deep_orange,
+    )
+    val COLORS_DEEP_ORANGE = GroupedColor(5, R.string.deep_orange,
             R.color.md_deep_orange_50,
             R.color.md_deep_orange_100,
             R.color.md_deep_orange_200,
@@ -116,9 +98,8 @@ public class ColorUtil {
             R.color.md_deep_orange_A200,
             R.color.md_deep_orange_A400,
             R.color.md_deep_orange_A700
-    );
-
-    public static GroupedColor COLORS_DEEP_PURPLE = new GroupedColor(5, R.string.deep_purple,
+    )
+    val COLORS_DEEP_PURPLE = GroupedColor(5, R.string.deep_purple,
             R.color.md_deep_purple_50,
             R.color.md_deep_purple_100,
             R.color.md_deep_purple_200,
@@ -133,9 +114,8 @@ public class ColorUtil {
             R.color.md_deep_purple_A200,
             R.color.md_deep_purple_A400,
             R.color.md_deep_purple_A700
-    );
-
-    public static GroupedColor COLORS_GREEN = new GroupedColor(5, R.string.green,
+    )
+    val COLORS_GREEN = GroupedColor(5, R.string.green,
             R.color.md_green_50,
             R.color.md_green_100,
             R.color.md_green_200,
@@ -150,9 +130,8 @@ public class ColorUtil {
             R.color.md_green_A200,
             R.color.md_green_A400,
             R.color.md_green_A700
-    );
-
-    public static GroupedColor COLORS_GREY = new GroupedColor(5, R.string.grey,
+    )
+    val COLORS_GREY = GroupedColor(5, R.string.grey,
             R.color.md_grey_50,
             R.color.md_grey_100,
             R.color.md_grey_200,
@@ -163,9 +142,8 @@ public class ColorUtil {
             R.color.md_grey_700,
             R.color.md_grey_800,
             R.color.md_grey_900
-    );
-
-    public static GroupedColor COLORS_INDIGO = new GroupedColor(5, R.string.indigo,
+    )
+    val COLORS_INDIGO = GroupedColor(5, R.string.indigo,
             R.color.md_indigo_50,
             R.color.md_indigo_100,
             R.color.md_indigo_200,
@@ -180,9 +158,8 @@ public class ColorUtil {
             R.color.md_indigo_A200,
             R.color.md_indigo_A400,
             R.color.md_indigo_A700
-    );
-
-    public static GroupedColor COLORS_LIGHT_BLUE = new GroupedColor(5, R.string.light_blue,
+    )
+    val COLORS_LIGHT_BLUE = GroupedColor(5, R.string.light_blue,
             R.color.md_light_blue_50,
             R.color.md_light_blue_100,
             R.color.md_light_blue_200,
@@ -197,9 +174,8 @@ public class ColorUtil {
             R.color.md_light_blue_A200,
             R.color.md_light_blue_A400,
             R.color.md_light_blue_A700
-    );
-
-    public static GroupedColor COLORS_LIGHT_GREEN = new GroupedColor(5, R.string.light_green,
+    )
+    val COLORS_LIGHT_GREEN = GroupedColor(5, R.string.light_green,
             R.color.md_light_green_50,
             R.color.md_light_green_100,
             R.color.md_light_green_200,
@@ -214,9 +190,8 @@ public class ColorUtil {
             R.color.md_light_green_A200,
             R.color.md_light_green_A400,
             R.color.md_light_green_A700
-    );
-
-    public static GroupedColor COLORS_LIME = new GroupedColor(5, R.string.lime,
+    )
+    val COLORS_LIME = GroupedColor(5, R.string.lime,
             R.color.md_lime_50,
             R.color.md_lime_100,
             R.color.md_lime_200,
@@ -231,9 +206,8 @@ public class ColorUtil {
             R.color.md_lime_A200,
             R.color.md_lime_A400,
             R.color.md_lime_A700
-    );
-
-    public static GroupedColor COLORS_ORANGE = new GroupedColor(5, R.string.orange,
+    )
+    val COLORS_ORANGE = GroupedColor(5, R.string.orange,
             R.color.md_orange_50,
             R.color.md_orange_100,
             R.color.md_orange_200,
@@ -248,9 +222,8 @@ public class ColorUtil {
             R.color.md_orange_A200,
             R.color.md_orange_A400,
             R.color.md_orange_A700
-    );
-
-    public static GroupedColor COLORS_PINK = new GroupedColor(5, R.string.pink,
+    )
+    val COLORS_PINK = GroupedColor(5, R.string.pink,
             R.color.md_pink_50,
             R.color.md_pink_100,
             R.color.md_pink_200,
@@ -265,9 +238,8 @@ public class ColorUtil {
             R.color.md_pink_A200,
             R.color.md_pink_A400,
             R.color.md_pink_A700
-    );
-
-    public static GroupedColor COLORS_PURPLE = new GroupedColor(5, R.string.purple,
+    )
+    val COLORS_PURPLE = GroupedColor(5, R.string.purple,
             R.color.md_purple_50,
             R.color.md_purple_100,
             R.color.md_purple_200,
@@ -282,9 +254,8 @@ public class ColorUtil {
             R.color.md_purple_A200,
             R.color.md_purple_A400,
             R.color.md_purple_A700
-    );
-
-    public static GroupedColor COLORS_RED = new GroupedColor(5, R.string.red,
+    )
+    val COLORS_RED = GroupedColor(5, R.string.red,
             R.color.md_red_50,
             R.color.md_red_100,
             R.color.md_red_200,
@@ -299,9 +270,8 @@ public class ColorUtil {
             R.color.md_red_A200,
             R.color.md_red_A400,
             R.color.md_red_A700
-    );
-
-    public static GroupedColor COLORS_TEAL = new GroupedColor(5, R.string.teal,
+    )
+    val COLORS_TEAL = GroupedColor(5, R.string.teal,
             R.color.md_teal_50,
             R.color.md_teal_100,
             R.color.md_teal_200,
@@ -316,9 +286,8 @@ public class ColorUtil {
             R.color.md_teal_A200,
             R.color.md_teal_A400,
             R.color.md_teal_A700
-    );
-
-    public static GroupedColor COLORS_YELLOW = new GroupedColor(5, R.string.yellow,
+    )
+    val COLORS_YELLOW = GroupedColor(5, R.string.yellow,
             R.color.md_yellow_50,
             R.color.md_yellow_100,
             R.color.md_yellow_200,
@@ -332,176 +301,27 @@ public class ColorUtil {
             R.color.md_yellow_A100,
             R.color.md_yellow_A200,
             R.color.md_yellow_A400,
-            R.color.md_yellow_A700);
-
-
-    public static final GroupedColor[] COLORS = new GroupedColor[]
-            {
-                    COLORS_RED,
-                    COLORS_PINK,
-                    COLORS_PURPLE,
-                    COLORS_DEEP_PURPLE,
-                    COLORS_INDIGO,
-                    COLORS_BLUE,
-                    COLORS_LIGHT_BLUE,
-                    COLORS_CYAN,
-                    COLORS_TEAL,
-                    COLORS_GREEN,
-                    COLORS_LIGHT_GREEN,
-                    COLORS_LIME,
-                    COLORS_YELLOW,
-                    COLORS_AMBER,
-                    COLORS_ORANGE,
-                    COLORS_DEEP_ORANGE,
-                    COLORS_BROWN,
-                    COLORS_GREY,
-                    COLORS_BLUE_GREY,
-                    COLORS_BW
-            };
-
-    public static String getNameFromMaterialColor(Context context, int color) {
-        String name = context.getResources().getResourceEntryName(color);
-        int firstUnderlineIndex = name.indexOf("_");
-        int lastUnderlineIndex = name.lastIndexOf("_");
-
-        String subName = name.substring(lastUnderlineIndex + 1);
-//        String group = name.substring(firstUnderlineIndex + 1, lastUnderlineIndex).replace("_", " ");
-
-        return subName;
-    }
-
-    public static int getNearestColorGroup(Context c, int color) {
-        int index = 0;
-        Double minDiff = null;
-
-        for (int i = 0; i < COLORS.length; i++) {
-            // s/w => nur auswählen, falls Farben gleich sind
-            if (COLORS[i].getColors().length == 2) {
-                if (color == COLORS[i].getColor(c, 0) || color == COLORS[i].getColor(c, 1)) {
-                    return i;
-                }
-            }
-            // sonst haben die Listen 10 oder 14 Werte, wir vergleichen mit der 500er Farbe wleche immer auf Index 6 ist
-            else {
-                double diff = calcColorDifference(color, COLORS[i].getColor(c, 6));
-                if (minDiff == null || minDiff > diff) {
-                    minDiff = diff;
-                    index = i;
-                }
-            }
-        }
-
-        return index;
-    }
-
-    public static int getBestTextColor(int background) {
-        if (Color.alpha(background) <= 255 * 0.4f) {
-            return Color.BLACK;
-        }
-        if (getDarknessFactor(background) > 0.2f) {
-            return Color.WHITE;
-        } else {
-            return Color.BLACK;
-        }
-    }
-
-    public static boolean isColorDark(int color) {
-        double darkness = getDarknessFactor(color);
-        if (darkness < 0.5) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public static double getDarknessFactor(int color) {
-        return 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
-    }
-
-    public static String getColorAsRGB(int color) {
-        return String.format("#%06X", 0xFFFFFF & color);
-    }
-
-    public static String getColorAsARGB(int color) {
-        return String.format("#%08X", 0xFFFFFFFF & color);
-    }
-
-    public static double calcColorDifference(int c1, int c2) {
-        int r1 = Color.red(c1);
-        int g1 = Color.green(c1);
-        int b1 = Color.blue(c1);
-
-        int r2 = Color.red(c2);
-        int g2 = Color.green(c2);
-        int b2 = Color.blue(c2);
-
-        int diffRed = Math.abs(r1 - r2);
-        int diffGreen = Math.abs(g1 - g2);
-        int diffBlue = Math.abs(b1 - b2);
-
-        double pctDiffRed = (double) diffRed / 255f;
-        double pctDiffGreen = (double) diffGreen / 255f;
-        double pctDiffBlue = (double) diffBlue / 255f;
-
-        return (pctDiffRed + pctDiffGreen + pctDiffBlue) / 3f;
-    }
-
-    public static class GroupedColor {
-        private Integer mMainColorIndex;
-        private int mResTitle;
-        private int[] mColors;
-
-        public GroupedColor(Integer mainColorIndex, int resTitle, int... colors) {
-            mMainColorIndex = mainColorIndex;
-            mResTitle = resTitle;
-            mColors = colors;
-        }
-
-        public Integer getMainColorRes() {
-            if (mMainColorIndex != null) {
-                return mColors[mMainColorIndex];
-            }
-            return null;
-        }
-
-        public Integer getMainColor(Context context) {
-            return ContextCompat.getColor(context, getMainColorRes());
-        }
-
-        public int[] getColors() {
-            return mColors;
-        }
-
-        public int getColor(Context context, int index) {
-            return ContextCompat.getColor(context, mColors[index]);
-        }
-
-        public int getColorRes(int index) {
-            return mColors[index];
-        }
-
-        public String getHeaderDescription(Context context) {
-            return context.getString(mResTitle).toUpperCase();
-        }
-
-        public String getColorDescription(Context context, int index) {
-            return ColorUtil.getNameFromMaterialColor(context, mColors[index]);
-        }
-    }
-
-    public static void setCircleBackground(View view, boolean withBorder, boolean darkTheme, int color) {
-        GradientDrawable drawable = null;
-        if (withBorder) {
-            drawable = (GradientDrawable) view.getContext().getResources().getDrawable(darkTheme ? R.drawable.circle_with_border_dark : R.drawable.circle_with_border_light);
-        } else {
-            drawable = (GradientDrawable) view.getContext().getResources().getDrawable(R.drawable.circle);
-        }
-        drawable.setColor(color);
-//        drawable.setColorFilter(primColor, PorterDuff.Mode.SRC_ATOP);
-
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-        view.setBackgroundDrawable(drawable);
-//        else
-//            view.setBackground(drawable);
-    }
+            R.color.md_yellow_A700)
+    val COLORS = arrayOf(
+            COLORS_RED,
+            COLORS_PINK,
+            COLORS_PURPLE,
+            COLORS_DEEP_PURPLE,
+            COLORS_INDIGO,
+            COLORS_BLUE,
+            COLORS_LIGHT_BLUE,
+            COLORS_CYAN,
+            COLORS_TEAL,
+            COLORS_GREEN,
+            COLORS_LIGHT_GREEN,
+            COLORS_LIME,
+            COLORS_YELLOW,
+            COLORS_AMBER,
+            COLORS_ORANGE,
+            COLORS_DEEP_ORANGE,
+            COLORS_BROWN,
+            COLORS_GREY,
+            COLORS_BLUE_GREY,
+            COLORS_BW
+    )
 }

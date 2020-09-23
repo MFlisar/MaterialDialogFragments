@@ -101,7 +101,7 @@ abstract class DialogFastAdapterFragment : MaterialDialogFragment<DialogFastAdap
         svSearch = view.findViewById(R.id.svSearch)
 
         if (setup.internalSetup.withToolbar) {
-            toolbar!!.setTitle(setup.title?.get(activity!!))
+            toolbar!!.title = setup.title?.get(activity!!)
         }
 
         rvData!!.layoutManager = getLayoutManager()

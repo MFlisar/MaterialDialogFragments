@@ -10,7 +10,7 @@ import com.mikepenz.fastadapter.items.AbstractItem
 class DemoItem(
         val title: String,
         val desc: String,
-        val function: ((DemoItem) -> Unit)
+        val function: (() -> Unit)
 ) : AbstractItem<DemoItem.ViewHolder>() {
 
     override val type = R.id.fast_adapter_demo_item

@@ -16,6 +16,8 @@ class DialogColor(
         override val title: Text,
         val color: Int,
         val showAlpha: Boolean = false,
+        val moveToCustomPageOnPickerSelection: Boolean = false,
+        val updateCustomColorOnPickerSelection: Boolean = true,
         val darkTheme: Boolean? = null,
         override val style: DialogStyle = DialogStyle.Dialog,
 

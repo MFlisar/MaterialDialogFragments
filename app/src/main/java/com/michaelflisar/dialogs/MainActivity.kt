@@ -12,7 +12,6 @@ import com.michaelflisar.dialogs.app.BuildConfig
 import com.michaelflisar.dialogs.app.R
 import com.michaelflisar.dialogs.app.databinding.ActivityMainBinding
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.text.asText
 import com.michaelflisar.dialogs.debug.DebugDialog
 import com.michaelflisar.dialogs.enums.IconSize
 import com.michaelflisar.dialogs.events.*
@@ -20,6 +19,7 @@ import com.michaelflisar.dialogs.fastAdapter.AllAppsFastAdapterDialog
 import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
 import com.michaelflisar.dialogs.setups.*
 import com.michaelflisar.dialogs.utils.ColorUtil
+import com.michaelflisar.text.asText
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
@@ -49,6 +49,12 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         addFrequencyDialogItems(itemAdapter)
         addDebugDialogItems(itemAdapter)
         addAdsDialogItems(itemAdapter)
+
+        // Test: start dialog color directly
+//        val idx = itemAdapter.itemList.items.indexOfFirst { it is DemoItem && it.title ==  "Color demo"}
+//        itemAdapter.itemList.items[idx + 1].let {
+//            (it as DemoItem).function()
+//        }
     }
 
     /*
@@ -139,7 +145,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
 
         adapter.onClickListener = { _, _, item, _ ->
             if (item is DemoItem) {
-                item.function(item)
+                item.function()
             }
             true
         }
@@ -421,7 +427,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                     DialogColor(
                             71,
                             "Select color".asText(),
-                            color = ColorUtil.COLORS_RED.getMainColor(this), // returns main (500) red material color
+                            color = ColorDefinitions.COLORS_RED.getMainColor(this), // returns main (500) red material color
                             showAlpha = true,
                             style = getStyleFromCheckbox()
                     )

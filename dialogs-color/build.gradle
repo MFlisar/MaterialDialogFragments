@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 androidExtensions {
     experimental = true
@@ -11,6 +12,9 @@ group = 'com.github.MFlisar'
 android {
 
     compileSdkVersion setup.compileSdk
+
+    dataBinding.enabled = setup.enableDataBinding
+    viewBinding.enabled = setup.enableViewBinding
 
     defaultConfig {
         minSdkVersion setup.minSdk
@@ -24,6 +28,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             consumerProguardFiles 'proguard-rules.pro'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     android {
@@ -47,8 +60,9 @@ dependencies {
 
     implementation "com.google.android.material:material:${androidx.material}"
     implementation "androidx.recyclerview:recyclerview:${androidx.recyclerview}"
+    implementation "androidx.constraintlayout:constraintlayout:${androidx.constraintLayout}"
 
-    // ------------------------
+// ------------------------
     // Library
     // ------------------------
 
@@ -58,6 +72,8 @@ dependencies {
     // Others
     // ------------------------
 
+    implementation 'com.afollestad:viewpagerdots:1.0.0'
     implementation "com.rarepebble:colorpicker:${versions.colorPicker}"
     implementation "com.mikepenz:materialize:${versions.materialize}"
+    implementation "de.hdodenhof:circleimageview:${versions.circleImageView}"
 }

@@ -11,7 +11,8 @@ group = 'com.github.MFlisar'
 android {
     compileSdkVersion setup.compileSdk
 
-    viewBinding.enabled = true
+    dataBinding.enabled = setup.enableDataBinding
+    viewBinding.enabled = setup.enableViewBinding
 
     defaultConfig {
         minSdkVersion setup.minSdk
@@ -25,15 +26,20 @@ android {
             consumerProguardFiles 'proguard-rules.pro'
         }
     }
-    android {
-        lintOptions {
-            abortOnError false
-        }
-    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    android {
+        lintOptions {
+            abortOnError false
+        }
     }
 }
 
