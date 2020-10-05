@@ -16,10 +16,21 @@ object DialogSetup {
      */
     var DEFAULT_SEND_RESULT_TYPE: SendResultType = SendResultType.First()
 
+    private val resultHandler: MutableList<((event: BaseDialogEvent, fragment: Fragment) -> Unit)> = ArrayList()
+
     /**
      * provide a custom dialog result handler - it will get ALL results
      */
-    var resultHandler: ((event: BaseDialogEvent, fragment: Fragment) -> Unit)? = null
+    fun addResultHandler(handler: (event: BaseDialogEvent, fragment: Fragment) -> Unit) {
+        resultHandler.add(handler)
+    }
+
+    /**
+     * remove a custom dialog result handler
+     */
+    fun removeResultHandler(handler: (event: BaseDialogEvent, fragment: Fragment) -> Unit) {
+        resultHandler.remove(handler)
+    }
 
     /**
      * define if your app currently uses a dark or a light theme
@@ -37,6 +48,8 @@ object DialogSetup {
     var logger: DialogLogger? = null
 
     internal fun sendResult(result: BaseDialogEvent, fragment: Fragment) {
-        resultHandler?.invoke(result, fragment)
+        resultHandler.forEach {
+            it.invoke(result, fragment)
+        }
     }
 }
