@@ -118,7 +118,7 @@ abstract class MaterialDialogFragment<T : SimpleBaseDialogSetup> : ExtendedFragm
 
     protected fun <X : BaseDialogEvent> sendEvent(event: X) {
         // send result to any custom handler
-        DialogSetup.sendResult(event)
+        DialogSetup.sendResult(event, this)
         // send result the default way
         DialogUtil.trySendResult(
                 event,

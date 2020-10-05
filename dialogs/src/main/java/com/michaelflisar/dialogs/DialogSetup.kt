@@ -1,5 +1,6 @@
 package com.michaelflisar.dialogs
 
+import androidx.fragment.app.Fragment
 import com.michaelflisar.dialogs.classes.DialogLogger
 import com.michaelflisar.dialogs.classes.SendResultType
 import com.michaelflisar.dialogs.events.BaseDialogEvent
@@ -18,7 +19,7 @@ object DialogSetup {
     /**
      * provide a custom dialog result handler - it will get ALL results
      */
-    var resultHandler: ((event: BaseDialogEvent) -> Unit)? = null
+    var resultHandler: ((event: BaseDialogEvent, fragment: Fragment) -> Unit)? = null
 
     /**
      * define if your app currently uses a dark or a light theme
@@ -35,7 +36,7 @@ object DialogSetup {
      */
     var logger: DialogLogger? = null
 
-    internal fun sendResult(result: BaseDialogEvent) {
-        resultHandler?.invoke(result)
+    internal fun sendResult(result: BaseDialogEvent, fragment: Fragment) {
+        resultHandler?.invoke(result, fragment)
     }
 }
