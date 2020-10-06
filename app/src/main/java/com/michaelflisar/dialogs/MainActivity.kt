@@ -15,7 +15,8 @@ import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.debug.DebugDialog
 import com.michaelflisar.dialogs.enums.IconSize
 import com.michaelflisar.dialogs.events.*
-import com.michaelflisar.dialogs.fastAdapter.AllAppsFastAdapterDialog
+import com.michaelflisar.dialogs.fastAdapter.AllAppsFastAdapterHelper
+import com.michaelflisar.dialogs.fastAdapter.SimpleAppItem
 import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
 import com.michaelflisar.dialogs.setups.*
 import com.michaelflisar.dialogs.utils.ColorUtil
@@ -95,6 +96,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
                 }
             }
             is DialogListEvent -> "List dialog event\nIndizes: ${event.data?.indizes?.joinToString()}"
+            is DialogFastAdapterEvent -> "FastAdapter dialog event\nSelected indizes: ${(event.data as? DialogFastAdapterEvent.Data<SimpleAppItem>)?.indizes?.joinToString()}\nSelected items: ${(event.data as? DialogFastAdapterEvent.Data<SimpleAppItem>)?.items?.map { it.app.name }?.joinToString()}"
             is DialogColorEvent -> "Color dialog event\nColor: ${ColorUtil.getColorAsARGB(event.data!!.color)}"
             is DialogDateTimeEvent -> {
                 val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -393,19 +395,16 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         adapter.add(
                 HeaderItem("Fast adapter demos"),
                 DemoItem("Installed apps", "Show a list of all installed apps in a fast adapter list dialog + enable filtering via custom predicate") {
-                    val dialog = AllAppsFastAdapterDialog.create(
-                            AllAppsFastAdapterDialog.Setup(
-                                    DialogFastAdapter.InternalSetup(
-                                            60,
-                                            "Select app".asText(),
-                                            clickable = true,
-                                            dismissOnClick = true,
-                                            filterable = true,
-                                            style = getStyleFromCheckbox()
-                                    )
-                            )
+                    DialogFastAdapter(
+                            60,
+                            AllAppsFastAdapterHelper.ItemProvider,
+                            "Select an app".asText(),
+                            selectionMode = DialogFastAdapter.SelectionMode.SingleClick,
+                            filterPredicate = AllAppsFastAdapterHelper.FilterPredicate,
+                            style = getStyleFromCheckbox()
                     )
-                    dialog.show(this)
+                            .create()
+                            .show(this)
                 }
         )
     }

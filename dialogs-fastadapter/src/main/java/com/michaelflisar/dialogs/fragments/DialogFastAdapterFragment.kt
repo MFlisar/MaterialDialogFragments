@@ -9,73 +9,74 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
-import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.events.DialogFastAdapterEvent
 import com.michaelflisar.dialogs.fastadapter.R
 import com.michaelflisar.dialogs.negativeButton
 import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.positiveButton
 import com.michaelflisar.dialogs.setups.DialogFastAdapter
-import com.michaelflisar.dialogs.title
+import com.michaelflisar.text.Text
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.IItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
-import java.util.*
+import com.mikepenz.fastadapter.select.getSelectExtension
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-abstract class DialogFastAdapterFragment : MaterialDialogFragment<DialogFastAdapter>() {
+class DialogFastAdapterFragment<Item : IItem<*>> : MaterialDialogFragment<DialogFastAdapter<Item>>() {
 
     companion object {
 
-        fun <T : DialogFastAdapterFragment> create(setup: DialogFastAdapter, createFragment: (() -> T)): T {
-            val dlg = createFragment()
+        fun <Item : IItem<*>> create(setup: DialogFastAdapter<Item>): DialogFastAdapterFragment<Item> {
+            val dlg = DialogFastAdapterFragment<Item>()
             dlg.setSetupArgs(setup)
             return dlg
         }
     }
 
-    protected var toolbar: Toolbar? = null
-    protected var rvData: RecyclerView? = null
-    protected var llLoading: LinearLayout? = null
-    protected var pbLoading: ProgressBar? = null
-    protected var tvLoading: TextView? = null
-    protected var svSearch: SearchView? = null
-    protected var data: ArrayList<IItem<*>>? = null
-        private set
-    protected var itemAdapter: ItemAdapter<IItem<*>>? = null
-    private var lastFilter: String? = null
+    private lateinit var lastFilter: String
+    private lateinit var viewData: ViewData
+    private lateinit var itemAdapter: ItemAdapter<Item>
+    private lateinit var fastAdapter: FastAdapter<Item>
 
     @Suppress("UNCHECKED_CAST")
-    protected val adapter: FastAdapter<IItem<*>>
-        get() = rvData!!.adapter as FastAdapter<IItem<*>>
+    protected val adapter: FastAdapter<Item>
+        get() = viewData.rvData.adapter as FastAdapter<Item>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        data = data
-
         if (savedInstanceState != null) {
-            lastFilter = savedInstanceState.getString("lastFilter")
+            lastFilter = savedInstanceState.getString("lastFilter") ?: ""
+        } else {
+            lastFilter = ""
         }
     }
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         // create dialog with correct style, title and cancelable flags
-        val dialog = setup.createMaterialDialog(activity!!, this, !setup.internalSetup.withToolbar)
+        val dialog = setup.createMaterialDialog(activity!!, this, !setup.withToolbar)
 
         dialog.customView(
-                if (setup.internalSetup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview,
+                if (setup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview,
                 scrollable = false,
-                noVerticalPadding = setup.internalSetup.withToolbar
+                noVerticalPadding = setup.withToolbar
         )
                 .positiveButton(setup) {
-                    onHandleClick(null, WhichButton.POSITIVE.ordinal, null)
+                    val selectionData = when (setup.selectionMode) {
+                        DialogFastAdapter.SelectionMode.SingleClick -> null
+                        DialogFastAdapter.SelectionMode.SingleSelect,
+                        DialogFastAdapter.SelectionMode.MultiSelect -> getData()
+                    }
+                    onHandleClick(WhichButton.POSITIVE.ordinal, selectionData)
                     dismiss()
                 }
                 .noAutoDismiss()
@@ -87,164 +88,173 @@ abstract class DialogFastAdapterFragment : MaterialDialogFragment<DialogFastAdap
                     sendEvent(DialogFastAdapterEvent(setup, WhichButton.NEUTRAL.ordinal, null))
                 }
 
-        updateBuilder(dialog)
         val view = dialog.getCustomView()
+        viewData = ViewData(view, setup)
 
-        toolbar = null
-        if (setup.internalSetup.withToolbar) {
-            toolbar = view.findViewById(R.id.toolbar)
-        }
-        rvData = view.findViewById(R.id.rvData)
-        llLoading = view.findViewById(R.id.llLoading)
-        pbLoading = view.findViewById(R.id.pbLoading)
-        tvLoading = view.findViewById(R.id.tvLoading)
-        svSearch = view.findViewById(R.id.svSearch)
-
-        if (setup.internalSetup.withToolbar) {
-            toolbar!!.title = setup.title?.get(activity!!)
+        if (setup.withToolbar) {
+            viewData.toolbar?.title = setup.title?.get(activity!!)
         }
 
-        rvData!!.layoutManager = getLayoutManager()
-        itemAdapter = ItemAdapter<IItem<*>>()
-        val fastAdapter = FastAdapter.with(itemAdapter!!)
+        viewData.rvData.layoutManager = getLayoutManager()
+        itemAdapter = ItemAdapter()
+        fastAdapter = FastAdapter.with(itemAdapter)
 
-        if (setup.internalSetup.clickable) {
-            fastAdapter.onClickListener = { _, _, item, position ->
-                val originalPosition = if (setup.internalSetup.filterable) data!!.indexOf(item) else position
-                if (isClickable(item, originalPosition)) {
-                    onHandleClick(item, null, originalPosition)
-                    if (setup.internalSetup.dismissOnClick) {
+        when (setup.selectionMode) {
+            DialogFastAdapter.SelectionMode.SingleClick -> {
+                fastAdapter.onClickListener = { _, _, item, position ->
+                    val originalPosition = if (setup.filterPredicate != null) itemAdapter.itemList.items.indexOf(item) else position
+                    if (isClickable(item, originalPosition)) {
+                        val data = DialogFastAdapterEvent.Data(originalPosition, item)
+                        onHandleClick(null, data)
                         dismiss()
                     }
+                    true
                 }
-                true
+            }
+            DialogFastAdapter.SelectionMode.SingleSelect,
+            DialogFastAdapter.SelectionMode.MultiSelect -> {
+                val selectExtension = fastAdapter.getSelectExtension()
+                selectExtension.apply {
+                    isSelectable = true
+                    multiSelect = setup.selectionMode == DialogFastAdapter.SelectionMode.MultiSelect
+                    selectWithItemUpdate = false
+                }
             }
         }
-        onUpdateAdapter(itemAdapter!!)
-        rvData!!.adapter = fastAdapter
-        data = createData()
-        itemAdapter!!.add(data!!)
 
-        updateInfo(setup.internalSetup.info, view)
-        onViewCreated(view, itemAdapter!!)
+        viewData.rvData.adapter = fastAdapter
 
-        if (setup.internalSetup.filterable) {
-            try {
-                @Suppress("UNCHECKED_CAST")
-                itemAdapter!!.itemFilter.filterPredicate = { item: IItem<*>, constraint: CharSequence? ->
-                    (this as IPredicate<IItem<*>>).filter(item, constraint)
-                }
-            } catch (e: ClassCastException) {
-                throw RuntimeException("Filterable adapter must implement IPredicate<IItem<*>>!")
+        setup.filterPredicate?.let {
+            itemAdapter.itemFilter.filterPredicate = { item: Item, constraint: CharSequence? ->
+                it.filter(item, constraint?.toString() ?: "")
             }
 
-            svSearch!!.visibility = View.VISIBLE
-            svSearch!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            viewData.svSearch.visibility = View.VISIBLE
+            viewData.svSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     lastFilter = query ?: ""
-                    itemAdapter!!.filter(lastFilter)
+                    itemAdapter.filter(lastFilter)
                     return true
                 }
 
                 override fun onQueryTextChange(query: String?): Boolean {
                     lastFilter = query ?: ""
-                    itemAdapter!!.filter(lastFilter)
+                    itemAdapter.filter(lastFilter)
                     return true
                 }
             })
-            if (lastFilter != null) {
-                svSearch!!.setQuery(lastFilter, false)
+            if (lastFilter.isNotEmpty()) {
+//                itemAdapter.filter(lastFilter)
+                viewData.svSearch.setQuery(lastFilter, false)
             }
         }
+
+        val selectedIndizes = if (savedInstanceState?.containsKey("selectedIndizes") == true) savedInstanceState.getIntegerArrayList("selectedIndizes")!! else emptyList<Int>()
+        if (setup.itemProvider.loadItemsAsynchronous) {
+            viewData.pbLoading.visibility = View.VISIBLE
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    val items = setup.itemProvider.loadItems(requireContext())
+                    withContext(Dispatchers.Main) {
+                        updateItems(items, selectedIndizes)
+                    }
+                }
+            }
+        } else {
+            val items = setup.itemProvider.loadItems(requireContext())
+            updateItems(items, selectedIndizes)
+        }
+
+        updateInfo(setup.info)
 
         return dialog
     }
 
-    protected fun updateInfo(info: Text?, view: View) {
-        val infoText = info?.get(activity!!)
-        val tvInfo = view.findViewById<TextView>(R.id.tvInfo)
-        if (infoText?.length ?: 0 > 0) {
-            tvInfo.visibility = View.VISIBLE
-            tvInfo.text = infoText
-            if (setup.internalSetup.infoSize != null) {
-                tvInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, setup.internalSetup.infoSize!!)
-            }
-        } else {
-            tvInfo.visibility = View.GONE
+    private fun updateItems(items: List<Item>, selectedIndizes: List<Int>) {
+        viewData.pbLoading.visibility = View.GONE
+        itemAdapter.setNewList(items, false)
+        if (setup.filterPredicate != null && lastFilter.isNotEmpty()) {
+            itemAdapter.filter(lastFilter)
+        }
+        if (setup.selectionMode != DialogFastAdapter.SelectionMode.SingleClick && selectedIndizes.isNotEmpty()) {
+            val selectExtension = fastAdapter.getSelectExtension()
+            selectExtension.select(selectedIndizes)
         }
     }
 
-    protected open fun onHandleClick(item: IItem<*>?, buttonIndex: Int?, position: Int?) {
-        val data = if (item != null && position != null) {
-            DialogFastAdapterEvent.Data(item, position)
-        } else null
+    private fun updateInfo(info: Text?) {
+        val infoText = info?.get(requireActivity())
+        if (infoText?.length ?: 0 > 0) {
+            viewData.tvInfo.visibility = View.VISIBLE
+            viewData.tvInfo.text = infoText
+            if (setup.infoSize != null) {
+                viewData.tvInfo.setTextSize(TypedValue.COMPLEX_UNIT_SP, setup.infoSize!!)
+            }
+        } else {
+            viewData.tvInfo.visibility = View.GONE
+        }
+    }
+
+    private fun getData(): DialogFastAdapterEvent.Data<Item> {
+        val selectExtension = fastAdapter.getSelectExtension()
+        val allItems = itemAdapter.itemList.items
+        val items = selectExtension.selectedItems.toList()
+        val indizes = items.map { allItems.indexOf(it) }
+        return DialogFastAdapterEvent.Data(indizes, items)
+    }
+
+    private fun onHandleClick(buttonIndex: Int?, data: DialogFastAdapterEvent.Data<Item>?) {
         sendEvent(DialogFastAdapterEvent(setup, buttonIndex, data))
     }
 
-    protected open fun onUpdateAdapter(adapter: ItemAdapter<IItem<*>>) {
+    private fun getLayoutManager(): RecyclerView.LayoutManager = LinearLayoutManager(activity)
 
-    }
-
-    protected open fun updateBuilder(dialog: MaterialDialog) {
-
-    }
-
-    protected open fun onViewCreated(view: View, adapter: ItemAdapter<IItem<*>>) {
-
-    }
-
-    protected open fun onPositiveClicked() {
-
-    }
-
-    protected open fun getLayoutManager(): RecyclerView.LayoutManager = LinearLayoutManager(activity)
-
-    protected open fun isClickable(item: IItem<*>, pos: Int): Boolean {
+    private fun isClickable(item: Item, pos: Int): Boolean {
         return true
     }
 
-    protected open fun updateData(items: ArrayList<IItem<*>>) {
-        data = items
-        itemAdapter!!.setNewList(data!!)
-
-        if (lastFilter != null && lastFilter!!.length > 0) {
-            itemAdapter!!.itemFilter.filter(lastFilter)
+    protected fun updateData(items: ArrayList<Item>) {
+        itemAdapter.setNewList(items)
+        if (lastFilter.isNotEmpty()) {
+            itemAdapter.itemFilter.filter(lastFilter)
         }
     }
 
     override fun onDestroyView() {
-        rvData = null
-        llLoading = null
-        rvData = null
-        tvLoading = null
         super.onDestroyView()
     }
 
-    protected fun addItem(item: IItem<*>) {
-        data!!.add(item)
-        itemAdapter!!.add(item)
+    protected fun addItem(item: Item) {
+        itemAdapter.add(item)
     }
 
-    protected fun removeItem(item: IItem<*>): Int {
-        val index = data!!.indexOf(item)
-        data!!.removeAt(index)
-        itemAdapter!!.remove(index)
+    protected fun removeItem(item: Item): Int {
+        val index = itemAdapter.itemList.items.indexOf(item)
+        itemAdapter.remove(index)
         return index
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        if (setup.internalSetup.filterable) {
-            lastFilter = svSearch!!.query.toString()
-            if (lastFilter != null && lastFilter!!.length > 0) {
+        if (setup.filterPredicate != null) {
+            lastFilter = viewData.svSearch.query.toString()
+            if (lastFilter.isNotEmpty()) {
                 outState.putString("lastFilter", lastFilter)
             }
         }
+        if (setup.selectionMode != DialogFastAdapter.SelectionMode.SingleClick) {
+            val data = getData()
+            outState.putIntegerArrayList("selectedIndizes", ArrayList(data.indizes))
+        }
+        super.onSaveInstanceState(outState)
     }
 
-    protected abstract fun createData(): ArrayList<IItem<*>>
-
-    interface IPredicate<Item : IItem<*>> {
-        fun filter(item: Item, constraint: CharSequence?): Boolean
+    class ViewData(view: View, setup: DialogFastAdapter<*>) {
+        val toolbar: Toolbar? = if (setup.withToolbar) view.findViewById(R.id.toolbar) else null
+        val rvData: RecyclerView = view.findViewById(R.id.rvData)
+        val llLoading: LinearLayout = view.findViewById(R.id.llLoading)
+        val pbLoading: ProgressBar = view.findViewById(R.id.pbLoading)
+        val tvLoading: TextView = view.findViewById(R.id.tvLoading)
+        val svSearch: SearchView = view.findViewById(R.id.svSearch)
+        val tvInfo: TextView = view.findViewById(R.id.tvInfo)
     }
 }

@@ -60,4 +60,6 @@ dependencies {
     implementation project(':dialogs-fastadapter') // for the use of mike penz's fast adapter (a very functional RecyclerView Adapter library)
     implementation project(':dialogs-frequency') // for the use of freqeuncy dialogs
     implementation project(':dialogs-ads') // for the use of ads dialogs
+
+    implementation "com.mikepenz:fastadapter-extensions-ui:${versions.fastAdapter}"
 }

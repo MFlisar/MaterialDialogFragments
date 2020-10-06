@@ -55,6 +55,8 @@ dependencies {
     // AndroidX
     // ------------------------
 
+    implementation "androidx.core:core-ktx:${androidx.corektx}"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${androidx.lifecycleRuntimeKtx}"
     implementation "com.google.android.material:material:${androidx.material}"
 
     // ------------------------
