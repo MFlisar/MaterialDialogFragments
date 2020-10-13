@@ -3,6 +3,7 @@ package com.michaelflisar.dialogs.setups
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.recyclerview.widget.RecyclerView
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
@@ -12,7 +13,7 @@ import com.mikepenz.fastadapter.IItem
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class DialogFastAdapter<Item: IItem<*>>(
+class DialogFastAdapter<Item : IItem<*>>(
         // base setup
         override val id: Int,
         val itemProvider: IItemProvider<Item>,
@@ -27,14 +28,31 @@ class DialogFastAdapter<Item: IItem<*>>(
 
         // special setup
         val selectionMode: SelectionMode = SelectionMode.SingleSelect,
+        val layoutStyle: LayoutStyle = LayoutStyle.List(),
         val info: Text? = null,
         val infoSize: Float? = null,
-        /*
-        Dialog MUST implement [com.mikepenz.fastadapter.IItemAdapter.Predicate]&lt;[IItem]&gt; for this to work!
-         */
         val filterPredicate: IFilterPredicate<Item>? = null,
         val withToolbar: Boolean = false
 ) : BaseDialogSetup {
+
+    sealed class LayoutStyle : Parcelable {
+        abstract @RecyclerView.Orientation
+        val orientation: Int
+        abstract val reverseLayout: Boolean
+
+        @Parcelize
+        class List(
+                @RecyclerView.Orientation override val orientation: Int = RecyclerView.VERTICAL,
+                override val reverseLayout: Boolean = false
+        ) : LayoutStyle()
+
+        @Parcelize
+        class Grid(
+                val columns: Int,
+                @RecyclerView.Orientation override val orientation: Int = RecyclerView.VERTICAL,
+                override val reverseLayout: Boolean = false
+        ) : LayoutStyle()
+    }
 
     enum class SelectionMode {
         SingleClick,
@@ -44,12 +62,12 @@ class DialogFastAdapter<Item: IItem<*>>(
 
     override fun create() = DialogFastAdapterFragment.create(this)
 
-    interface IItemProvider<Item: IItem<*>>: Parcelable {
+    interface IItemProvider<Item : IItem<*>> : Parcelable {
         val loadItemsAsynchronous: Boolean
         fun loadItems(context: Context): List<Item>
     }
 
-    interface IFilterPredicate<Item : IItem<*>>: Parcelable {
+    interface IFilterPredicate<Item : IItem<*>> : Parcelable {
         fun filter(item: Item, filter: String): Boolean
     }
 }

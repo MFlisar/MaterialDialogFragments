@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.WhichButton
@@ -207,7 +208,12 @@ class DialogFastAdapterFragment<Item : IItem<*>> : MaterialDialogFragment<Dialog
         sendEvent(DialogFastAdapterEvent(setup, buttonIndex, data))
     }
 
-    private fun getLayoutManager(): RecyclerView.LayoutManager = LinearLayoutManager(activity)
+    private fun getLayoutManager(): RecyclerView.LayoutManager {
+        return when (setup.layoutStyle) {
+            is DialogFastAdapter.LayoutStyle.List ->  LinearLayoutManager(activity, setup.layoutStyle.orientation, setup.layoutStyle.reverseLayout)
+            is DialogFastAdapter.LayoutStyle.Grid -> GridLayoutManager(activity, (setup as DialogFastAdapter.LayoutStyle.Grid).columns, setup.layoutStyle.orientation, setup.layoutStyle.reverseLayout)
+        }
+    }
 
     private fun isClickable(item: Item, pos: Int): Boolean {
         return true
