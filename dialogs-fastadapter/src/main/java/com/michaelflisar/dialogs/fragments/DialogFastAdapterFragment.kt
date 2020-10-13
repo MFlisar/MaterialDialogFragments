@@ -211,7 +211,7 @@ class DialogFastAdapterFragment<Item : IItem<*>> : MaterialDialogFragment<Dialog
     private fun getLayoutManager(): RecyclerView.LayoutManager {
         return when (setup.layoutStyle) {
             is DialogFastAdapter.LayoutStyle.List ->  LinearLayoutManager(activity, setup.layoutStyle.orientation, setup.layoutStyle.reverseLayout)
-            is DialogFastAdapter.LayoutStyle.Grid -> GridLayoutManager(activity, (setup as DialogFastAdapter.LayoutStyle.Grid).columns, setup.layoutStyle.orientation, setup.layoutStyle.reverseLayout)
+            is DialogFastAdapter.LayoutStyle.Grid -> GridLayoutManager(activity, (setup.layoutStyle as DialogFastAdapter.LayoutStyle.Grid).columns, setup.layoutStyle.orientation, setup.layoutStyle.reverseLayout)
         }
     }
 
