@@ -72,8 +72,8 @@ class GroupedColor(
     // ----------------
 
     fun findMatchingColor(context: Context, color: Int): Int? {
-        val solid = ColorUtil.adjustAlpha(color, 100f)
-        val matchingColor = resColors.find { ColorUtil.adjustAlpha(ContextCompat.getColor(context, it), 100f) == solid }
+        val solid = ColorUtil.adjustAlpha(color, 255)
+        val matchingColor = resColors.find { ColorUtil.adjustAlpha(ContextCompat.getColor(context, it), 255) == solid }
         return matchingColor?.let { ContextCompat.getColor(context, it) }
     }
 

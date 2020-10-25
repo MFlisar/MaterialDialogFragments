@@ -24,16 +24,17 @@ object ColorUtil {
     }
 
     fun getNearestColorGroup(context: Context, color: Int): GroupedColor {
+        val solidColor = adjustAlpha(color, 255)
         var bestMatch = ColorDefinitions.COLORS_BW
         var minDiff: Double? = null
         for (c in ColorDefinitions.COLORS) {
             // s/w => nur auswählen, falls Farben gleich sind
             if (c.resColors.size == 2) {
-                if (color == c.getColor(context, 0) || color == c.getColor(context, 1)) {
+                if (solidColor == c.getColor(context, 0) || solidColor == c.getColor(context, 1)) {
                     return c
                 }
             } else {
-                val diff = calcColorDifference(color, c.getColor(context, 6))
+                val diff = calcColorDifference(solidColor, c.getColor(context, 6))
                 if (minDiff == null || minDiff > diff) {
                     minDiff = diff
                     bestMatch = c
