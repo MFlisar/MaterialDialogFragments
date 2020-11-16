@@ -1,13 +1,19 @@
 package com.michaelflisar.dialogs.fragments
 
 import android.app.Dialog
+import android.content.res.TypedArray
 import android.graphics.Color
+import android.graphics.Outline
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import android.widget.Toast
+import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +25,7 @@ import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.callbacks.onShow
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
+import com.afollestad.materialdialogs.utils.MDUtil
 import com.michaelflisar.dialogs.ColorDefinitions
 import com.michaelflisar.dialogs.adapter.ColorAdapter
 import com.michaelflisar.dialogs.adapter.MainColorAdapter
@@ -34,6 +41,7 @@ import com.michaelflisar.dialogs.setups.DialogColor
 import com.michaelflisar.dialogs.utils.ColorUtil
 import com.michaelflisar.dialogs.utils.RecyclerViewUtil
 import kotlin.math.roundToInt
+
 
 class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
 
@@ -143,6 +151,18 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
 
         // TODO: Problem: this only works for dialogs, not for bottom sheets!
         (dlg ?: dialog as MaterialDialog).onShow {
+            val radius = it.cornerRadius ?: MDUtil.resolveDimen(requireContext(), attr = R.attr.md_corner_radius) {
+                resources.getDimension(R.dimen.md_dialog_default_corner_radius)
+            }
+            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                it.view.outlineProvider = object : ViewOutlineProvider() {
+                    override fun getOutline(view: View, outline: Outline) {
+                        outline.setRoundRect(0, 0, view.width, view.height, radius)
+                    }
+                }
+                it.view.clipChildren = true
+                it.view.clipToOutline = true
+            }
             it.getActionButton(WhichButton.POSITIVE).apply {
                 setBackgroundColor(selectedColor)
                 setTextColor(textColor)
