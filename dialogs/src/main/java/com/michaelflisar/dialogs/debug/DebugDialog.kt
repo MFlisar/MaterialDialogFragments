@@ -216,32 +216,32 @@ object DebugDialog {
         val map = hashMapOf<String, Any>()
 
         internal fun getBoolean(key: String, defaultValue: Boolean): Boolean {
-            if (map.containsKey(key)) {
-                return map.get(key) as Boolean
+            val cached = map.get(key)
+            if (cached != null && cached is Boolean) {
+                return cached
             }
-
             val value = sharedPreferences.getBoolean(key, defaultValue)
-            map.put(key, value)
+            map[key] = value
             return value
         }
 
         internal fun putBoolean(key: String, value: Boolean) {
-            map.put(key, value)
+            map[key] = value
             sharedPreferences.edit().putBoolean(key, value).apply()
         }
 
         internal fun getInt(key: String, defaultValue: Int): Int {
-            if (map.containsKey(key)) {
-                return map.get(key) as Int
+            val cached = map.get(key)
+            if (cached != null && cached is Int) {
+                return cached
             }
-
             val value = sharedPreferences.getInt(key, defaultValue)
-            map.put(key, value)
+            map[key] = value
             return value
         }
 
         internal fun putInt(key: String, value: Int) {
-            map.put(key, value)
+            map[key] = value
             sharedPreferences.edit().putInt(key, value).apply()
         }
 
