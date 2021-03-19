@@ -7,4 +7,6 @@ interface ITextImageProvider {
     val subTitle: String?
     fun loadImage(iv: ImageView)
     fun hasImage(): Boolean
+
+    fun isEmpty() = title.isEmpty() && (subTitle?.isEmpty() ?: true) && !hasImage()
 }
