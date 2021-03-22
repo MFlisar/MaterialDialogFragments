@@ -5,7 +5,7 @@
     <string name="sample_admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
 
     <string name="app_name">DialogFragments</string>
-    <string name="title_activity_main">DialogFragments Demo</string>
+    <string name="title_activity_main">Material Dialog Fragments Demo</string>
 
     <string name="number_age_formatter">Age: %1$d</string>
 

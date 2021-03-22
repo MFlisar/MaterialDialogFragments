@@ -1,11 +1,14 @@
 package com.michaelflisar.dialogs
 
 import android.content.Context
+import android.graphics.Color
 import android.util.TypedValue
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.DialogCallback
 import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.michaelflisar.dialogs.classes.SimpleBaseDialogSetup
 import com.michaelflisar.dialogs.core.R
 import com.michaelflisar.text.Text
@@ -14,17 +17,19 @@ import com.michaelflisar.text.Text
 // MaterialDialog
 // --------------
 
-// old name: textViewMessage
-//fun MaterialDialog.textView(): TextView? = javaClass.getDeclaredField("messageTextView").let {
-//    it.isAccessible = true
-//    return it.get(this) as TextView?
-//}
-
 fun MaterialDialog.iconView(): ImageView? = findViewById(R.id.md_icon_title)
 
 fun MaterialDialog.textView(): TextView? = findViewById(R.id.md_text_message)
 
 fun MaterialDialog.titleView(): TextView? = findViewById(R.id.md_text_title)
+
+fun MaterialDialog.dismissAnimated() {
+    findViewById<ViewGroup>(R.id.md_root_bottom_sheet)?.let {
+        val bottomSheetBehavior = BottomSheetBehavior.from(it)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        // behaviour does dismiss the sheet already automatically if sheet is hidden => this extension function depends on this fact and that it does not change
+    } ?: dismiss()
+}
 
 fun MaterialDialog.message(text: Text?): MaterialDialog {
     when (text) {
@@ -88,4 +93,16 @@ internal fun Context.getThemeReference(attribute: Int): Int {
 internal fun Context.dpToPx(dp: Float): Int {
     val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
     return px.toInt()
+}
+
+internal fun Context.isCurrentThemeDark(): Boolean {
+    val color = resolve(android.R.attr.colorBackground)
+    val darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255
+    return darkness > 0.5
+}
+
+private fun Context.resolve(attrId: Int): Int {
+    val typedValue = TypedValue()
+    theme.resolveAttribute(attrId, typedValue, true)
+    return typedValue.data
 }

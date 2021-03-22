@@ -74,7 +74,7 @@ Usage is very simply, you only need to do following:
 * you create a dialog with the corresponding setup class like e.g.:
 
         DialogInfo(
-			1,
+			1, // ID - this allows you to identify dialog events in the callback
 			"Info Title".asText(),
 			"Some info label".asText()
 		)

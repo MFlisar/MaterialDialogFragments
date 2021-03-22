@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.GroupedColor
 import com.michaelflisar.dialogs.color.R
 import com.michaelflisar.dialogs.color.databinding.RowColorBinding
@@ -14,7 +15,6 @@ import com.michaelflisar.dialogs.tint
 import com.michaelflisar.dialogs.utils.ColorUtil
 
 class ColorAdapter(
-        private val darkTheme: Boolean,
         private val isLandscape: Boolean,
         private var groupedColor: GroupedColor,
         private var transparency: Int,
@@ -80,14 +80,14 @@ class ColorAdapter(
             updateTransparency(vh, position, color, transparency)
             updateSelection(vh, position)
 
-            vh.binding.vColorForeground.setCircleBackground(darkTheme, solidColor, false)
+            vh.binding.vColorForeground.setCircleBackground(solidColor, false)
             vh.itemView.setOnClickListener { view: View? ->
                 listener?.invoke(this@ColorAdapter, vh, color, vh.adapterPosition)
             }
         }
 
         if (vh.oldPosition != position) {
-            vh.binding.vSelectedBackground.setCircleBackground(darkTheme, Color.TRANSPARENT, true)
+            vh.binding.vSelectedBackground.setCircleBackground(Color.TRANSPARENT, true)
         }
     }
 

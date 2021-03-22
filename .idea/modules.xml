@@ -2,15 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/material-dialogfragments.iml" filepath="$PROJECT_DIR$/material-dialogfragments.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/material-dialogfragments.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/material-dialogfragments.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/material-dialogfragments.dialogs.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/material-dialogfragments.dialogs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-ads/material-dialogfragments.dialogs-ads.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-ads/material-dialogfragments.dialogs-ads.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-color/material-dialogfragments.dialogs-color.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-color/material-dialogfragments.dialogs-color.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-datetime/material-dialogfragments.dialogs-datetime.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-datetime/material-dialogfragments.dialogs-datetime.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-fastadapter/material-dialogfragments.dialogs-fastadapter.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-fastadapter/material-dialogfragments.dialogs-fastadapter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-frequency/material-dialogfragments.dialogs-frequency.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-frequency/material-dialogfragments.dialogs-frequency.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-input/material-dialogfragments.dialogs-input.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-input/material-dialogfragments.dialogs-input.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MaterialDialogFragments.iml" filepath="$PROJECT_DIR$/.idea/modules/MaterialDialogFragments.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MaterialDialogFragments.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MaterialDialogFragments.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/MaterialDialogFragments.dialogs.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/MaterialDialogFragments.dialogs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-ads/MaterialDialogFragments.dialogs-ads.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-ads/MaterialDialogFragments.dialogs-ads.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-color/MaterialDialogFragments.dialogs-color.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-color/MaterialDialogFragments.dialogs-color.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-datetime/MaterialDialogFragments.dialogs-datetime.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-datetime/MaterialDialogFragments.dialogs-datetime.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-fastadapter/MaterialDialogFragments.dialogs-fastadapter.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-fastadapter/MaterialDialogFragments.dialogs-fastadapter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-frequency/MaterialDialogFragments.dialogs-frequency.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-frequency/MaterialDialogFragments.dialogs-frequency.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-input/MaterialDialogFragments.dialogs-input.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-input/MaterialDialogFragments.dialogs-input.iml" />
     </modules>
   </component>
 </project>

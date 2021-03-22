@@ -12,7 +12,6 @@ import com.michaelflisar.dialogs.enums.Payload
 import com.michaelflisar.dialogs.setCircleBackground
 
 class MainColorAdapter(
-        private val darkTheme: Boolean,
         private val items: Array<GroupedColor>,
         private var selected: Int,
         private val listener: ((adapter: MainColorAdapter, view: ColorViewHolder, color: GroupedColor, pos: Int) -> Unit)?
@@ -44,8 +43,8 @@ class MainColorAdapter(
         }
         if (vh.oldPosition != position) {
             val groupColor = items[position]
-            vh.binding.vSelectedBackground.setCircleBackground(darkTheme, Color.TRANSPARENT, true)
-            groupColor.displayAsCircleViewBackground(vh.binding.vColor, darkTheme)
+            vh.binding.vSelectedBackground.setCircleBackground(Color.TRANSPARENT, true)
+            groupColor.displayAsCircleViewBackground(vh.binding.vColor)
             vh.itemView.setOnClickListener { v: View? -> listener?.invoke(this@MainColorAdapter, vh, groupColor, vh.adapterPosition) }
         }
     }

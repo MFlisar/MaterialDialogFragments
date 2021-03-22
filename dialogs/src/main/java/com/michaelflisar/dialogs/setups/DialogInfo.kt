@@ -34,7 +34,6 @@ class DialogInfo(
         override val cancelable: Boolean = true,
         override val extra: Bundle? = null,
         override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
-        val darkTheme: Boolean? = null,
         override val style: DialogStyle = DialogStyle.Dialog,
 
         // special setup
@@ -47,7 +46,5 @@ class DialogInfo(
 ) : BaseDialogSetup {
 
     override fun create() = DialogInfoFragment.create(this)
-
-    fun useDarkTheme() = darkTheme ?: DialogSetup.useDarkTheme()
 
 }

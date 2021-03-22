@@ -7,11 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.core.R
 import com.michaelflisar.dialogs.core.databinding.RowAdapterDebugBinding
 
 
-class DebugAdapter(val items: List<DebugDialog.Entry<*>>, val context: Context, val dialog: MaterialDialog, val darkTheme: Boolean, val withNumbering: Boolean) : RecyclerView.Adapter<DebugAdapter.ViewHolder>() {
+class DebugAdapter(
+        val items: List<DebugDialog.Entry<*>>,
+        val context: Context,
+        val dialog: MaterialDialog,
+        val withNumbering: Boolean
+) : RecyclerView.Adapter<DebugAdapter.ViewHolder>() {
 
     private var level = 0
     private var selectedIndices = arrayListOf<Int>()
@@ -52,12 +58,12 @@ class DebugAdapter(val items: List<DebugDialog.Entry<*>>, val context: Context, 
         }
 
         if (item is DebugDialog.Entry.Group || item is DebugDialog.Entry.List) {
-            holder.binding.text.setCheckMarkDrawable(if (darkTheme) R.drawable.ic_arrow_forward_white_24dp  else R.drawable.ic_arrow_forward_black_24dp)
+            holder.binding.text.setCheckMarkDrawable(if (DialogSetup.isUsingDarkTheme(holder.binding.root.context)) R.drawable.ic_arrow_forward_white_24dp else R.drawable.ic_arrow_forward_black_24dp)
         } else if (item is DebugDialog.Entry.Checkbox) {
             holder.binding.text.setCheckMarkDrawable(multiCheckMark)
         } else {
             if (checked) {
-                holder.binding.text.setCheckMarkDrawable(if (darkTheme) R.drawable.ic_check_white_24dp else R.drawable.ic_check_black_24dp)
+                holder.binding.text.setCheckMarkDrawable(if (DialogSetup.isUsingDarkTheme(holder.binding.root.context)) R.drawable.ic_check_white_24dp else R.drawable.ic_check_black_24dp)
             } else {
                 holder.binding.text.checkMarkDrawable = null
             }

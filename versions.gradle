@@ -12,20 +12,20 @@ ext {
             appcompat       : "1.2.0",
             recyclerview    : "1.1.0",
             cardview        : "1.0.0",
-            constraintLayout: "2.0.1",
-            material        : "1.2.1",
+            constraintLayout: "2.0.4",
+            material        : "1.3.0",
             fragment        : "1.0.0",
             multidex        : "2.0.1",
-            corektx            : "1.3.1",
-            lifecycleRuntimeKtx: "2.3.0-alpha07"
+            core            : "1.3.2",
+            lifecycle       : "2.3.0"
     ]
 
     versions = [
-            kotlinVersion  : "1.4.10",
+            kotlinVersion  : "1.4.31",
             gradlePlugin   : "3.6.0",
             mavenVersion   : "2.1",
 
-            androidText    : "0.2",
+            androidText    : "0.6",
 
             materialDialogs: "3.3.0",
             materialize    : "1.2.1",
@@ -34,6 +34,6 @@ ext {
             colorPicker2   : "1.1.0",
             circleImageView: "3.1.0",
 
-            playServices   : "19.4.0"
+            playServices   : "19.8.0"
     ]
 }

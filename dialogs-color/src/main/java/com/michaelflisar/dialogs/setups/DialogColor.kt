@@ -18,7 +18,6 @@ class DialogColor(
         val showAlpha: Boolean = false,
         val moveToCustomPageOnPickerSelection: Boolean = false,
         val updateCustomColorOnPickerSelection: Boolean = true,
-        val darkTheme: Boolean? = null,
         override val style: DialogStyle = DialogStyle.Dialog,
 
         // special setup
@@ -31,7 +30,5 @@ class DialogColor(
 ) : BaseDialogSetup {
 
     override fun create() = DialogColorFragment.create(this)
-
-    fun useDarkTheme() = darkTheme ?: DialogSetup.useDarkTheme()
 
 }

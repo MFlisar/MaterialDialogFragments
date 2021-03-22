@@ -1,5 +1,6 @@
 package com.michaelflisar.dialogs
 
+import android.content.Context
 import androidx.fragment.app.Fragment
 import com.michaelflisar.dialogs.classes.DialogLogger
 import com.michaelflisar.dialogs.classes.SendResultType
@@ -34,8 +35,14 @@ object DialogSetup {
 
     /**
      * define if your app currently uses a dark or a light theme
+     *
+     * this is a function so that you can set up a function that reads a setting as well
+     * if null, the dialogs try to deduce the theme from the themes background color automatically so
+     * this should not be necessary
+     *
+     * default: null
      */
-    var useDarkTheme: (() -> Boolean) = { false }
+    var useDarkTheme: (() -> Boolean?) = { null }
 
     /**
      * enable this, if you also want to be informed about cancel events (cancelled by touch outside and by back press)
@@ -52,4 +59,6 @@ object DialogSetup {
             it.invoke(result, fragment)
         }
     }
+
+    fun isUsingDarkTheme(context: Context) = useDarkTheme() ?: context.isCurrentThemeDark()
 }

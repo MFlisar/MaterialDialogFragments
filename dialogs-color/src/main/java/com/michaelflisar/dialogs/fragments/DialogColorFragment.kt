@@ -26,7 +26,7 @@ import com.afollestad.materialdialogs.callbacks.onShow
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.afollestad.materialdialogs.utils.MDUtil
-import com.michaelflisar.dialogs.ColorDefinitions
+import com.michaelflisar.dialogs.*
 import com.michaelflisar.dialogs.adapter.ColorAdapter
 import com.michaelflisar.dialogs.adapter.MainColorAdapter
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
@@ -34,9 +34,6 @@ import com.michaelflisar.dialogs.classes.GroupedColor
 import com.michaelflisar.dialogs.color.R
 import com.michaelflisar.dialogs.color.databinding.DialogColorBinding
 import com.michaelflisar.dialogs.events.DialogColorEvent
-import com.michaelflisar.dialogs.isLandscape
-import com.michaelflisar.dialogs.negativeButton
-import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.setups.DialogColor
 import com.michaelflisar.dialogs.utils.ColorUtil
 import com.michaelflisar.dialogs.utils.RecyclerViewUtil
@@ -112,7 +109,7 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
             getItem(0).apply {
                 setIcon(R.drawable.ic_baseline_sync_alt_24)
                 setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                icon?.setColorFilter(if (setup.useDarkTheme()) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+                icon?.setColorFilter(if (DialogSetup.isUsingDarkTheme(view.context)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
             }
         }
         binding.toolbar.setOnMenuItemClickListener {
@@ -212,7 +209,7 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
         val isLandscape = isLandscape()
 
         // 1) RecyclerViews
-        colorAdapter = ColorAdapter(setup.useDarkTheme(), isLandscape, selectedColorPickerGroup, selectedColorPickerTransparency, selectedColorPickerGroup.findMatchingColorIndex(requireContext(), selectedColorPickerColor)) { adapter, item, color, pos ->
+        colorAdapter = ColorAdapter(isLandscape, selectedColorPickerGroup, selectedColorPickerTransparency, selectedColorPickerGroup.findMatchingColorIndex(requireContext(), selectedColorPickerColor)) { adapter, item, color, pos ->
             selectedColorPickerColor = color
             colorAdapter.updateSelection(pos)
             updateSelectedColorDependencies(null)
@@ -224,7 +221,7 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
                 }
             }
         }
-        mainColorAdapter = MainColorAdapter(setup.useDarkTheme(), ColorDefinitions.COLORS, getSelectedGroupIndex()) { adapter, item, color, pos ->
+        mainColorAdapter = MainColorAdapter(ColorDefinitions.COLORS, getSelectedGroupIndex()) { adapter, item, color, pos ->
             // nicht hier speichern, das macht den Dialog etwas langsam weil das schreiben die UI blockiert
             // => nur wert updaten und später speichern
             if (color != selectedColorPickerGroup) {
@@ -249,17 +246,24 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
         ensureMainColorIsVisible()
 
         // 2) Slider
-        binding.slTransparancy.value = selectedColorPickerTransparency / 255f
-        binding.slTransparancy.setLabelFormatter {
-            "${(100 * it).roundToInt()}%"
-        }
-        binding.slTransparancy.addOnChangeListener { slider, value, fromUser ->
-            if (fromUser) {
-                selectedColorPickerTransparency = (255f * value).roundToInt()
-                selectedColorPickerColor?.let {
-                    selectedColorPickerColor = ColorUtil.adjustAlpha(it, selectedColorPickerTransparency)
+        if (!setup.showAlpha) {
+            binding.tvTitleTransparancy.visibility = View.GONE
+            binding.llTransparancy.visibility = View.GONE
+        } else {
+            binding.tvTitleTransparancy.visibility = View.VISIBLE
+            binding.llTransparancy.visibility = View.VISIBLE
+            binding.slTransparancy.value = selectedColorPickerTransparency / 255f
+            binding.slTransparancy.setLabelFormatter {
+                "${(100 * it).roundToInt()}%"
+            }
+            binding.slTransparancy.addOnChangeListener { slider, value, fromUser ->
+                if (fromUser) {
+                    selectedColorPickerTransparency = (255f * value).roundToInt()
+                    selectedColorPickerColor?.let {
+                        selectedColorPickerColor = ColorUtil.adjustAlpha(it, selectedColorPickerTransparency)
+                    }
+                    updateSelectedColorDependencies(null, true)
                 }
-                updateSelectedColorDependencies(null, true)
             }
         }
 

@@ -7,6 +7,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.michaelflisar.dialogs.ColorDefinitions
+import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.color.R
 import com.michaelflisar.dialogs.setCircleBackground
 import com.michaelflisar.dialogs.utils.ColorUtil
@@ -85,10 +86,10 @@ class GroupedColor(
         return matchingColorIndex
     }
 
-    fun displayAsCircleViewBackground(view: View, darkTheme: Boolean) {
+    fun displayAsCircleViewBackground(view: View) {
         if (this == ColorDefinitions.COLORS_BW) {
             val d: Drawable? = VectorDrawableCompat.create(view.context.resources, R.drawable.vector_bw, view.context.theme)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) view.background = d else view.setBackgroundDrawable(d)
-        } else view.setCircleBackground(darkTheme, getMainColor(view.context), false)
+        } else view.setCircleBackground(getMainColor(view.context), false)
     }
 }

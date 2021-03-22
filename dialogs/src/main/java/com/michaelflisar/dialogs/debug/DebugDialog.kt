@@ -95,7 +95,7 @@ object DebugDialog {
         val visibleItems = items.filter { isDebug || it.visibleInRelease }
 
         val dialog = MaterialDialog(activity)
-        val adapter = DebugAdapter(visibleItems, activity, dialog, DialogSetup.useDarkTheme(), withNumbering)
+        val adapter = DebugAdapter(visibleItems, activity, dialog, withNumbering)
         dialog
                 .noAutoDismiss()
                 .title(text = customTitle ?: "Debug Menu")

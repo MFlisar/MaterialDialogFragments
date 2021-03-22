@@ -13,14 +13,11 @@ import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
+import com.michaelflisar.dialogs.*
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.core.R
 import com.michaelflisar.dialogs.events.DialogInfoEvent
-import com.michaelflisar.dialogs.message
-import com.michaelflisar.dialogs.negativeButton
-import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.setups.DialogInfo
-import com.michaelflisar.dialogs.textView
 
 open class DialogInfoFragment : MaterialDialogFragment<DialogInfo>() {
 
@@ -140,7 +137,7 @@ open class DialogInfoFragment : MaterialDialogFragment<DialogInfo>() {
 
         if (setup.textIsHtml) {
             var color = ""
-            if (setup.useDarkTheme()) {
+            if (DialogSetup.isUsingDarkTheme(activity!!)) {
                 color = " color: white;"
             }
             val wv: WebView = dialog.getCustomView().findViewById(R.id.wv)
@@ -156,7 +153,7 @@ open class DialogInfoFragment : MaterialDialogFragment<DialogInfo>() {
                     .replace(PLACEHOLDER_BODY_STYLE_EXTRA, color)
                     .replace(PLACEHOLDER_BODY, body)
 
-            wv.loadData(html, "text/html; charset=UTF-8", "UTF-8");
+            wv.loadDataWithBaseURL(null, html, "text/html; charset=UTF-8", "UTF-8", null)
 //            wv.loadData(t, "label/html; charset=UTF-8", "UTF-8")
             wv.setBackgroundColor(Color.TRANSPARENT)
         }
