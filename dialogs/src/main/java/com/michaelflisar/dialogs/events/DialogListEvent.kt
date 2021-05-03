@@ -10,7 +10,7 @@ class DialogListEvent(setup: BaseDialogSetup, buttonIndex: Int?, val data: Data?
 
         val itemCount = indizes.size
 
-        val index = indizes.takeIf { it.isNotEmpty() } ?: -1
+        val index = indizes.firstOrNull() ?: -1
         fun <T> getItem()  = indizes.takeIf { it.isNotEmpty() }?.map { items[0] } as T?
 
         fun getIndex(i: Int = 0) = indizes[i]
