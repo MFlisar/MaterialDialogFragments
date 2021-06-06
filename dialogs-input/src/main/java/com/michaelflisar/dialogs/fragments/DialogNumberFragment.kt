@@ -76,13 +76,8 @@ class DialogNumberFragment : MaterialDialogFragment<DialogNumber>() {
                         hint = setup.hint?.get(activity!!) ?: "",
                         prefill = input?.toString() ?: "",
                         inputType = InputType.TYPE_CLASS_NUMBER) { materialDialog: MaterialDialog, charSequence: CharSequence ->
-                    val valid = charSequence.toString().length > 0
-                    if (valid) {
-                        input = charSequence.toString().toInt()
-                    } else {
-                        input = null
-                    }
-                    materialDialog.setActionButtonEnabled(WhichButton.POSITIVE, valid)
+                    input = charSequence.toString().toIntOrNull()
+                    materialDialog.setActionButtonEnabled(WhichButton.POSITIVE, input != null)
                 }
 
         val editText = dialog.getInputField()
