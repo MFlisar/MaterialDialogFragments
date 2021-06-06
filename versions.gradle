@@ -34,6 +34,6 @@ ext {
             colorPicker2   : "1.1.0",
             circleImageView: "3.1.0",
 
-            playServices   : "20.1.0"
+            playServices   : "19.8.0"
     ]
 }
