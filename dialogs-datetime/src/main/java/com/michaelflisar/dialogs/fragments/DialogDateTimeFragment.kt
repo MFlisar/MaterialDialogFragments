@@ -63,6 +63,7 @@ open class DialogDateTimeFragment : MaterialDialogFragment<DialogDateTime>() {
             DialogDateTime.Type.DateAndTime -> {
                 dialog.dateTimePicker(
                         setup.minDateTime,
+                        setup.maxDateTime,
                         date,
                         setup.requireFutureDateTime,
                         setup.show24HoursView

@@ -22,7 +22,7 @@ ext {
 
     versions = [
             kotlinVersion          : "1.5.30",
-            gradlePlugin           : "3.6.0",
+            gradlePlugin           : "7.0.1",
             mavenVersion           : "2.1",
 
             androidText            : "0.6",
