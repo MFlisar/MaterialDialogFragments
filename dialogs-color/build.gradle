@@ -76,3 +76,13 @@ dependencies {
     implementation "com.mikepenz:materialize:${versions.materialize}"
     implementation "de.hdodenhof:circleimageview:${versions.circleImageView}"
 }
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
+}

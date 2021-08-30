@@ -69,3 +69,13 @@ dependencies {
     //api "com.afollestad.material-dialogs:datetime:${versions.materialDialogs}"
     api "com.github.MFlisar.material-dialogs:datetime:${versions.materialDialogsAdjusted}"
 }
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
+}

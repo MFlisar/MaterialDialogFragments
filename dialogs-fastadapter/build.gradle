@@ -70,3 +70,13 @@ dependencies {
 
     api "com.mikepenz:fastadapter:${versions.fastAdapter}"
 }
+
+project.afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+            }
+        }
+    }
+}
