@@ -60,7 +60,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:${androidx.recyclerview}"
     implementation "androidx.constraintlayout:constraintlayout:${androidx.constraintLayout}"
 
-// ------------------------
+    // ------------------------
     // Library
     // ------------------------
 
