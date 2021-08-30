@@ -27,8 +27,8 @@ ext {
 
             androidText            : "0.6",
 
-            materialDialogs        : "3.3.0",
-            materialDialogsAdjusted: "0511545947", // own copy of 3.3.0 with small adjustment
+            //materialDialogs        : "3.3.0",
+            materialDialogsAdjusted: "50fc618f13", // own copy of 3.3.0 with small adjustment to fix a bottomsheet crash
             materialize            : "1.2.1",
             fastAdapter            : "5.0.0",
             colorPicker            : "2.4.1",
