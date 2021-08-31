@@ -7,7 +7,7 @@ import com.michaelflisar.dialogs.DialogFrequencySetup
 import com.michaelflisar.dialogs.enums.*
 import com.michaelflisar.dialogs.extension.addDays
 import com.michaelflisar.dialogs.frequency.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList

@@ -3,7 +3,7 @@ package com.michaelflisar.dialogs.enums
 import android.os.Parcelable
 import com.michaelflisar.dialogs.DialogFrequencySetup
 import com.michaelflisar.dialogs.extension.setWeekDay
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize

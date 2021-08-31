@@ -67,7 +67,7 @@ dependencies {
     // ------------------------
 
     //api "com.afollestad.material-dialogs:datetime:${versions.materialDialogs}"
-    api "com.github.MFlisar.material-dialogs:datetime:${versions.materialDialogsAdjusted}"
+    api "com.github.MFlisar.material-dialogs:datetime:${versions.materialDialogsFork}"
 }
 
 project.afterEvaluate {

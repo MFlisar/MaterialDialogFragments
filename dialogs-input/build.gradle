@@ -67,7 +67,7 @@ dependencies {
     // ------------------------
 
     //api "com.afollestad.material-dialogs:input:${versions.materialDialogs}"
-    api "com.github.MFlisar.material-dialogs:input:${versions.materialDialogsAdjusted}"
+    api "com.github.MFlisar.material-dialogs:input:${versions.materialDialogsFork}"
 }
 
 project.afterEvaluate {

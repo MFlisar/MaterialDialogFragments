@@ -6,3 +6,8 @@ include 'dialogs-color'
 include 'dialogs-fastadapter'
 include 'dialogs-frequency'
 include 'dialogs-ads'
+
+//include ':md:core'
+//project(':md:core').projectDir = new File("M:\\dev\\12 - libs (foreign)\\material-dialogs\\core")
+//include ':md:bottomsheets'
+//project(':md:bottomsheets').projectDir = new File("M:\\dev\\12 - libs (foreign)\\material-dialogs\\bottomsheets")

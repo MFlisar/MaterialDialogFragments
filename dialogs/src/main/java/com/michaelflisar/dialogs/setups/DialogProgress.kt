@@ -7,7 +7,7 @@ import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogProgressFragment
 import com.michaelflisar.dialogs.interfaces.IProgressDialogFragment
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class DialogProgress constructor(

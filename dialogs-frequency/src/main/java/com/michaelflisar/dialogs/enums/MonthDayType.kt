@@ -2,7 +2,7 @@ package com.michaelflisar.dialogs.enums
 
 import android.os.Parcelable
 import com.michaelflisar.dialogs.frequency.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal enum class MonthDayType(val typeRes: Int) : Parcelable {

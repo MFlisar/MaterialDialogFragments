@@ -12,7 +12,7 @@ import com.michaelflisar.dialogs.enums.StartType
 import com.michaelflisar.dialogs.enums.WeekDay
 import com.michaelflisar.dialogs.extension.*
 import com.michaelflisar.dialogs.frequency.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.ceil

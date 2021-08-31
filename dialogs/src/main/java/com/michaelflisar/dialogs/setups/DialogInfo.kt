@@ -7,7 +7,7 @@ import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogInfoFragment
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /**
  * [textIsHtml] - define if the privided label is formatted as html label or not

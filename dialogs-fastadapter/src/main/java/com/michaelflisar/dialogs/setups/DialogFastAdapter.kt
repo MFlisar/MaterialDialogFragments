@@ -10,7 +10,7 @@ import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.fragments.DialogFastAdapterFragment
 import com.michaelflisar.text.Text
 import com.mikepenz.fastadapter.IItem
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class DialogFastAdapter<Item : IItem<*>>(

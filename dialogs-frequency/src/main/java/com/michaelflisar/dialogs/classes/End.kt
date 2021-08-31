@@ -2,7 +2,7 @@ package com.michaelflisar.dialogs.classes
 
 import android.os.Parcelable
 import com.michaelflisar.dialogs.enums.EndType
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
 sealed class End(

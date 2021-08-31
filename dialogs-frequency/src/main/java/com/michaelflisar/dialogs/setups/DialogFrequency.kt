@@ -9,7 +9,7 @@ import com.michaelflisar.dialogs.enums.FrequencyUnit
 import com.michaelflisar.dialogs.enums.RepeatType
 import com.michaelflisar.dialogs.fragments.DialogFrequencyFragment
 import com.michaelflisar.text.Text
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class DialogFrequency(

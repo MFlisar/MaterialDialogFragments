@@ -6,7 +6,7 @@ import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogNumberFragment
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 
 @Parcelize

@@ -5,7 +5,7 @@ import android.os.Parcelable
 import com.michaelflisar.dialogs.CalendarUtil
 import com.michaelflisar.dialogs.enums.WeekDay
 import com.michaelflisar.dialogs.frequency.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.json.JSONObject
 import java.lang.RuntimeException
 import java.util.*

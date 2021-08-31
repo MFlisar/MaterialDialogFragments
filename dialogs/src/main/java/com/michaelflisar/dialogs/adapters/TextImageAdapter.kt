@@ -182,7 +182,7 @@ class TextImageAdapter<T : ITextImageProvider>(
     private inner class ItemFilter : Filter() {
         override fun performFiltering(constraint: CharSequence): Filter.FilterResults {
 
-            val filterString = constraint.toString().toLowerCase()
+            val filterString = constraint.toString().lowercase()
 
             val results = Filter.FilterResults()
 
@@ -195,11 +195,11 @@ class TextImageAdapter<T : ITextImageProvider>(
 
             for (i in 0 until count) {
                 filterableString = list[i].title
-                if (filterableString.toLowerCase().contains(filterString)) {
+                if (filterableString.lowercase().contains(filterString)) {
                     nlist.add(list[i])
                 }
                 filterableString = list[i].subTitle
-                if (filterableString != null && filterableString.toLowerCase().contains(filterString)) {
+                if (filterableString != null && filterableString.lowercase().contains(filterString)) {
                     nlist.add(list[i])
                 }
             }

@@ -11,7 +11,7 @@ import com.michaelflisar.dialogs.enums.IconSize
 import com.michaelflisar.dialogs.fragments.DialogListFragment
 import com.michaelflisar.dialogs.interfaces.IParcelableTextImageProvider
 import com.michaelflisar.text.Text
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class DialogList(

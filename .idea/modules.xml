@@ -11,6 +11,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-fastadapter/MaterialDialogFragments.dialogs-fastadapter.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-fastadapter/MaterialDialogFragments.dialogs-fastadapter.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-frequency/MaterialDialogFragments.dialogs-frequency.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-frequency/MaterialDialogFragments.dialogs-frequency.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs-input/MaterialDialogFragments.dialogs-input.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs-input/MaterialDialogFragments.dialogs-input.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/md/MaterialDialogFragments.md.iml" filepath="$PROJECT_DIR$/.idea/modules/md/MaterialDialogFragments.md.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1203712859/MaterialDialogFragments.md.bottomsheets.iml" filepath="$PROJECT_DIR$/.idea/modules/1203712859/MaterialDialogFragments.md.bottomsheets.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1639301659/MaterialDialogFragments.md.core.iml" filepath="$PROJECT_DIR$/.idea/modules/1639301659/MaterialDialogFragments.md.core.iml" />
     </modules>
   </component>
 </project>

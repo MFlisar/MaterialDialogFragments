@@ -3,7 +3,8 @@ package com.michaelflisar.dialogs.fastAdapter
 import android.content.Context
 import com.michaelflisar.dialogs.classes.App
 import com.michaelflisar.dialogs.setups.DialogFastAdapter
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 object AllAppsFastAdapterHelper {
@@ -17,6 +18,8 @@ object AllAppsFastAdapterHelper {
 
     @Parcelize
     object ItemProvider : DialogFastAdapter.IItemProvider<SimpleAppItem> {
+
+        @IgnoredOnParcel
         override val loadItemsAsynchronous = true
 
         override fun loadItems(context: Context): List<SimpleAppItem> {

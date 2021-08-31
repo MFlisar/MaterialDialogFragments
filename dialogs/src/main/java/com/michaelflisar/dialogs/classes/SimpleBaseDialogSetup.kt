@@ -39,7 +39,8 @@ interface SimpleBaseDialogSetup : Parcelable {
         val dialog = when (s) {
             is DialogStyle.Dialog -> MaterialDialog(activity)
             is DialogStyle.BottomSheet -> {
-                val dlg = MaterialDialog(activity, BottomSheet(if (s.layoutModeMatchParent) LayoutMode.MATCH_PARENT else LayoutMode.WRAP_CONTENT))
+                // no animation, because the fragment will call the the dialogs show function after screen off/on and material-dialogs will animate in this event!
+                val dlg = MaterialDialog(activity, BottomSheet(if (s.layoutModeMatchParent) LayoutMode.MATCH_PARENT else LayoutMode.WRAP_CONTENT, s.initialState, false))
                 if (s.peekHeight != null || s.resPeekHeight != null) {
                     dlg.setPeekHeight(s.peekHeight, s.resPeekHeight)
                 }

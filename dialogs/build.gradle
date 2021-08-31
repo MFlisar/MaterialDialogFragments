@@ -68,8 +68,12 @@ dependencies {
 
     //api "com.afollestad.material-dialogs:core:${versions.materialDialogs}"
     //api "com.afollestad.material-dialogs:bottomsheets:${versions.materialDialogs}"
-    api "com.github.MFlisar.material-dialogs:core:${versions.materialDialogsAdjusted}"
-    api "com.github.MFlisar.material-dialogs:bottomsheets:${versions.materialDialogsAdjusted}"
+
+    api "com.github.MFlisar.material-dialogs:core:${versions.materialDialogsFork}"
+    api "com.github.MFlisar.material-dialogs:bottomsheets:${versions.materialDialogsFork}"
+
+    //api project(':md:core')
+    //api project(':md:bottomsheets')
 
 }
 
