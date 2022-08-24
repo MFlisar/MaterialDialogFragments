@@ -78,7 +78,6 @@ Usage is very simply, you only need to do following:
 			"Info Title".asText(),
 			"Some info label".asText()
 		)
-				.create()
 				.show(this)
 				
 * in the `DialogFragmentCallback` you can handle the result now like following:
