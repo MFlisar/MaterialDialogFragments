@@ -7,8 +7,7 @@ import com.afollestad.materialdialogs.datetime.datePicker
 import com.afollestad.materialdialogs.datetime.dateTimePicker
 import com.afollestad.materialdialogs.datetime.timePicker
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
-import com.michaelflisar.dialogs.events.DialogDateTimeEvent
-import com.michaelflisar.dialogs.events.DialogInfoEvent
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
 import com.michaelflisar.dialogs.negativeButton
 import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.positiveButton
@@ -38,35 +37,35 @@ open class DialogDateTimeFragment : MaterialDialogFragment<DialogDateTime>() {
         }
 
         // create dialog with correct style, title and cancelable flags
-        val dialog = setup.createMaterialDialog(activity!!, this)
+        val dialog = setup.createMaterialDialog(requireActivity(), this)
 
         when (setup.type) {
             DialogDateTime.Type.DateOnly -> {
                 dialog.datePicker(
-                        setup.minDateTime,
-                        setup.maxDateTime,
-                        date,
-                        setup.requireFutureDateTime
+                    setup.minDateTime,
+                    setup.maxDateTime,
+                    date,
+                    setup.requireFutureDateTime
                 ) { _, datetime ->
                     date = datetime
                 }
             }
             DialogDateTime.Type.TimeOnly -> {
                 dialog.timePicker(
-                        date,
-                        setup.requireFutureDateTime,
-                        setup.show24HoursView
+                    date,
+                    setup.requireFutureDateTime,
+                    setup.show24HoursView
                 ) { _, datetime ->
                     date = datetime
                 }
             }
             DialogDateTime.Type.DateAndTime -> {
                 dialog.dateTimePicker(
-                        setup.minDateTime,
-                        setup.maxDateTime,
-                        date,
-                        setup.requireFutureDateTime,
-                        setup.show24HoursView
+                    setup.minDateTime,
+                    setup.maxDateTime,
+                    date,
+                    setup.requireFutureDateTime,
+                    setup.show24HoursView
                 ) { _, datetime ->
                     date = datetime
                 }
@@ -74,45 +73,38 @@ open class DialogDateTimeFragment : MaterialDialogFragment<DialogDateTime>() {
         }
 
         dialog
-                .positiveButton(setup) {
-                    sendEvent(
-                            DialogDateTimeEvent(
-                                    setup,
-                                    WhichButton.POSITIVE.ordinal,
-                                    DialogDateTimeEvent.Data(date)
-                            )
+            .positiveButton(setup) {
+                sendEvent(
+                    DialogDateTime.Event.Data(
+                        setup,
+                        MaterialDialogButton.Positive,
+                        date
                     )
-                    dismiss()
-                }.negativeButton(setup) {
-                    sendEvent(
-                            DialogDateTimeEvent(
-                                    setup,
-                                    WhichButton.NEGATIVE.ordinal,
-                                    null
-                            )
+                )
+                dismiss()
+            }.negativeButton(setup) {
+                sendEvent(
+                    DialogDateTime.Event.Empty(
+                        setup,
+                        MaterialDialogButton.Negative
                     )
-                    dismiss()
-                }
-                .neutralButton(setup) {
-                    sendEvent(
-                            DialogDateTimeEvent(
-                                    setup,
-                                    WhichButton.NEUTRAL.ordinal,
-                                    null
-                            )
+                )
+                dismiss()
+            }
+            .neutralButton(setup) {
+                sendEvent(
+                    DialogDateTime.Event.Empty(
+                        setup,
+                        MaterialDialogButton.Neutral
                     )
-                }
+                )
+            }
 
         return dialog
-    }
-
-    private fun onClick(which: WhichButton) {
-        sendEvent(DialogInfoEvent(setup, which.index))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putSerializable("date", date)
     }
-
 }

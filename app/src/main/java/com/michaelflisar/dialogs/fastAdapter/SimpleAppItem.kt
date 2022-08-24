@@ -5,7 +5,7 @@ import android.util.TypedValue
 import android.view.View
 import com.michaelflisar.dialogs.app.R
 import com.michaelflisar.dialogs.app.databinding.ItemSimpleAppBinding
-import com.michaelflisar.dialogs.classes.App
+import com.michaelflisar.dialogs.apps.App
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import com.mikepenz.fastadapter.ui.utils.FastAdapterUIUtils

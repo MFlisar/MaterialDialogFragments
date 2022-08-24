@@ -1,7 +1,8 @@
 package com.michaelflisar.dialogs.fastAdapter
 
 import android.content.Context
-import com.michaelflisar.dialogs.classes.App
+import com.michaelflisar.dialogs.apps.App
+import com.michaelflisar.dialogs.apps.AppsManager
 import com.michaelflisar.dialogs.setups.DialogFastAdapter
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -23,7 +24,7 @@ object AllAppsFastAdapterHelper {
         override val loadItemsAsynchronous = true
 
         override fun loadItems(context: Context): List<SimpleAppItem> {
-            return ArrayList(App.load(context).map { SimpleAppItem(it) })
+            return ArrayList(AppsManager.load(context).map { SimpleAppItem(it) })
         }
     }
 }

@@ -5,18 +5,14 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.ExtendedFragment
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.SendResultType
 import com.michaelflisar.dialogs.classes.SimpleBaseDialogSetup
-import com.michaelflisar.dialogs.events.BaseDialogEvent
+import com.michaelflisar.dialogs.events.MaterialDialogEvent
 import com.michaelflisar.dialogs.events.DialogCancelledEvent
 import com.michaelflisar.dialogs.utils.DialogUtil
 
-
-abstract class MaterialDialogFragment<T : SimpleBaseDialogSetup> : ExtendedFragment() {
+abstract class MaterialDialogFragment<T : SimpleBaseDialogSetup> : DialogFragment() {
 
     companion object {
         const val ARG_SETUP = "setup"
@@ -27,49 +23,15 @@ abstract class MaterialDialogFragment<T : SimpleBaseDialogSetup> : ExtendedFragm
     // -----------
 
     var customSendResultType: SendResultType? = null
-        private set
+        internal set
     private var pSetup: T? = null
     protected val setup: T
         get() {
             if (pSetup == null) {
-                pSetup = arguments!!.getParcelable(ARG_SETUP)!!
+                pSetup = requireArguments().getParcelable(ARG_SETUP)!!
             }
             return pSetup!!
         }
-
-    // -----------
-    // Functions - SHOW
-    // -----------
-
-    fun show(
-            activity: FragmentActivity,
-            customSendResultType: SendResultType? = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
-            tag: String = this::class.java.name
-    ) {
-        this.customSendResultType = customSendResultType
-        show(activity.supportFragmentManager, tag)
-    }
-
-    fun show(
-            parent: Fragment,
-            customSendResultType: SendResultType? = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
-            tag: String = this::class.java.name
-    ) {
-        this.customSendResultType = customSendResultType
-        show(parent.childFragmentManager, tag)
-    }
-
-    fun showAllowingStateLoss(activity: FragmentActivity) {
-        showAllowingStateLoss(activity, this)
-    }
-
-    fun showAllowingStateLoss(activity: FragmentActivity, fragment: DialogFragment) {
-        showAllowingStateLoss(activity, fragment.javaClass.name)
-    }
-
-    fun showAllowingStateLoss(activity: FragmentActivity, tag: String?) {
-        showAllowingStateLoss(activity.supportFragmentManager, tag)
-    }
 
     // -----------
     // Functions - Setup
@@ -116,7 +78,7 @@ abstract class MaterialDialogFragment<T : SimpleBaseDialogSetup> : ExtendedFragm
     // Result
     // -----------------------------
 
-    protected fun <X : BaseDialogEvent> sendEvent(event: X) {
+    protected fun <X : MaterialDialogEvent> sendEvent(event: X) {
         // send result to any custom handler
         DialogSetup.sendResult(event, this)
         // send result the default way
@@ -129,7 +91,7 @@ abstract class MaterialDialogFragment<T : SimpleBaseDialogSetup> : ExtendedFragm
         onEventSend(event)
     }
 
-    protected open fun <X : BaseDialogEvent> onEventSend(event: X) {
+    protected open fun <X : MaterialDialogEvent> onEventSend(event: X) {
 
     }
 

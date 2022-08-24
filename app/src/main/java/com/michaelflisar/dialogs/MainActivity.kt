@@ -14,7 +14,8 @@ import com.michaelflisar.dialogs.app.databinding.ActivityMainBinding
 import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.debug.DebugDialog
 import com.michaelflisar.dialogs.enums.IconSize
-import com.michaelflisar.dialogs.events.*
+import com.michaelflisar.dialogs.events.DialogCancelledEvent
+import com.michaelflisar.dialogs.events.MaterialDialogEvent
 import com.michaelflisar.dialogs.fastAdapter.AllAppsFastAdapterHelper
 import com.michaelflisar.dialogs.fastAdapter.SimpleAppItem
 import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
@@ -61,12 +62,16 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
     /*
      * optionally handle the results of the dialog - use the event.id to find out where the event comes from
      */
-    override fun onDialogResultAvailable(event: BaseDialogEvent): Boolean {
+    override fun onDialogResultAvailable(event: MaterialDialogEvent): Boolean {
 
         // we have enabled this manually in this demo, by default cancel events are not send!
         // useful if you want to close the parent activity if a special dialog is cancelled or do something else based on this event
         if (event is DialogCancelledEvent) {
-            Toast.makeText(this, "Dialog (ID ${event.id}) cancelled via touch outside or back button press!", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "Dialog (ID ${event.id}) cancelled via touch outside or back button press!",
+                Toast.LENGTH_LONG
+            ).show()
             return true
         }
 
@@ -79,44 +84,94 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         // }
 
         val data = when (event) {
-            is DialogInfoEvent -> "Info dialog closed - ID = ${event.id}"
-            is DialogInputEvent -> {
-                if (event.neutrClicked()) {
-                    "Input dialog closed\nClosed by neutral button click"
-                } else {
-                    "Input dialog closed\nInput: ${event.data?.getInput()} | ${event.data?.getInput(1)}"
+            is DialogInfo.Event -> "Info dialog closed - ID = ${event.id}"
+            is DialogInput.Event -> {
+                when (event) {
+                    is DialogInput.Event.Data -> "Input dialog closed\nInput: ${event.input} | ${
+                        event.getInput(
+                            1
+                        )
+                    }"
+                    is DialogInput.Event.Empty -> "Input dialog closed\nClosed by ${event.button}}"
                 }
             }
-            is DialogNumberEvent -> "Number dialog closed\nInput: ${event.data?.value} (${event.data?.values})"
-            is DialogProgressEvent -> {
-                if (event.negClicked()) {
-                    "Progress dialog closed\nCANCELLED"
-                } else {
-                    "Progress dialog closed\nProgress finished"
+            is DialogNumber.Event -> {
+                when (event) {
+                    is DialogNumber.Event.Data -> "Number dialog closed\nInput: ${event.value} (${event.values})"
+                    is DialogNumber.Event.Empty -> "Number dialog closed - nothing selected - button: ${event.button}"
+                }
+
+            }
+            is DialogProgress.Event -> {
+                when (event) {
+                    is DialogProgress.Event.Data -> {
+                        if (event.closed) {
+                            "Progress dialog closed\nProgress finished - closeForcedByNewDialog: ${event.closeForcedByNewDialog}"
+                        } else {
+                            "Progress dialog event: button = ${event.button}"
+                        }
+                    }
+                    is DialogProgress.Event.Empty -> "Progress dialog closed\nCANCELLED"
                 }
             }
-            is DialogListEvent -> "List dialog event\nIndizes: ${event.data?.indizes?.joinToString()}"
-            is DialogFastAdapterEvent -> "FastAdapter dialog event\nSelected indizes: ${(event.data as? DialogFastAdapterEvent.Data<SimpleAppItem>)?.indizes?.joinToString()}\nSelected items: ${(event.data as? DialogFastAdapterEvent.Data<SimpleAppItem>)?.items?.map { it.app.name }?.joinToString()}"
-            is DialogColorEvent -> "Color dialog event\nColor: ${ColorUtil.getColorAsARGB(event.data!!.color)}"
-            is DialogDateTimeEvent -> {
-                val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                val date = event.data?.date?.let { format.format(it.time) } ?: "NULL"
-                "Date time event\nSelected date: $date"
+            is DialogList.Event -> {
+                when (event) {
+                    is DialogList.Event.Data -> "List dialog event\nIndizes: ${event.indizes.joinToString()}"
+                    is DialogList.Event.Empty -> "List dialog event - ${event.button}"
+                }
             }
-            is DialogFrequencyEvent -> {
-                val frequency = event.data?.frequency?.toReadableString(this)
-                "Frequency event\nSelected frequency: $frequency"
+            is DialogFastAdapter.Event -> {
+                when (event) {
+                    is DialogFastAdapter.Event.Data<*> -> "FastAdapter dialog event\nSelected indizes: ${(event as DialogFastAdapter.Event.Data<SimpleAppItem>).indizes.joinToString()}\nSelected items: ${
+                        (event as DialogFastAdapter.Event.Data<SimpleAppItem>).items.map { it.app.name }
+                            .joinToString()
+                    }"
+                    is DialogFastAdapter.Event.Empty -> "FastAdapter dialog event - button: ${event.button}"
+                }
+
             }
-            is DialogAdsEvent -> {
+            is DialogColor.Event -> {
+                when (event) {
+                    is DialogColor.Event.Data -> "Color dialog event\nColor: ${
+                        ColorUtil.getColorAsARGB(
+                            event.color
+                        )
+                    }"
+                    is DialogColor.Event.Empty -> "Color dialog event - button: ${event.button}"
+                }
+
+            }
+            is DialogDateTime.Event -> {
+                when (event) {
+                    is DialogDateTime.Event.Data -> {
+                        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                        val date = event.date.let { format.format(it.time) } ?: "NULL"
+                        "Date time event\nSelected date: $date"
+                    }
+                    is DialogDateTime.Event.Empty -> "Date time event - button: ${event.button}"
+                }
+
+            }
+            is DialogFrequency.Event -> {
+                when (event) {
+                    is DialogFrequency.Event.Data -> {
+                        val frequency = event.frequency.toReadableString(this)
+                        "Frequency event\nSelected frequency: $frequency"
+                    }
+                    is DialogFrequency.Event.Empty -> "Frequency event - button: ${event.button}"
+                }
+
+            }
+            is DialogAds.Event -> {
                 val data = event.data
                 when (data) {
-                    is DialogAdsEvent.Data.RewardReceived -> {
+                    is DialogAds.Event.Data.RewardReceived -> {
                         "Reward received - amount: ${data.amount}"
                     }
-                    is DialogAdsEvent.Data.InterstitialShown -> {
+                    is DialogAds.Event.Data.InterstitialShown -> {
                         "Interstitial shown"
                     }
-                    is DialogAdsEvent.Data.ClosedByUser -> {
+                    is DialogAds.Event.Data.ClosedByUser -> {
                         "Closed by user"
                     }
                 }
@@ -158,352 +213,382 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
 
     private fun addInfoDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
-                HeaderItem("INFO demos"),
-                DemoItem("Simple info demo", "Show a simple info dialog") {
-                    DialogInfo(
-                            10,
-                            "Info Title".asText(),
-                            "Some info label".asText(),
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                },
-                DemoItem("Info demo with timeout", "Show a info dialog with an ok button that will only be enabled after 10s and which shows a colored warning message") {
-                    DialogInfo(
-                            11,
-                            "Info Title".asText(),
-                            "Some info about a dangerous action + 10s timeout until the ok button can be clicked.\nRotate me and I'll remember the already past by time.".asText(),
-                            warning = "Attention: Dangerous action!".asText(),
-                            warningSeparator = "\n\n",
-                            cancelable = false,
-                            timerPosButton = 10,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                },
-                DemoItem("HTLM info demo", "Show a simple info dialog with HTML text") {
-                    DialogInfo(
-                            12,
-                            "Info Title".asText(),
-                            "<b>Header</b></br>Some text with a bold html text title inside text and some <font color=\"#FF0000\">red colored text</font> inside it.</br></br><b>Header2</b></br>This version of <font color=\"#00FF00\">InfoDialog</font> supports <u>all</u> html tags that are supported by a WebView &#128526;.".asText(),
-                            textIsHtml = true,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                })
+            HeaderItem("INFO demos"),
+            DemoItem("Simple info demo", "Show a simple info dialog") {
+                DialogInfo(
+                    10,
+                    "Info Title".asText(),
+                    "Some info label".asText(),
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem(
+                "Info demo with timeout",
+                "Show a info dialog with an ok button that will only be enabled after 10s and which shows a colored warning message"
+            ) {
+                DialogInfo(
+                    11,
+                    "Info Title".asText(),
+                    "Some info about a dangerous action + 10s timeout until the ok button can be clicked.\nRotate me and I'll remember the already past by time.".asText(),
+                    warning = "Attention: Dangerous action!".asText(),
+                    warningSeparator = "\n\n",
+                    cancelable = false,
+                    timerPosButton = 10,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem("HTLM info demo", "Show a simple info dialog with HTML text") {
+                DialogInfo(
+                    12,
+                    "Info Title".asText(),
+                    "<b>Header</b></br>Some text with a bold html text title inside text and some <font color=\"#FF0000\">red colored text</font> inside it.</br></br><b>Header2</b></br>This version of <font color=\"#00FF00\">InfoDialog</font> supports <u>all</u> html tags that are supported by a WebView &#128526;.".asText(),
+                    textIsHtml = true,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            })
     }
 
     private fun addInputDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
-                HeaderItem("INPUT demos"),
-                DemoItem("Input demo 1", "Show a dialog with an input field and a hint and allow an empty input") {
-                    DialogInput(
-                            20,
-                            "Insert your name".asText(),
-                            DialogInput.InputField("Please insert your full name".asText(), null, "E.g. Max Musterman".asText(), true),
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                },
-                DemoItem("Input demo 2", "Show a dialog with 2 input fields and force non empty inputs") {
-                    DialogInput(
-                            21,
-                            "Insert your name".asText(),
-                            DialogInput.InputField("First name".asText(), null, "E.g. Max".asText()),
-                            additonalInputs = arrayListOf(DialogInput.InputField("Last name".asText(), null, "E.g. Musterman".asText())),
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                },
-                DemoItem("Input demo 3", "Show a dialog with an input field and a button to insert some predefined placeholder") {
-                    DialogInput(
-                            22,
-                            "Insert the macro".asText(),
-                            DialogInput.InputField(null, null, "My name is %s".asText()),
-                            neutralButtonMode = DialogInput.NeutralButtonMode.InsertText,
-                            neutrButton = "Insert %s".asText(),
-                            textToInsertOnNeutralButtonClick = "%s".asText(),
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                }
+            HeaderItem("INPUT demos"),
+            DemoItem(
+                "Input demo 1",
+                "Show a dialog with an input field and a hint and allow an empty input"
+            ) {
+                DialogInput(
+                    20,
+                    "Insert your name".asText(),
+                    DialogInput.InputField(
+                        "Please insert your full name".asText(),
+                        null,
+                        "E.g. Max Musterman".asText(),
+                        true
+                    ),
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem(
+                "Input demo 2",
+                "Show a dialog with 2 input fields and force non empty inputs"
+            ) {
+                DialogInput(
+                    21,
+                    "Insert your name".asText(),
+                    DialogInput.InputField("First name".asText(), null, "E.g. Max".asText()),
+                    additonalInputs = arrayListOf(
+                        DialogInput.InputField(
+                            "Last name".asText(),
+                            null,
+                            "E.g. Musterman".asText()
+                        )
+                    ),
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem(
+                "Input demo 3",
+                "Show a dialog with an input field and a button to insert some predefined placeholder"
+            ) {
+                DialogInput(
+                    22,
+                    "Insert the macro".asText(),
+                    DialogInput.InputField(null, null, "My name is %s".asText()),
+                    neutralButtonMode = DialogInput.NeutralButtonMode.InsertText,
+                    neutrButton = "Insert %s".asText(),
+                    textToInsertOnNeutralButtonClick = "%s".asText(),
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            }
         )
     }
 
     private fun addListDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
-                HeaderItem("LIST demos"),
-                DemoItem("List demo 1", "Show a dialog with a list of items - single select") {
-                    DialogList(
-                            30,
-                            "Simple list".asText(),
-                            DialogList.itemsString(List(50) { "Item ${it + 1}" }),
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                },
-                DemoItem("List demo 2", "Show a dialog with a list of items and icons - multi select") {
-                    DialogList(
-                            31,
-                            "Multi select".asText(),
-                            DialogList.itemsString(List(50) { "Item ${it + 1}" }, List(50) { R.mipmap.ic_launcher }),
-                            selectionMode = DialogList.SelectionMode.Multi,
-                            iconSize = IconSize.Medium,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                },
-                DemoItem("List demo 3", "Show a dialog with a list of items and icons, without default checkbox and custom checkbox icon") {
-                    DialogList(
-                            32,
-                            "Multi select".asText(),
-                            DialogList.itemsString(List(50) { "Item ${it + 1}" }, List(50) { R.mipmap.ic_launcher }),
-                            selectionMode = DialogList.SelectionMode.Multi,
-                            hideDefaultCheckMarkIcon = true,
-                            checkMark = R.drawable.custom_check_mark,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                },
-                DemoItem("List demo 4", "Show a dialog with a list of items, icons, icon tint and some text - no selection but with multi click enabled - each click creates a event") {
-                    DialogList(
-                            33,
-                            "Multi click".asText(),
-                            DialogList.itemsString(List(50) { "Item ${it + 1}" }, List(50) { R.drawable.ic_arrow_forward_black_24dp }),
-                            text = "Some information about this dialog".asText(),
-                            multiClick = true,
-                            iconColorTint = Color.RED,
-                            iconColorTintMode = PorterDuff.Mode.SRC_ATOP,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                }
+            HeaderItem("LIST demos"),
+            DemoItem("List demo 1", "Show a dialog with a list of items - single select") {
+                DialogList(
+                    30,
+                    "Simple list".asText(),
+                    DialogList.itemsString(List(50) { "Item ${it + 1}" }),
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem("List demo 2", "Show a dialog with a list of items and icons - multi select") {
+                DialogList(
+                    31,
+                    "Multi select".asText(),
+                    DialogList.itemsString(
+                        List(50) { "Item ${it + 1}" },
+                        List(50) { R.mipmap.ic_launcher }),
+                    selectionMode = DialogList.SelectionMode.Multi,
+                    iconSize = IconSize.Medium,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem(
+                "List demo 3",
+                "Show a dialog with a list of items and icons, without default checkbox and custom checkbox icon"
+            ) {
+                DialogList(
+                    32,
+                    "Multi select".asText(),
+                    DialogList.itemsString(
+                        List(50) { "Item ${it + 1}" },
+                        List(50) { R.mipmap.ic_launcher }),
+                    selectionMode = DialogList.SelectionMode.Multi,
+                    hideDefaultCheckMarkIcon = true,
+                    checkMark = R.drawable.custom_check_mark,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem(
+                "List demo 4",
+                "Show a dialog with a list of items, icons, icon tint and some text - no selection but with multi click enabled - each click creates a event"
+            ) {
+                DialogList(
+                    33,
+                    "Multi click".asText(),
+                    DialogList.itemsString(
+                        List(50) { "Item ${it + 1}" },
+                        List(50) { R.drawable.arrow_forward }),
+                    text = "Some information about this dialog".asText(),
+                    multiClick = true,
+                    iconColorTint = Color.RED,
+                    iconColorTintMode = PorterDuff.Mode.SRC_ATOP,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            }
         )
     }
 
     private fun addNumberDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
-                HeaderItem("NUMBER demos"),
-                DemoItem("Number demo", "Show a dialog with an text input field and limit input number range") {
-                    DialogNumber(
-                            40,
-                            "Age".asText(),
-                            text = "Insert a value between 0 and 100".asText(),
-                            hint = "Insert your age...".asText(),
-                            min = 0,
-                            max = 100,
-                            errorMessage = "Please insert a value between 0 and 100".asText(),
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                },
-                DemoItem("Number picker demo", "Shows a dialog with a number and an increase/decrease button and allows to input values from 0 to 100") {
-                    DialogNumberPicker(
-                            41,
-                            "Age".asText(),
-                            25,
-                            "Select your age [0, 100]".asText(),
-                            min = 0,
-                            max = 100,
-                            step = 1,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                },
-                DemoItem("Number picker demo", "Shows a dialog with a number and an increase/decrease button and allows to input values from 0 to 100 in steps of 5 + custom value formatter") {
-                    DialogNumberPicker(
-                            42,
-                            "Age".asText(),
-                            25,
-                            "Select your age [0, 100], StepSize: 5".asText(),
-                            min = 0,
-                            max = 100,
-                            step = 5,
-                            valueFormatRes = R.string.number_age_formatter,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                },
-                DemoItem("Multi number picker demo", "Select 3 numbers between 10 and 100") {
-                    DialogNumberPicker(
-                            43,
-                            "Select numbers".asText(),
-                            10,
-                            "Value 1".asText(),
-                            min = 10,
-                            max = 100,
-                            step = 1,
-                            additonalValues = arrayListOf(
-                                    DialogNumberPicker.NumberField("Value 2".asText(), 20),
-                                    DialogNumberPicker.NumberField("Value 3".asText(), 30)
-                            ),
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                }
+            HeaderItem("NUMBER demos"),
+            DemoItem(
+                "Number demo",
+                "Show a dialog with an text input field and limit input number range"
+            ) {
+                DialogNumber(
+                    40,
+                    "Age".asText(),
+                    text = "Insert a value between 0 and 100".asText(),
+                    hint = "Insert your age...".asText(),
+                    min = 0,
+                    max = 100,
+                    errorMessage = "Please insert a value between 0 and 100".asText(),
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem(
+                "Number picker demo",
+                "Shows a dialog with a number and an increase/decrease button and allows to input values from 0 to 100"
+            ) {
+                DialogNumberPicker(
+                    41,
+                    "Age".asText(),
+                    25,
+                    "Select your age [0, 100]".asText(),
+                    min = 0,
+                    max = 100,
+                    step = 1,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem(
+                "Number picker demo",
+                "Shows a dialog with a number and an increase/decrease button and allows to input values from 0 to 100 in steps of 5 + custom value formatter"
+            ) {
+                DialogNumberPicker(
+                    42,
+                    "Age".asText(),
+                    25,
+                    "Select your age [0, 100], StepSize: 5".asText(),
+                    min = 0,
+                    max = 100,
+                    step = 5,
+                    valueFormatRes = R.string.number_age_formatter,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem("Multi number picker demo", "Select 3 numbers between 10 and 100") {
+                DialogNumberPicker(
+                    43,
+                    "Select numbers".asText(),
+                    10,
+                    "Value 1".asText(),
+                    min = 10,
+                    max = 100,
+                    step = 1,
+                    additonalValues = arrayListOf(
+                        DialogNumberPicker.NumberField("Value 2".asText(), 20),
+                        DialogNumberPicker.NumberField("Value 3".asText(), 30)
+                    ),
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            }
         )
     }
 
     private fun addProgressDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
-                HeaderItem("PROGRESS demos"),
-                DemoItem("Progress demo", "Show a progress dialog for 5s") {
-                    DialogProgress(
-                            50,
-                            title = "Loading".asText(),
-                            text = "Data is loading...".asText(),
-                            negButton = "Cancel".asText(),
-                            dismissOnNegative = true,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
+            HeaderItem("PROGRESS demos"),
+            DemoItem("Progress demo", "Show a progress dialog for 5s") {
+                DialogProgress(
+                    50,
+                    title = "Loading".asText(),
+                    text = "Data is loading...".asText(),
+                    negButton = "Cancel".asText(),
+                    dismissOnNegative = true,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
 
-                    // simple unsafe method to immitate some background process...
-                    val handler = Handler()
-                    val delay = 1000L
-                    var c = 0
-                    handler.postDelayed(object : Runnable {
-                        override fun run() {
-                            c++
-                            DialogProgress.update("Time left: ${5 - c}s".asText())
-                            if (c < 5)
-                                handler.postDelayed(this, delay)
-                            else
-                                DialogProgress.close()
-                        }
-                    }, delay)
-                }
+                // simple unsafe method to immitate some background process...
+                val handler = Handler()
+                val delay = 1000L
+                var c = 0
+                handler.postDelayed(object : Runnable {
+                    override fun run() {
+                        c++
+                        DialogProgress.update("Time left: ${5 - c}s".asText())
+                        if (c < 5)
+                            handler.postDelayed(this, delay)
+                        else
+                            DialogProgress.close()
+                    }
+                }, delay)
+            }
         )
     }
 
     private fun addFastAdapterDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
-                HeaderItem("Fast adapter demos"),
-                DemoItem("Installed apps", "Show a list of all installed apps in a fast adapter list dialog + enable filtering via custom predicate") {
-                    DialogFastAdapter(
-                            60,
-                            AllAppsFastAdapterHelper.ItemProvider,
-                            "Select an app".asText(),
-                            selectionMode = DialogFastAdapter.SelectionMode.SingleClick,
-                            filterPredicate = AllAppsFastAdapterHelper.FilterPredicate,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                }
+            HeaderItem("Fast adapter demos"),
+            DemoItem(
+                "Installed apps",
+                "Show a list of all installed apps in a fast adapter list dialog + enable filtering via custom predicate"
+            ) {
+                DialogFastAdapter(
+                    60,
+                    AllAppsFastAdapterHelper.ItemProvider,
+                    "Select an app".asText(),
+                    selectionMode = DialogFastAdapter.SelectionMode.SingleClick,
+                    filterPredicate = AllAppsFastAdapterHelper.FilterPredicate,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            }
         )
     }
 
     private fun addColorDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
-                HeaderItem("Color demos"),
-                DemoItem("Color demo", "Show a color dialog") {
-                    DialogColor(
-                            70,
-                            "Select color".asText(),
-                            color = Color.BLUE,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                },
-                DemoItem("Color demo", "Show a color dialog - with possiblility to select an alpha value") {
-                    DialogColor(
-                            71,
-                            "Select color".asText(),
-                            color = ColorDefinitions.COLORS_RED.getMainColor(this), // returns main (500) red material color
-                            showAlpha = true,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                }
+            HeaderItem("Color demos"),
+            DemoItem("Color demo", "Show a color dialog") {
+                DialogColor(
+                    70,
+                    "Select color".asText(),
+                    color = Color.BLUE,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem(
+                "Color demo",
+                "Show a color dialog - with possiblility to select an alpha value"
+            ) {
+                DialogColor(
+                    71,
+                    "Select color".asText(),
+                    color = ColorDefinitions.COLORS_RED.getMainColor(this), // returns main (500) red material color
+                    showAlpha = true,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            }
         )
     }
 
     private fun addDateTimeDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
-                HeaderItem("Date/Time demos"),
-                DemoItem("Datetime demo", "Show a date time dialog") {
-                    DialogDateTime(
-                            80,
-                            "DateTime".asText(),
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                }
+            HeaderItem("Date/Time demos"),
+            DemoItem("Datetime demo", "Show a date time dialog") {
+                DialogDateTime(
+                    80,
+                    "DateTime".asText(),
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            }
         )
     }
 
     private fun addFrequencyDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
-                HeaderItem("Frequency demos"),
-                DemoItem("Frequency demo", "Show a frequency dialog") {
-                    DialogFrequency(
-                            90,
-                            "Frequency".asText(),
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this)
-                }
+            HeaderItem("Frequency demos"),
+            DemoItem("Frequency demo", "Show a frequency dialog") {
+                DialogFrequency(
+                    90,
+                    "Frequency".asText(),
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            }
         )
     }
 
     private fun addDebugDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
-                HeaderItem("DEBUGGING SETTINGS demos"),
-                DemoItem("Debug settings demo", "Show a custom debug settings dialog") {
+            HeaderItem("DEBUGGING SETTINGS demos"),
+            DemoItem("Debug settings demo", "Show a custom debug settings dialog") {
 
-                    // should be done once only, but for the demo we do it here...
-                    DebugDialog.init(this)
+                // should be done once only, but for the demo we do it here...
+                DebugDialog.init(this)
 
-                    // Dialog will save it's values inside a preference file automatically
-                    val items = arrayListOf<DebugDialog.Entry<*>>()
-                    items.addAll(
-                            arrayListOf(
-                                    DebugDialog.Entry.Button("Debug button") {
-                                        Toast.makeText(this, "Debug button pressed", Toast.LENGTH_SHORT).show()
-                                    },
-                                    DebugDialog.Entry.Checkbox("Enable debug mode", "debug_bool_1", false),
-                                    DebugDialog.Entry.List("Debug color", "debug_list_1", 0)
-                                            .apply {
-                                                addEntries(
-                                                        DebugDialog.Entry.ListEntry("red", this, 0),
-                                                        DebugDialog.Entry.ListEntry("blue", this, 1),
-                                                        DebugDialog.Entry.ListEntry("green", this, 2)
-                                                )
-                                            },
-                                    DebugDialog.Entry.Button("Reset all debug settings") {
-                                        DebugDialog.reset(items, it)
-                                    }
-                            )
+                // Dialog will save it's values inside a preference file automatically
+                val items = arrayListOf<DebugDialog.Entry<*>>()
+                items.addAll(
+                    arrayListOf(
+                        DebugDialog.Entry.Button("Debug button") {
+                            Toast.makeText(this, "Debug button pressed", Toast.LENGTH_SHORT).show()
+                        },
+                        DebugDialog.Entry.Checkbox("Enable debug mode", "debug_bool_1", false),
+                        DebugDialog.Entry.List("Debug color", "debug_list_1", 0)
+                            .apply {
+                                addEntries(
+                                    DebugDialog.Entry.ListEntry("red", this, 0),
+                                    DebugDialog.Entry.ListEntry("blue", this, 1),
+                                    DebugDialog.Entry.ListEntry("green", this, 2)
+                                )
+                            },
+                        DebugDialog.Entry.Button("Reset all debug settings") {
+                            DebugDialog.reset(items, it)
+                        }
                     )
-                    DebugDialog.showDialog(
-                            items,
-                            this,
-                            "Back",
-                            true,
-                            BuildConfig.DEBUG,
-                            "Debug dialog"
-                    )
-                }
+                )
+                DebugDialog.showDialog(
+                    items,
+                    this,
+                    "Back",
+                    true,
+                    BuildConfig.DEBUG,
+                    "Debug dialog"
+                )
+            }
         )
     }
 
@@ -526,56 +611,65 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
         // DialogAds.ShowPolicy.EveryXTime(5)
 
         adapter.add(
-                HeaderItem("Ad dialog demos"),
-                DemoItem("Banner dialog", "Shows a simple dialog with a banner - can be closed after 10s") {
-                    DialogAds(
-                            100,
-                            "Ad Banner Dialog".asText(),
-                            info = "This dialog will not be shown if you buy the pro version!".asText(),
-                            appId = appId.asText(),
-                            bannerSetup = DialogAds.BannerSetup(
-                                    emptyAdId.asText() // this should be the banner ad id in a real app
-                            ),
-                            testSetup = TEST_SETUP,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this, policy)
-                },
-                DemoItem("Reward dialog", "Shows a simple dialog with a button to show a rewarded ad - can be closed after 10s in case the ad can not be loaded") {
-                    DialogAds(
-                            101,
-                            "Ad Reward Dialog".asText(),
-                            info = "This dialog will not be shown if you buy the pro version!".asText(),
-                            appId = appId.asText(),
-                            bigAdSetup = DialogAds.BigAdSetup(
-                                    emptyAdId.asText(), // this should be the reward ad id in a real app
-                                    "Show me the ad".asText(),
-                                    DialogAds.BigAdType.Reward
-                            ),
-                            testSetup = TEST_SETUP,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this, policy)
-                },
-                DemoItem("Interstitial dialog", "Shows a simple dialog with a button to show an interstitial ad - can be closed after 10s in case the ad can not be loaded") {
-                    DialogAds(
-                            102,
-                            "Ad Interstitial Dialog".asText(),
-                            info = "This dialog will not be shown if you buy the pro version!".asText(),
-                            appId = appId.asText(),
-                            bigAdSetup = DialogAds.BigAdSetup(
-                                    emptyAdId.asText(), // this should be the interstitial ad id in a real app
-                                    "Show me the ad".asText(),
-                                    DialogAds.BigAdType.Interstitial
-                            ),
-                            testSetup = TEST_SETUP,
-                            style = getStyleFromCheckbox()
-                    )
-                            .create()
-                            .show(this, policy)
-                }
+            HeaderItem("Ad dialog demos"),
+            DemoItem(
+                "Banner dialog",
+                "Shows a simple dialog with a banner - can be closed after 10s"
+            ) {
+                DialogAds(
+                    100,
+                    "Ad Banner Dialog".asText(),
+                    info = "This dialog will not be shown if you buy the pro version!".asText(),
+                    appId = appId.asText(),
+                    bannerSetup = DialogAds.BannerSetup(
+                        emptyAdId.asText() // this should be the banner ad id in a real app
+                    ),
+                    testSetup = TEST_SETUP,
+                    style = getStyleFromCheckbox()
+                )
+                    // Import: Use the show method with a policy for this dialog!!!
+                    .show(this, policy)
+            },
+            DemoItem(
+                "Reward dialog",
+                "Shows a simple dialog with a button to show a rewarded ad - can be closed after 10s in case the ad can not be loaded"
+            ) {
+                DialogAds(
+                    101,
+                    "Ad Reward Dialog".asText(),
+                    info = "This dialog will not be shown if you buy the pro version!".asText(),
+                    appId = appId.asText(),
+                    bigAdSetup = DialogAds.BigAdSetup(
+                        emptyAdId.asText(), // this should be the reward ad id in a real app
+                        "Show me the ad".asText(),
+                        DialogAds.BigAdType.Reward
+                    ),
+                    testSetup = TEST_SETUP,
+                    style = getStyleFromCheckbox()
+                )
+                    // Import: Use the show method with a policy for this dialog!!!
+                    .show(this, policy)
+            },
+            DemoItem(
+                "Interstitial dialog",
+                "Shows a simple dialog with a button to show an interstitial ad - can be closed after 10s in case the ad can not be loaded"
+            ) {
+                DialogAds(
+                    102,
+                    "Ad Interstitial Dialog".asText(),
+                    info = "This dialog will not be shown if you buy the pro version!".asText(),
+                    appId = appId.asText(),
+                    bigAdSetup = DialogAds.BigAdSetup(
+                        emptyAdId.asText(), // this should be the interstitial ad id in a real app
+                        "Show me the ad".asText(),
+                        DialogAds.BigAdType.Interstitial
+                    ),
+                    testSetup = TEST_SETUP,
+                    style = getStyleFromCheckbox()
+                )
+                    // Import: Use the show method with a policy for this dialog!!!
+                    .show(this, policy)
+            }
         )
 
 //

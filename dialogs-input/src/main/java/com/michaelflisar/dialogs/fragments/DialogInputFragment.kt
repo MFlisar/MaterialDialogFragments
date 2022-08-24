@@ -17,7 +17,7 @@ import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.michaelflisar.dialogs.*
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
-import com.michaelflisar.dialogs.events.DialogInputEvent
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
 import com.michaelflisar.dialogs.input.R
 import com.michaelflisar.dialogs.setups.DialogInput
 import com.michaelflisar.dialogs.utils.KeyboardUtils
@@ -47,11 +47,11 @@ class DialogInputFragment : MaterialDialogFragment<DialogInput>() {
         if (savedInstanceState != null) {
             inputTexts = savedInstanceState.getStringArrayList("inputTexts")!!
         } else {
-            inputTexts.addAll(inputFields.map { it.initialText?.get(activity!!) ?: "" })
+            inputTexts.addAll(inputFields.map { it.initialText?.get(requireActivity()) ?: "" })
         }
 
         // create dialog with correct style, title and cancelable flags
-        val dialog = setup.createMaterialDialog(activity!!, this)
+        val dialog = setup.createMaterialDialog(requireActivity(), this)
 
         if (inputTexts.size == 1) {
 
@@ -60,67 +60,65 @@ class DialogInputFragment : MaterialDialogFragment<DialogInput>() {
             }
 
             dialog
-                    .input(
-                            waitForPositiveButton = false,
-                            allowEmpty = inputFields[0].allowEmptyText,
-                            hint = inputFields[0].hint?.get(activity!!) ?: "",
-                            prefill = inputTexts[0],
-                            inputType = inputFields[0].inputType
-                    ) { materialDialog: MaterialDialog, charSequence: CharSequence ->
-                        inputTexts[0] = charSequence.toString()
-                        val valid = inputFields[0].allowEmptyText || inputTexts[0].isNotEmpty()
-                        materialDialog.setActionButtonEnabled(WhichButton.POSITIVE, valid)
-                    }
-                    .positiveButton(setup) {
-                        finishAndSendEvent(it)
-                    }
+                .input(
+                    waitForPositiveButton = false,
+                    allowEmpty = inputFields[0].allowEmptyText,
+                    hint = inputFields[0].hint?.get(requireActivity()) ?: "",
+                    prefill = inputTexts[0],
+                    inputType = inputFields[0].inputType
+                ) { materialDialog: MaterialDialog, charSequence: CharSequence ->
+                    inputTexts[0] = charSequence.toString()
+                    val valid = inputFields[0].allowEmptyText || inputTexts[0].isNotEmpty()
+                    materialDialog.setActionButtonEnabled(WhichButton.POSITIVE, valid)
+                }
+                .positiveButton(setup) {
+                    finishAndSendEvent(it)
+                }
         } else {
             // TODO: replace layout with RecyclerView + Items to support any time of items
             dialog
-                    .customView(R.layout.dialog_multi_input, scrollable = true)
-                    .positiveButton(setup) {
-                        val customView = it.getCustomView()
-                        val editText1: EditText = customView.findViewById(R.id.etText1)
-                        val editText2: EditText = customView.findViewById(R.id.etText2)
-                        editText1.inputType = inputFields[0].inputType
-                        editText1.inputType = inputFields[1].inputType
-                        inputTexts[0] = editText1.text.toString()
-                        inputTexts[1] = editText2.text.toString()
-                        finishAndSendEvent(it)
-                    }
+                .customView(R.layout.dialog_multi_input, scrollable = true)
+                .positiveButton(setup) {
+                    val customView = it.getCustomView()
+                    val editText1: EditText = customView.findViewById(R.id.etText1)
+                    val editText2: EditText = customView.findViewById(R.id.etText2)
+                    editText1.inputType = inputFields[0].inputType
+                    editText1.inputType = inputFields[1].inputType
+                    inputTexts[0] = editText1.text.toString()
+                    inputTexts[1] = editText2.text.toString()
+                    finishAndSendEvent(it)
+                }
         }
 
         dialog
-                .noAutoDismiss()
-                .neutralButton(setup) {
-                    when (setup.neutralButtonMode) {
-                        DialogInput.NeutralButtonMode.SendEvent -> {
-                            sendEvent(
-                                    DialogInputEvent(
-                                            setup,
-                                            WhichButton.NEUTRAL.ordinal,
-                                            null
-                                    )
+            .noAutoDismiss()
+            .neutralButton(setup) {
+                when (setup.neutralButtonMode) {
+                    DialogInput.NeutralButtonMode.SendEvent -> {
+                        sendEvent(
+                            DialogInput.Event.Empty(
+                                setup,
+                                MaterialDialogButton.Neutral
                             )
-                            dismiss()
-                        }
-                        DialogInput.NeutralButtonMode.InsertText -> {
-                            setup.textToInsertOnNeutralButtonClick?.get(activity!!)?.let {
-                                dialog.getInputField().append(it)
-                            }
+                        )
+                        dismiss()
+                    }
+                    DialogInput.NeutralButtonMode.InsertText -> {
+                        setup.textToInsertOnNeutralButtonClick?.get(requireActivity())?.let {
+                            dialog.getInputField().append(it)
                         }
                     }
                 }
-                .negativeButton(setup) {
-                    sendEvent(
-                            DialogInputEvent(
-                                    setup,
-                                    WhichButton.NEGATIVE.ordinal,
-                                    null
-                            )
+            }
+            .negativeButton(setup) {
+                sendEvent(
+                    DialogInput.Event.Empty(
+                        setup,
+                        MaterialDialogButton.Negative
                     )
-                    dismiss()
-                }
+                )
+                dismiss()
+            }
 
         val editTexts = ArrayList<EditText>()
         val textViews = ArrayList<TextView?>()
@@ -154,15 +152,25 @@ class DialogInputFragment : MaterialDialogFragment<DialogInput>() {
             textViews.add(tvText2)
 
             if (!inputFields[0].allowEmptyText || !inputFields[1].allowEmptyText) {
-                fun shouldPositiveButtonBeEnabled() = (inputFields[0].allowEmptyText || inputTexts[0].length > 0) && (inputFields[1].allowEmptyText || inputTexts[1].length > 0)
-                dialog.getActionButton(WhichButton.POSITIVE).isEnabled = shouldPositiveButtonBeEnabled()
+                fun shouldPositiveButtonBeEnabled() =
+                    (inputFields[0].allowEmptyText || inputTexts[0].length > 0) && (inputFields[1].allowEmptyText || inputTexts[1].length > 0)
+                dialog.getActionButton(WhichButton.POSITIVE).isEnabled =
+                    shouldPositiveButtonBeEnabled()
                 for (i in 0 until editTexts.size) {
                     editTexts[i].addTextChangedListener(object : TextWatcher {
-                        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+                        override fun beforeTextChanged(
+                            p0: CharSequence?,
+                            p1: Int,
+                            p2: Int,
+                            p3: Int
+                        ) {
+                        }
+
                         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                         override fun afterTextChanged(s: Editable?) {
                             inputTexts[i] = s.toString()
-                            dialog.getActionButton(WhichButton.POSITIVE).isEnabled = shouldPositiveButtonBeEnabled()
+                            dialog.getActionButton(WhichButton.POSITIVE).isEnabled =
+                                shouldPositiveButtonBeEnabled()
                         }
                     })
                 }
@@ -171,8 +179,8 @@ class DialogInputFragment : MaterialDialogFragment<DialogInput>() {
             for (i in 0 until Math.max(inputTexts.size, 2)) {
                 if (i < inputTexts.size) {
                     val inputText = inputTexts[i]
-                    val label = inputFields[i].label?.get(activity!!)
-                    val hint = inputFields[i].hint?.get(activity!!)
+                    val label = inputFields[i].label?.get(requireActivity())
+                    val hint = inputFields[i].hint?.get(requireActivity())
                     if (label?.length ?: 0 > 0) {
                         textViews[i]!!.text = label
                         textViews[i]!!.visibility = View.VISIBLE
@@ -208,11 +216,11 @@ class DialogInputFragment : MaterialDialogFragment<DialogInput>() {
 
     private fun finishAndSendEvent(materialDialog: MaterialDialog) {
         sendEvent(
-                DialogInputEvent(
-                        setup,
-                        WhichButton.POSITIVE.ordinal,
-                        DialogInputEvent.Data(inputTexts)
-                )
+            DialogInput.Event.Data(
+                setup,
+                MaterialDialogButton.Positive,
+                inputTexts
+            )
         )
         if (activity != null) {
             KeyboardUtils.hideKeyboardWithZeroFlag(activity, materialDialog.currentFocus)

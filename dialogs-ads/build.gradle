@@ -53,6 +53,7 @@ dependencies {
     // ------------------------
 
     api "com.google.android.gms:play-services-ads:$rootProject.versions.playServices"
+    api "com.google.android.gms:play-services-ads:$rootProject.versions.playServices"
 
     // ------------------------
     // Library

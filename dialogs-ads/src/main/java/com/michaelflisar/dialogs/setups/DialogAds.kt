@@ -3,6 +3,8 @@ package com.michaelflisar.dialogs.setups
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.michaelflisar.dialogs.Constants
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.Utils
@@ -10,34 +12,51 @@ import com.michaelflisar.dialogs.ads.BuildConfig
 import com.michaelflisar.dialogs.ads.R
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.text.Text
+import com.michaelflisar.dialogs.classes.MaterialDialogEventImpl
+import com.michaelflisar.dialogs.classes.SendResultType
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
+import com.michaelflisar.dialogs.events.MaterialDialogEvent
 import com.michaelflisar.dialogs.fragments.DialogAdsFragment
+import com.michaelflisar.dialogs.show
+import com.michaelflisar.text.Text
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
 class DialogAds(
-        // base setup
-        override val id: Int,
-        override val title: Text? = null,
-        override val posButton: Text = Text.Resource(R.string.mdf_close_dialog),
-        override val negButton: Text? = null,
-        override val neutrButton: Text? = null,
-        override val cancelable: Boolean = false,
-        override val extra: Bundle? = null,
-        override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
-        override val style: DialogStyle = DialogStyle.Dialog,
+    // base setup
+    override val id: Int,
+    override val title: Text? = null,
+    override val posButton: Text = Text.Resource(R.string.mdf_close_dialog),
+    override val negButton: Text? = null,
+    override val neutrButton: Text? = null,
+    override val cancelable: Boolean = false,
+    override val extra: Bundle? = null,
+    override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
+    override val style: DialogStyle = DialogStyle.Dialog,
 
-        // special setup
-        val info: Text,
-        val appId: Text,
-        val bannerSetup: BannerSetup? = null,
-        val bigAdSetup: BigAdSetup? = null,
-        val testSetup: TestSetup? = null,
-        val timeToShowDialogAfterError: Int = 10
+    // special setup
+    val info: Text,
+    val appId: Text,
+    val bannerSetup: BannerSetup? = null,
+    val bigAdSetup: BigAdSetup? = null,
+    val testSetup: TestSetup? = null,
+    val timeToShowDialogAfterError: Int = 10
 ) : BaseDialogSetup {
 
     override fun create() = DialogAdsFragment.create(this)
+
+    class Event(setup: BaseDialogSetup, button: MaterialDialogButton?, val data: Data) :
+        MaterialDialogEvent by MaterialDialogEventImpl(setup, button) {
+        sealed class Data {
+            class RewardReceived(val amount: Int) : Data()
+            object InterstitialShown : Data()
+            class ClosedByUser(
+                val errorLoadingBanner: Exception?,
+                val errorLoadingBigAd: Exception?
+            ) : Data()
+        }
+    }
 
     internal fun getAdId(context: Context, type: AdType): String {
         return when (type) {
@@ -48,15 +67,17 @@ class DialogAds(
                 testId ?: bannerSetup!!.adIdBanner.get(context)
             }
             AdType.Interstitial -> {
-                val testId: String? = if (BuildConfig.DEBUG && testSetup?.useGooglesTestIds == true) {
-                    Constants.TEST_ID_INTERSTITIAL
-                } else null
+                val testId: String? =
+                    if (BuildConfig.DEBUG && testSetup?.useGooglesTestIds == true) {
+                        Constants.TEST_ID_INTERSTITIAL
+                    } else null
                 testId ?: bigAdSetup!!.adId.get(context)
             }
             AdType.Reward -> {
-                val testId: String? = if (BuildConfig.DEBUG && testSetup?.useGooglesTestIds == true) {
-                    Constants.TEST_ID_REWARDED_VIDEO
-                } else null
+                val testId: String? =
+                    if (BuildConfig.DEBUG && testSetup?.useGooglesTestIds == true) {
+                        Constants.TEST_ID_REWARDED_VIDEO
+                    } else null
                 testId ?: bigAdSetup!!.adId.get(context)
             }
         }
@@ -78,21 +99,22 @@ class DialogAds(
 
     @Parcelize
     class BigAdSetup(
-            val adId: Text,
-            val showAdButtonText: Text,
-            val type: BigAdType
+        val adId: Text,
+        val showAdButtonText: Text,
+        val type: BigAdType
     ) : Parcelable
 
     @Parcelize
     class TestSetup(
-            val addDeviceIdAsTestDeviceId: Boolean = true,
-            val useGooglesTestIds: Boolean = true,
-            val testDeviceIds: List<Text> = emptyList()
+        val addDeviceIdAsTestDeviceId: Boolean = true,
+        val useGooglesTestIds: Boolean = true,
+        val testDeviceIds: List<Text> = emptyList()
 
     ) : Parcelable {
 
         companion object {
-            fun getDefaultByBuildType(debugBuild: Boolean): TestSetup? = if (debugBuild) TestSetup() else null
+            fun getDefaultByBuildType(debugBuild: Boolean): TestSetup? =
+                if (debugBuild) TestSetup() else null
         }
     }
 
@@ -115,8 +137,8 @@ class DialogAds(
                     return true
                 } else {
                     if (last.get(Calendar.YEAR) < now.get(Calendar.YEAR) ||
-                            last.get(Calendar.MONTH) < now.get(Calendar.MONTH) ||
-                            last.get(Calendar.DAY_OF_MONTH) < now.get(Calendar.DAY_OF_MONTH)
+                        last.get(Calendar.MONTH) < now.get(Calendar.MONTH) ||
+                        last.get(Calendar.DAY_OF_MONTH) < now.get(Calendar.DAY_OF_MONTH)
                     ) {
                         Utils.saveLastShowPolicyDate(context, now, preference)
                         DialogSetup.logger?.debug("Showing ad dialog because of policy ${this::class.java.simpleName}!")
@@ -144,6 +166,30 @@ class DialogAds(
                     return true
                 }
             }
+        }
+    }
+
+    fun show(
+        activity: FragmentActivity,
+        policy: ShowPolicy,
+        customSendResultType: SendResultType? = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
+        tag: String = this::class.java.name,
+        allowStateLoss: Boolean = false
+    ) {
+        if (policy.shouldShow(activity)) {
+            show(activity, customSendResultType, tag, allowStateLoss)
+        }
+    }
+
+    fun show(
+        parent: Fragment,
+        policy: ShowPolicy,
+        customSendResultType: SendResultType? = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
+        tag: String = this::class.java.name,
+        allowStateLoss: Boolean = false
+    ) {
+        if (policy.shouldShow(parent.requireContext())) {
+            show(parent, customSendResultType, tag, allowStateLoss)
         }
     }
 }

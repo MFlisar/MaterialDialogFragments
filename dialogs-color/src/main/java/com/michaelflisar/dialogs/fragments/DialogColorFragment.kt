@@ -1,19 +1,16 @@
 package com.michaelflisar.dialogs.fragments
 
 import android.app.Dialog
-import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.Outline
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.Toast
-import androidx.annotation.DimenRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +30,7 @@ import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.classes.GroupedColor
 import com.michaelflisar.dialogs.color.R
 import com.michaelflisar.dialogs.color.databinding.DialogColorBinding
-import com.michaelflisar.dialogs.events.DialogColorEvent
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
 import com.michaelflisar.dialogs.setups.DialogColor
 import com.michaelflisar.dialogs.utils.ColorUtil
 import com.michaelflisar.dialogs.utils.RecyclerViewUtil
@@ -64,13 +61,21 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
 
         if (savedInstanceState != null) {
             selectedPage = savedInstanceState.getInt("selectedPage")
-            selectedColorPickerGroup = ColorDefinitions.COLORS[savedInstanceState.getInt("selectedColorPickerGroup")]
-            selectedColorPickerColor = "selectedColorPickerColor".let { if (savedInstanceState.containsKey(it)) savedInstanceState.getInt(it) else null }
-            selectedColorPickerTransparency = savedInstanceState.getInt("selectedColorPickerTransparency")
-            selectedCustomColor = "selectedCustomColor".let { if (savedInstanceState.containsKey(it)) savedInstanceState.getInt(it) else null }
+            selectedColorPickerGroup =
+                ColorDefinitions.COLORS[savedInstanceState.getInt("selectedColorPickerGroup")]
+            selectedColorPickerColor = "selectedColorPickerColor".let {
+                if (savedInstanceState.containsKey(it)) savedInstanceState.getInt(it) else null
+            }
+            selectedColorPickerTransparency =
+                savedInstanceState.getInt("selectedColorPickerTransparency")
+            selectedCustomColor = "selectedCustomColor".let {
+                if (savedInstanceState.containsKey(it)) savedInstanceState.getInt(it) else null
+            }
         } else {
-            selectedColorPickerGroup = ColorUtil.getNearestColorGroup(requireActivity(), setup.color)
-            selectedColorPickerColor = selectedColorPickerGroup.findMatchingColor(requireContext(), setup.color)
+            selectedColorPickerGroup =
+                ColorUtil.getNearestColorGroup(requireActivity(), setup.color)
+            selectedColorPickerColor =
+                selectedColorPickerGroup.findMatchingColor(requireContext(), setup.color)
             selectedColorPickerTransparency = Color.alpha(setup.color)
             selectedCustomColor = setup.color
         }
@@ -79,27 +84,37 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
         val dialog = setup.createMaterialDialog(requireActivity(), this, false)
 
         dialog.customView(
-                R.layout.dialog_color,
-                scrollable = false,
-                noVerticalPadding = true
+            R.layout.dialog_color,
+            scrollable = false,
+            noVerticalPadding = true
         )
-                .positiveButton(R.string.color_dialog_select) {
-                    val selectedColor = getSelectedColor()
-                    if (selectedColor == null) {
-                        Toast.makeText(requireActivity(), R.string.color_dialog_nothing_selected, Toast.LENGTH_SHORT).show()
-                        return@positiveButton
-                    }
-                    sendEvent(DialogColorEvent(setup, WhichButton.POSITIVE.ordinal, DialogColorEvent.Data(selectedColor)))
-                    dismiss()
+            .positiveButton(R.string.color_dialog_select) {
+                val selectedColor = getSelectedColor()
+                if (selectedColor == null) {
+                    Toast.makeText(
+                        requireActivity(),
+                        R.string.color_dialog_nothing_selected,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@positiveButton
                 }
-                .noAutoDismiss()
-                .negativeButton(setup) {
-                    sendEvent(DialogColorEvent(setup, WhichButton.NEGATIVE.ordinal, null))
-                    dismiss()
-                }
-                .neutralButton(setup) {
-                    sendEvent(DialogColorEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-                }
+                sendEvent(
+                    DialogColor.Event.Data(
+                        setup,
+                        MaterialDialogButton.Positive,
+                        selectedColor
+                    )
+                )
+                dismiss()
+            }
+            .noAutoDismiss()
+            .negativeButton(setup) {
+                sendEvent(DialogColor.Event.Empty(setup, MaterialDialogButton.Negative))
+                dismiss()
+            }
+            .neutralButton(setup) {
+                sendEvent(DialogColor.Event.Empty(setup, MaterialDialogButton.Neutral))
+            }
 
         val view = dialog.getCustomView()
         binding = DialogColorBinding.bind(view)
@@ -109,7 +124,10 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
             getItem(0).apply {
                 setIcon(R.drawable.ic_baseline_sync_alt_24)
                 setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                icon?.setColorFilter(if (DialogSetup.isUsingDarkTheme(view.context)) Color.WHITE else Color.BLACK, PorterDuff.Mode.SRC_ATOP)
+                icon?.setColorFilter(
+                    if (DialogSetup.isUsingDarkTheme(view.context)) Color.WHITE else Color.BLACK,
+                    PorterDuff.Mode.SRC_ATOP
+                )
             }
         }
         binding.toolbar.setOnMenuItemClickListener {
@@ -132,23 +150,30 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
         return dialog
     }
 
-    private fun updateSelectedColorDependencies(dlg: MaterialDialog?, pickerAlphaChanged: Boolean = false) {
+    private fun updateSelectedColorDependencies(
+        dlg: MaterialDialog?,
+        pickerAlphaChanged: Boolean = false
+    ) {
         val selectedColor = getSelectedColor()
-                ?: selectedColorPickerGroup.getMainColor(requireContext())
+            ?: selectedColorPickerGroup.getMainColor(requireContext())
         val textColor = ColorUtil.getBestTextColor(selectedColor)
 
 //        binding.tabs.setBackgroundColor(selectedColor)
 //        binding.tabs.tabTextColors = ColorStateList.valueOf(textColor)
 //        binding.tabs.setSelectedTabIndicatorColor(textColor)
 
-        binding.tvTransparancy.text = "${(100 * selectedColorPickerTransparency / 255f).roundToInt()}%"
+        binding.tvTransparancy.text =
+            "${(100 * selectedColorPickerTransparency / 255f).roundToInt()}%"
         if (pickerAlphaChanged) {
             colorAdapter.setTransparency(selectedColorPickerTransparency)
         }
 
         // TODO: Problem: this only works for dialogs, not for bottom sheets!
         (dlg ?: dialog as MaterialDialog).onShow {
-            val radius = it.cornerRadius ?: MDUtil.resolveDimen(requireContext(), attr = R.attr.md_corner_radius) {
+            val radius = it.cornerRadius ?: MDUtil.resolveDimen(
+                requireContext(),
+                attr = R.attr.md_corner_radius
+            ) {
                 resources.getDimension(R.dimen.md_dialog_default_corner_radius)
             }
             if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -169,7 +194,10 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt("selectedColorPickerGroup", ColorDefinitions.COLORS.indexOf(selectedColorPickerGroup))
+        outState.putInt(
+            "selectedColorPickerGroup",
+            ColorDefinitions.COLORS.indexOf(selectedColorPickerGroup)
+        )
         outState.putInt("selectedPage", selectedPage)
         selectedColorPickerColor?.let { outState.putInt("selectedColorPickerColor", it) }
         outState.putInt("selectedColorPickerTransparency", selectedColorPickerTransparency)
@@ -182,8 +210,8 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
 
     private fun initViewPager() {
         val adapter = ColorPageAdapter(
-                listOf(binding.page1, binding.page2),
-                listOf(R.string.color_dialog_presets, R.string.color_dialog_custom)
+            listOf(binding.page1, binding.page2),
+            listOf(R.string.color_dialog_presets, R.string.color_dialog_custom)
 
         )
         binding.pager.adapter = adapter
@@ -209,7 +237,15 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
         val isLandscape = isLandscape()
 
         // 1) RecyclerViews
-        colorAdapter = ColorAdapter(isLandscape, selectedColorPickerGroup, selectedColorPickerTransparency, selectedColorPickerGroup.findMatchingColorIndex(requireContext(), selectedColorPickerColor)) { adapter, item, color, pos ->
+        colorAdapter = ColorAdapter(
+            isLandscape,
+            selectedColorPickerGroup,
+            selectedColorPickerTransparency,
+            selectedColorPickerGroup.findMatchingColorIndex(
+                requireContext(),
+                selectedColorPickerColor
+            )
+        ) { adapter, item, color, pos ->
             selectedColorPickerColor = color
             colorAdapter.updateSelection(pos)
             updateSelectedColorDependencies(null)
@@ -221,7 +257,10 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
                 }
             }
         }
-        mainColorAdapter = MainColorAdapter(ColorDefinitions.COLORS, getSelectedGroupIndex()) { adapter, item, color, pos ->
+        mainColorAdapter = MainColorAdapter(
+            ColorDefinitions.COLORS,
+            getSelectedGroupIndex()
+        ) { adapter, item, color, pos ->
             // nicht hier speichern, das macht den Dialog etwas langsam weil das schreiben die UI blockiert
             // => nur wert updaten und später speichern
             if (color != selectedColorPickerGroup) {
@@ -235,12 +274,15 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
             }
         }
 
-        binding.tvGroupColorHeader.text = selectedColorPickerGroup.getHeaderDescription(requireActivity())
+        binding.tvGroupColorHeader.text =
+            selectedColorPickerGroup.getHeaderDescription(requireActivity())
 
         val columns = if (isLandscape) 7 else 4
-        binding.rvMaterialColors.layoutManager = GridLayoutManager(activity, columns, RecyclerView.VERTICAL, false)
+        binding.rvMaterialColors.layoutManager =
+            GridLayoutManager(activity, columns, RecyclerView.VERTICAL, false)
         binding.rvMaterialColors.adapter = colorAdapter
-        binding.rvMaterialMainColors.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        binding.rvMaterialMainColors.layoutManager =
+            LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         binding.rvMaterialMainColors.adapter = mainColorAdapter
 
         ensureMainColorIsVisible()
@@ -260,7 +302,8 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
                 if (fromUser) {
                     selectedColorPickerTransparency = (255f * value).roundToInt()
                     selectedColorPickerColor?.let {
-                        selectedColorPickerColor = ColorUtil.adjustAlpha(it, selectedColorPickerTransparency)
+                        selectedColorPickerColor =
+                            ColorUtil.adjustAlpha(it, selectedColorPickerTransparency)
                     }
                     updateSelectedColorDependencies(null, true)
                 }
@@ -292,7 +335,11 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
 
     private fun ensureMainColorIsVisible() {
         val scrollToMainColor = {
-            if (!RecyclerViewUtil.isViewVisible(binding.rvMaterialMainColors, getSelectedGroupIndex()))
+            if (!RecyclerViewUtil.isViewVisible(
+                    binding.rvMaterialMainColors,
+                    getSelectedGroupIndex()
+                )
+            )
                 binding.rvMaterialMainColors.scrollToPosition(getSelectedGroupIndex())
         }
 
@@ -322,8 +369,8 @@ class DialogColorFragment : MaterialDialogFragment<DialogColor>() {
     // -----------------
 
     internal inner class ColorPageAdapter(
-            private val views: List<View>,
-            private val titles: List<Int>
+        private val views: List<View>,
+        private val titles: List<Int>
     ) : PagerAdapter() {
 
         override fun instantiateItem(collection: View, position: Int): Any {

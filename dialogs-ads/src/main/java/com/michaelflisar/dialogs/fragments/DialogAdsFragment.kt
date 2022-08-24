@@ -6,8 +6,6 @@ import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
 import com.afollestad.materialdialogs.customview.customView
@@ -20,8 +18,7 @@ import com.michaelflisar.dialogs.*
 import com.michaelflisar.dialogs.ads.R
 import com.michaelflisar.dialogs.ads.databinding.DialogAdsBinding
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
-import com.michaelflisar.dialogs.classes.SendResultType
-import com.michaelflisar.dialogs.events.DialogAdsEvent
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
 import com.michaelflisar.dialogs.setups.DialogAds
 
 class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
@@ -54,7 +51,7 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
 
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        MobileAds.initialize(activity!!, setup.appId.get(activity!!))
+        MobileAds.initialize(requireActivity(), setup.appId.get(requireActivity()))
 
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey("timeLeft")) {
@@ -67,26 +64,37 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
         }
 
         // create dialog with correct style, title and cancelable flags
-        val dialog = setup.createMaterialDialog(activity!!, this)
+        val dialog = setup.createMaterialDialog(requireActivity(), this)
 
         dialog
-                .customView(
-                        R.layout.dialog_ads,
-                        horizontalPadding = true
+            .customView(
+                R.layout.dialog_ads,
+                horizontalPadding = true
+            )
+            .positiveButton(setup) {
+                finishDialog(
+                    WhichButton.POSITIVE,
+                    DialogAds.Event.Data.ClosedByUser(errorBanner, errorBigAd)
                 )
-                .positiveButton(setup) {
-                    finishDialog(WhichButton.POSITIVE, DialogAdsEvent.Data.ClosedByUser(errorBanner, errorBigAd))
-                }
-                .negativeButton(setup) {
-                    finishDialog(WhichButton.NEGATIVE, DialogAdsEvent.Data.ClosedByUser(errorBanner, errorBigAd))
-                }
-                .neutralButton(setup) {
-                    finishDialog(WhichButton.NEUTRAL, DialogAdsEvent.Data.ClosedByUser(errorBanner, errorBigAd))
-                }
+            }
+            .negativeButton(setup) {
+                finishDialog(
+                    WhichButton.NEGATIVE,
+                    DialogAds.Event.Data.ClosedByUser(errorBanner, errorBigAd)
+                )
+            }
+            .neutralButton(setup) {
+                finishDialog(
+                    WhichButton.NEUTRAL,
+                    DialogAds.Event.Data.ClosedByUser(errorBanner, errorBigAd)
+                )
+            }
 
         posButton = dialog.getActionButton(WhichButton.POSITIVE)
-        negButton = if (setup.negButton != null) dialog.getActionButton(WhichButton.NEGATIVE) else null
-        neutrButton = if (setup.neutrButton != null) dialog.getActionButton(WhichButton.NEUTRAL) else null
+        negButton =
+            if (setup.negButton != null) dialog.getActionButton(WhichButton.NEGATIVE) else null
+        neutrButton =
+            if (setup.neutrButton != null) dialog.getActionButton(WhichButton.NEUTRAL) else null
 
         if (timeLeft > 0) {
             posButton!!.isEnabled = false
@@ -94,35 +102,35 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
             neutrButton?.isEnabled = false
         }
 
-        binding = DialogAdsBinding.bind(dialog.getCustomView())!!
+        binding = DialogAdsBinding.bind(dialog.getCustomView())
         onBindingReady()
         return dialog
     }
 
     override fun onResume() {
-        rewardedVideoAd?.resume(activity!!)
+        rewardedVideoAd?.resume(requireActivity())
         super.onResume()
     }
 
     override fun onPause() {
-        rewardedVideoAd?.pause(activity!!)
+        rewardedVideoAd?.pause(requireActivity())
         super.onPause()
     }
 
     override fun onDestroy() {
-        rewardedVideoAd?.destroy(activity!!)
+        rewardedVideoAd?.destroy(requireActivity())
         super.onDestroy()
     }
 
     private fun onBindingReady() {
 
-        binding.tvInfo.text = setup.info.get(activity!!)
+        binding.tvInfo.text = setup.info.get(requireActivity())
         binding.btShow.isEnabled = false
 
         // set up AdView
         if (setup.bannerSetup != null) {
-            val adId = setup.getAdId(activity!!, DialogAds.AdType.Banner)
-            val adView = AdView(activity!!).apply {
+            val adId = setup.getAdId(requireActivity(), DialogAds.AdType.Banner)
+            val adView = AdView(requireActivity()).apply {
                 adSize = AdSize.BANNER
                 adUnitId = adId
             }
@@ -135,22 +143,26 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
 
         // set up interstitial/reward button
         if (setup.bigAdSetup != null) {
-            binding.btShow.text = setup.bigAdSetup!!.showAdButtonText.get(activity!!)
+            binding.btShow.text = setup.bigAdSetup!!.showAdButtonText.get(requireActivity())
             binding.btShow.setOnClickListener {
                 showBigAd()
             }
             when (setup.bigAdSetup!!.type) {
                 DialogAds.BigAdType.Interstitial -> {
-                    val adId = setup.getAdId(activity!!, DialogAds.AdType.Interstitial)
-                    interstitialAd = InterstitialAd(activity!!)
+                    val adId = setup.getAdId(requireActivity(), DialogAds.AdType.Interstitial)
+                    interstitialAd = InterstitialAd(requireActivity())
                     interstitialAd?.adUnitId = adId
                     interstitialAd?.adListener = createAdListener(DialogAds.AdType.Interstitial)
                     interstitialAd?.loadAd(createAdRequest())
                 }
                 DialogAds.BigAdType.Reward -> {
-                    val adId = setup.getAdId(activity!!, DialogAds.AdType.Reward)
-                    rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(activity!!)
-                    rewardedVideoAd?.setRewardedVideoAdListener(createRewardedVideoAdListener(DialogAds.AdType.Reward))
+                    val adId = setup.getAdId(requireActivity(), DialogAds.AdType.Reward)
+                    rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(requireActivity())
+                    rewardedVideoAd?.setRewardedVideoAdListener(
+                        createRewardedVideoAdListener(
+                            DialogAds.AdType.Reward
+                        )
+                    )
                     rewardedVideoAd?.loadAd(adId, createAdRequest())
                 }
             }
@@ -163,12 +175,12 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
         val adRequest = AdRequest.Builder()
         if (setup.testSetup != null) {
             if (setup.testSetup!!.addDeviceIdAsTestDeviceId) {
-                Utils.getDeviceId(activity!!)?.let {
+                Utils.getDeviceId(requireActivity())?.let {
                     adRequest.addTestDevice(it)
                 }
             }
             setup.testSetup?.testDeviceIds?.forEach {
-                adRequest.addTestDevice(it.get(activity!!))
+                adRequest.addTestDevice(it.get(requireActivity()))
             }
         }
         return adRequest.build()
@@ -178,7 +190,7 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
         return object : AdListener() {
             override fun onAdClosed() {
                 if (type == DialogAds.AdType.Interstitial) {
-                    finishDialog(null, DialogAdsEvent.Data.InterstitialShown)
+                    finishDialog(null, DialogAds.Event.Data.InterstitialShown)
                 }
             }
 
@@ -203,7 +215,7 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
     private fun createRewardedVideoAdListener(type: DialogAds.AdType): RewardedVideoAdListener {
         return object : RewardedVideoAdListener {
             override fun onRewardedVideoAdClosed() {
-                finishDialog(null, DialogAdsEvent.Data.ClosedByUser(errorBanner, errorBigAd))
+                finishDialog(null, DialogAds.Event.Data.ClosedByUser(errorBanner, errorBigAd))
             }
 
             override fun onRewardedVideoAdLeftApplication() {
@@ -221,7 +233,7 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
 
             override fun onRewarded(reward: RewardItem?) {
                 reward?.amount?.let {
-                    finishDialog(null, DialogAdsEvent.Data.RewardReceived(it))
+                    finishDialog(null, DialogAds.Event.Data.RewardReceived(it))
                 }
             }
 
@@ -295,15 +307,18 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
         parent.addView(adView, index)
     }
 
-    private fun finishDialog(button: WhichButton?, data: DialogAdsEvent.Data) {
-        sendEvent(DialogAdsEvent(setup, button?.ordinal, data))
+    private fun finishDialog(button: WhichButton?, data: DialogAds.Event.Data) {
+        sendEvent(DialogAds.Event(setup, button?.let { MaterialDialogButton.find(it.ordinal) }, data))
         dismiss()
     }
 
     private fun onAdLoadingStatesChanged(type: DialogAds.AdType) {
         if (setup.bigAdSetup != null && type.isBigAd) {
             if (errorBigAd != null) {
-                startTimer(R.string.mdf_dialogs_info_error_ad_timeout, R.string.mdf_dialogs_info_error_ad_timeout_over)
+                startTimer(
+                    R.string.mdf_dialogs_info_error_ad_timeout,
+                    R.string.mdf_dialogs_info_error_ad_timeout_over
+                )
             } else {
                 binding.tvInfoPreparing.setText(R.string.mdf_dialogs_info_ad_ready)
                 binding.btShow.isEnabled = true
@@ -313,11 +328,14 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
             }
         } else if (setup.bigAdSetup == null && type == DialogAds.AdType.Banner) {
             if (errorBanner != null) {
-                startTimer(R.string.mdf_dialogs_info_error_ad_timeout, R.string.mdf_dialogs_info_error_ad_timeout_over)
+                startTimer(
+                    R.string.mdf_dialogs_info_error_ad_timeout,
+                    R.string.mdf_dialogs_info_error_ad_timeout_over
+                )
             } else {
                 startTimer(
-                        R.string.mdf_dialogs_info_ad_ready_banner_timeout,
-                        R.string.mdf_dialogs_info_ad_ready_banner_timeout_over
+                    R.string.mdf_dialogs_info_ad_ready_banner_timeout,
+                    R.string.mdf_dialogs_info_ad_ready_banner_timeout_over
                 )
             }
         }
@@ -354,30 +372,6 @@ class DialogAdsFragment : MaterialDialogFragment<DialogAds>() {
         super.onSaveInstanceState(outState)
         if (timeLeft > 0) {
             outState.putInt("timeLeft", timeLeft)
-        }
-    }
-
-    // additioanl show methods with policy
-
-    fun show(
-            activity: FragmentActivity,
-            policy: DialogAds.ShowPolicy,
-            customSendResultType: SendResultType? = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
-            tag: String = this::class.java.name
-    ) {
-        if (policy.shouldShow(activity)) {
-            super.show(activity, customSendResultType, tag)
-        }
-    }
-
-    fun show(
-            parent: Fragment,
-            policy: DialogAds.ShowPolicy,
-            customSendResultType: SendResultType? = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
-            tag: String = this::class.java.name
-    ) {
-        if (policy.shouldShow(parent.requireContext())) {
-            super.show(parent, customSendResultType, tag)
         }
     }
 }

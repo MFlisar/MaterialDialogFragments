@@ -4,6 +4,9 @@ import android.os.Bundle
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
+import com.michaelflisar.dialogs.classes.MaterialDialogEventImpl
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
+import com.michaelflisar.dialogs.events.MaterialDialogEvent
 import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogProgressFragment
 import com.michaelflisar.dialogs.interfaces.IProgressDialogFragment
@@ -27,6 +30,11 @@ class DialogProgress constructor(
         ) : BaseDialogSetup {
 
     override fun create() = DialogProgressFragment.create(this)
+
+    sealed class Event {
+        class Empty(setup: BaseDialogSetup, button: MaterialDialogButton?) : Event(), MaterialDialogEvent by MaterialDialogEventImpl(setup, button)
+        class Data(setup: BaseDialogSetup, button: MaterialDialogButton?, val closed: Boolean, val closeForcedByNewDialog: Boolean) : Event(), MaterialDialogEvent by MaterialDialogEventImpl(setup, button)
+    }
 
     companion object {
         private var dialog: IProgressDialogFragment? = null

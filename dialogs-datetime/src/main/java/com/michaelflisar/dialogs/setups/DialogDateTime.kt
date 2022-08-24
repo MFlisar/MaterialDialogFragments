@@ -4,6 +4,9 @@ import android.os.Bundle
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
+import com.michaelflisar.dialogs.classes.MaterialDialogEventImpl
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
+import com.michaelflisar.dialogs.events.MaterialDialogEvent
 import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogDateTimeFragment
 import kotlinx.parcelize.Parcelize
@@ -43,6 +46,11 @@ class DialogDateTime(
 ) : BaseDialogSetup {
 
     override fun create() = DialogDateTimeFragment.create(this)
+
+    sealed class Event {
+        class Empty(setup: BaseDialogSetup, button: MaterialDialogButton?) : Event(), MaterialDialogEvent by MaterialDialogEventImpl(setup, button)
+        class Data(setup: BaseDialogSetup, button: MaterialDialogButton?, val date: Calendar) : Event(), MaterialDialogEvent by MaterialDialogEventImpl(setup, button)
+    }
 
     enum class Type {
         DateOnly,

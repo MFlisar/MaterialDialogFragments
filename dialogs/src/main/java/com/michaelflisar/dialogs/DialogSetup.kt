@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import com.michaelflisar.dialogs.classes.DialogLogger
 import com.michaelflisar.dialogs.classes.SendResultType
-import com.michaelflisar.dialogs.events.BaseDialogEvent
+import com.michaelflisar.dialogs.events.MaterialDialogEvent
 
 /**
  * Created by flisar on 23.09.2016.
@@ -17,19 +17,19 @@ object DialogSetup {
      */
     var DEFAULT_SEND_RESULT_TYPE: SendResultType = SendResultType.First()
 
-    private val resultHandler: MutableList<((event: BaseDialogEvent, fragment: Fragment) -> Unit)> = ArrayList()
+    private val resultHandler: MutableList<((event: MaterialDialogEvent, fragment: Fragment) -> Unit)> = ArrayList()
 
     /**
      * provide a custom dialog result handler - it will get ALL results
      */
-    fun addResultHandler(handler: (event: BaseDialogEvent, fragment: Fragment) -> Unit) {
+    fun addResultHandler(handler: (event: MaterialDialogEvent, fragment: Fragment) -> Unit) {
         resultHandler.add(handler)
     }
 
     /**
      * remove a custom dialog result handler
      */
-    fun removeResultHandler(handler: (event: BaseDialogEvent, fragment: Fragment) -> Unit) {
+    fun removeResultHandler(handler: (event: MaterialDialogEvent, fragment: Fragment) -> Unit) {
         resultHandler.remove(handler)
     }
 
@@ -54,7 +54,7 @@ object DialogSetup {
      */
     var logger: DialogLogger? = null
 
-    internal fun sendResult(result: BaseDialogEvent, fragment: Fragment) {
+    internal fun sendResult(result: MaterialDialogEvent, fragment: Fragment) {
         resultHandler.forEach {
             it.invoke(result, fragment)
         }

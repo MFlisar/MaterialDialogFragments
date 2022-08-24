@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
+import com.michaelflisar.dialogs.classes.MaterialDialogEventImpl
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
+import com.michaelflisar.dialogs.events.MaterialDialogEvent
 import com.michaelflisar.dialogs.fragments.DialogFastAdapterFragment
 import com.michaelflisar.text.Text
 import com.mikepenz.fastadapter.IItem
@@ -14,26 +17,45 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class DialogFastAdapter<Item : IItem<*>>(
-        // base setup
-        override val id: Int,
-        val itemProvider: IItemProvider<Item>,
-        override val title: Text?,
-        override val posButton: Text = Text.Resource(android.R.string.ok),
-        override val negButton: Text? = null,
-        override val neutrButton: Text? = null,
-        override val cancelable: Boolean = true,
-        override val extra: Bundle? = null,
-        override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
-        override val style: DialogStyle = DialogStyle.Dialog,
+    // base setup
+    override val id: Int,
+    val itemProvider: IItemProvider<Item>,
+    override val title: Text?,
+    override val posButton: Text = Text.Resource(android.R.string.ok),
+    override val negButton: Text? = null,
+    override val neutrButton: Text? = null,
+    override val cancelable: Boolean = true,
+    override val extra: Bundle? = null,
+    override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
+    override val style: DialogStyle = DialogStyle.Dialog,
 
-        // special setup
-        val selectionMode: SelectionMode = SelectionMode.SingleSelect,
-        val layoutStyle: LayoutStyle = LayoutStyle.List(),
-        val info: Text? = null,
-        val infoSize: Float? = null,
-        val filterPredicate: IFilterPredicate<Item>? = null,
-        val withToolbar: Boolean = false
+    // special setup
+    val selectionMode: SelectionMode = SelectionMode.SingleSelect,
+    val layoutStyle: LayoutStyle = LayoutStyle.List(),
+    val info: Text? = null,
+    val infoSize: Float? = null,
+    val filterPredicate: IFilterPredicate<Item>? = null,
+    val withToolbar: Boolean = false
 ) : BaseDialogSetup {
+
+    sealed class Event {
+        class Empty(setup: BaseDialogSetup, button: MaterialDialogButton?) : Event(),
+            MaterialDialogEvent by MaterialDialogEventImpl(setup, button)
+
+        class Data<Item : IItem<*>>(
+            setup: BaseDialogSetup,
+            button: MaterialDialogButton?,
+            val indizes: List<Int>,
+            val items: List<Item>
+        ) : Event(), MaterialDialogEvent by MaterialDialogEventImpl(setup, button) {
+            constructor(setup: BaseDialogSetup, button: MaterialDialogButton?, index: Int, item: Item) : this(
+                setup,
+                button,
+                arrayListOf(index),
+                arrayListOf(item)
+            )
+        }
+    }
 
     sealed class LayoutStyle : Parcelable {
         abstract @RecyclerView.Orientation
@@ -42,15 +64,15 @@ class DialogFastAdapter<Item : IItem<*>>(
 
         @Parcelize
         class List(
-                @RecyclerView.Orientation override val orientation: Int = RecyclerView.VERTICAL,
-                override val reverseLayout: Boolean = false
+            @RecyclerView.Orientation override val orientation: Int = RecyclerView.VERTICAL,
+            override val reverseLayout: Boolean = false
         ) : LayoutStyle()
 
         @Parcelize
         class Grid(
-                val columns: Int,
-                @RecyclerView.Orientation override val orientation: Int = RecyclerView.VERTICAL,
-                override val reverseLayout: Boolean = false
+            val columns: Int,
+            @RecyclerView.Orientation override val orientation: Int = RecyclerView.VERTICAL,
+            override val reverseLayout: Boolean = false
         ) : LayoutStyle()
     }
 

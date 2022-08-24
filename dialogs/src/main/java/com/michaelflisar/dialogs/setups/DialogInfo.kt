@@ -5,8 +5,11 @@ import android.os.Bundle
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
-import com.michaelflisar.text.Text
+import com.michaelflisar.dialogs.classes.MaterialDialogEventImpl
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
+import com.michaelflisar.dialogs.events.MaterialDialogEvent
 import com.michaelflisar.dialogs.fragments.DialogInfoFragment
+import com.michaelflisar.text.Text
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -24,27 +27,28 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 class DialogInfo(
-        // base setup
-        override val id: Int,
-        override val title: Text?,
-        val text: Text,
-        override val posButton: Text = Text.Resource(android.R.string.ok),
-        override val negButton: Text? = null,
-        override val neutrButton: Text?  = null,
-        override val cancelable: Boolean = true,
-        override val extra: Bundle? = null,
-        override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
-        override val style: DialogStyle = DialogStyle.Dialog,
+    // base setup
+    override val id: Int,
+    override val title: Text?,
+    val text: Text,
+    override val posButton: Text = Text.Resource(android.R.string.ok),
+    override val negButton: Text? = null,
+    override val neutrButton: Text? = null,
+    override val cancelable: Boolean = true,
+    override val extra: Bundle? = null,
+    override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
+    override val style: DialogStyle = DialogStyle.Dialog,
 
-        // special setup
-        val textIsHtml: Boolean = false,
-        val timerPosButton: Int = 0,
-        val warning: Text? = null,
-        val warningColor: Int = Color.RED,
-        val warningSeparator: String = "\n",
-        val warningTextSizeFactor: Float = 1f
+    // special setup
+    val textIsHtml: Boolean = false,
+    val timerPosButton: Int = 0,
+    val warning: Text? = null,
+    val warningColor: Int = Color.RED,
+    val warningSeparator: String = "\n",
+    val warningTextSizeFactor: Float = 1f
 ) : BaseDialogSetup {
 
     override fun create() = DialogInfoFragment.create(this)
 
+    class Event(setup: BaseDialogSetup, button: MaterialDialogButton?) : MaterialDialogEvent by MaterialDialogEventImpl(setup, button)
 }

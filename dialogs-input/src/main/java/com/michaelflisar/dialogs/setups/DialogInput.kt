@@ -6,6 +6,9 @@ import android.text.InputType
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
+import com.michaelflisar.dialogs.classes.MaterialDialogEventImpl
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
+import com.michaelflisar.dialogs.events.MaterialDialogEvent
 import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.fragments.DialogInputFragment
 import kotlinx.parcelize.Parcelize
@@ -36,6 +39,14 @@ class DialogInput(
 ) : BaseDialogSetup {
 
     override fun create() = DialogInputFragment.create(this)
+
+    sealed class Event {
+        class Empty(setup: BaseDialogSetup, button: MaterialDialogButton): Event(), MaterialDialogEvent by MaterialDialogEventImpl(setup, button)
+        class Data(setup: BaseDialogSetup, button: MaterialDialogButton, val inputs: ArrayList<String>): Event(), MaterialDialogEvent by MaterialDialogEventImpl(setup, button) {
+            val input = inputs[0]
+            fun getInput(index: Int = 0) = if (inputs.size > index) inputs[index] else null
+        }
+    }
 
     @Parcelize
     class InputField(val label: Text? = null, val initialText: Text? = null, val hint: Text? = null, val allowEmptyText: Boolean = false, val inputType: Int = InputType.TYPE_CLASS_TEXT) : Parcelable

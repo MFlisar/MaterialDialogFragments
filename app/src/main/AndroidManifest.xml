@@ -19,7 +19,8 @@
         <activity
             android:name="com.michaelflisar.dialogs.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

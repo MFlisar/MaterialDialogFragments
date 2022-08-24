@@ -10,6 +10,7 @@ import com.afollestad.materialdialogs.actions.setActionButtonEnabled
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
 import com.michaelflisar.dialogs.message
 import com.michaelflisar.dialogs.negativeButton
 import com.michaelflisar.dialogs.neutralButton
@@ -39,46 +40,48 @@ class DialogNumberFragment : MaterialDialogFragment<DialogNumber>() {
             input = setup.initialValue
 
         // create dialog with correct style, title and cancelable flags
-        val dialog = setup.createMaterialDialog(activity!!, this)
+        val dialog = setup.createMaterialDialog(requireActivity(), this)
 
         dialog
-                .positiveButton(setup) {
-                    input = it.getInputField().text.toString().toInt()
-                    if ((setup.min != null && input!! < setup.min!!) || (setup.max != null && input!! > setup.max!!)) {
-                        setup.errorMessage?.get(activity!!)?.let {
-                            // TODO: instead of a toast this should be part of the layout => needs a custom layout
-                            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        sendEvent(
-                                com.michaelflisar.dialogs.events.DialogNumberEvent(
-                                        setup,
-                                        WhichButton.POSITIVE.ordinal,
-                                        com.michaelflisar.dialogs.events.DialogNumberEvent.Data(input!!)
-                                )
-                        )
-                        val activity = activity
-                        KeyboardUtils.hideKeyboard(activity, it.currentFocus)
-                        dismiss()
+            .positiveButton(setup) {
+                input = it.getInputField().text.toString().toInt()
+                if ((setup.min != null && input!! < setup.min!!) || (setup.max != null && input!! > setup.max!!)) {
+                    setup.errorMessage?.get(requireActivity())?.let {
+                        // TODO: instead of a toast this should be part of the layout => needs a custom layout
+                        Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
                     }
-                }
-                .noAutoDismiss()
-                .negativeButton(setup) {
-                    sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                } else {
+                    sendEvent(
+                        DialogNumber.Event.Data(
+                            setup,
+                            MaterialDialogButton.Positive,
+                            input!!
+                        )
+                    )
+                    val activity = activity
+                    KeyboardUtils.hideKeyboard(activity, it.currentFocus)
                     dismiss()
                 }
-                .neutralButton(setup) {
-                    sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-                }
-                .message(setup.text)
-                .input(
-                        waitForPositiveButton = false,
-                        hint = setup.hint?.get(activity!!) ?: "",
-                        prefill = input?.toString() ?: "",
-                        inputType = InputType.TYPE_CLASS_NUMBER) { materialDialog: MaterialDialog, charSequence: CharSequence ->
-                    input = charSequence.toString().toIntOrNull()
-                    materialDialog.setActionButtonEnabled(WhichButton.POSITIVE, input != null)
-                }
+            }
+            .negativeButton(setup) {
+                sendEvent(DialogNumber.Event.Empty(setup, MaterialDialogButton.Negative))
+                dismiss()
+            }
+            .neutralButton(setup) {
+                sendEvent(DialogNumber.Event.Empty(setup, MaterialDialogButton.Neutral))
+            }
+            .message(setup.text)
+        dialog
+            .input(
+                waitForPositiveButton = false,
+                hint = setup.hint?.get(requireActivity()) ?: "",
+                prefill = input?.toString() ?: "",
+                inputType = InputType.TYPE_CLASS_NUMBER
+            ) { materialDialog: MaterialDialog, charSequence: CharSequence ->
+                input = charSequence.toString().toIntOrNull()
+                materialDialog.setActionButtonEnabled(WhichButton.POSITIVE, input != null)
+            }
+        dialog.noAutoDismiss()
 
         val editText = dialog.getInputField()
         if (setup.selectText) {

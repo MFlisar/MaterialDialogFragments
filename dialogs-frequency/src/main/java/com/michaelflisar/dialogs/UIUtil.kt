@@ -65,7 +65,6 @@ internal object UIUtil {
                         type = DialogDateTime.Type.DateOnly,
                         currentDateTime = Calendar.getInstance().apply { timeInMillis = dateTime }
                     )
-                        .create()
                         .show(fragment, SendResultType.ParentFragment)
                 } else {
                     val error = if (maxNumber == null) R.string.mdf_error_value_must_be_greater_than_zero.asText() else {
@@ -80,7 +79,6 @@ internal object UIUtil {
                         errorMessage = error,
                         selectText = true
                     )
-                        .create()
                         .show(fragment, SendResultType.ParentFragment)
                 }
             }

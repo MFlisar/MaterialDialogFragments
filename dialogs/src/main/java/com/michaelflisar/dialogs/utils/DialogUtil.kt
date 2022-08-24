@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.michaelflisar.dialogs.DialogSetup
 import com.michaelflisar.dialogs.classes.SendResultType
-import com.michaelflisar.dialogs.events.BaseDialogEvent
+import com.michaelflisar.dialogs.events.MaterialDialogEvent
 import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
 
 /**
@@ -15,10 +15,10 @@ import com.michaelflisar.dialogs.interfaces.DialogFragmentCallback
 object DialogUtil {
 
     fun trySendResult(
-            event: BaseDialogEvent,
-            fragment: Fragment,
-            sendResultType: SendResultType = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
-            excludedFilter: ((DialogFragmentCallback) -> Boolean)? = null
+        event: MaterialDialogEvent,
+        fragment: Fragment,
+        sendResultType: SendResultType = DialogSetup.DEFAULT_SEND_RESULT_TYPE,
+        excludedFilter: ((DialogFragmentCallback) -> Boolean)? = null
     ) {
         var stopAfterFirstHandled = true
         val allCallbacks = when (sendResultType) {

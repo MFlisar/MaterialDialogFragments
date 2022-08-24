@@ -16,7 +16,7 @@ import com.afollestad.materialdialogs.customview.getCustomView
 import com.michaelflisar.dialogs.*
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
 import com.michaelflisar.dialogs.core.R
-import com.michaelflisar.dialogs.events.DialogInfoEvent
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
 import com.michaelflisar.dialogs.setups.DialogInfo
 
 open class DialogInfoFragment : MaterialDialogFragment<DialogInfo>() {
@@ -67,7 +67,7 @@ open class DialogInfoFragment : MaterialDialogFragment<DialogInfo>() {
             }
         }
 
-        posButtonText = setup.posButton.get(activity!!)
+        posButtonText = setup.posButton.get(requireActivity())
 
         if (timeLeft > 0) {
             handlerTimer = Handler()
@@ -88,7 +88,7 @@ open class DialogInfoFragment : MaterialDialogFragment<DialogInfo>() {
         }
 
         // create dialog with correct style, title and cancelable flags
-        val dialog = setup.createMaterialDialog(activity!!, this)
+        val dialog = setup.createMaterialDialog(requireActivity(), this)
 
         if (setup.textIsHtml) {
             dialog.customView(R.layout.dialog_webview, scrollable = false)
@@ -119,8 +119,8 @@ open class DialogInfoFragment : MaterialDialogFragment<DialogInfo>() {
 
 
         if (!setup.textIsHtml && setup.warning != null) {
-            val content = dialog.textView()!!.getText().toString()
-            val contentExtra: String? = setup.warning!!.get(activity!!)
+            val content = dialog.textView()!!.text.toString()
+            val contentExtra = setup.warning!!.get(requireActivity())
             val spannable = SpannableString(content + setup.warningSeparator + contentExtra)
             spannable.setSpan(
                     ForegroundColorSpan(setup.warningColor),
@@ -132,20 +132,20 @@ open class DialogInfoFragment : MaterialDialogFragment<DialogInfo>() {
                     content.length + setup.warningSeparator.length,
                     content.length + setup.warningSeparator.length + contentExtra.length,
                     0)
-            dialog.textView()!!.setText(spannable)
+            dialog.textView()!!.text = spannable
         }
 
         if (setup.textIsHtml) {
             var color = ""
-            if (DialogSetup.isUsingDarkTheme(activity!!)) {
+            if (DialogSetup.isUsingDarkTheme(requireActivity())) {
                 color = " color: white;"
             }
             val wv: WebView = dialog.getCustomView().findViewById(R.id.wv)
 
-            var body = setup.text.get(activity!!)
+            var body = setup.text.get(requireActivity())
             setup.warning?.let {
                 val warningHexColor = Integer.toHexString(setup.warningColor)
-                val contentExtra = it.get(activity!!)
+                val contentExtra = it.get(requireActivity())
                 body += "<p><font color=\"#$warningHexColor\">$contentExtra</font></p>"
             }
 
@@ -167,7 +167,7 @@ open class DialogInfoFragment : MaterialDialogFragment<DialogInfo>() {
     }
 
     private fun onClick(which: WhichButton) {
-        sendEvent(DialogInfoEvent(setup, which.index))
+        sendEvent(DialogInfo.Event(setup, MaterialDialogButton.find(which.index)))
     }
 
     override fun onDestroyView() {

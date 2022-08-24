@@ -11,16 +11,18 @@ import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
-import com.michaelflisar.text.Text
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
 import com.michaelflisar.dialogs.helper.RepeatListener
 import com.michaelflisar.dialogs.input.R
 import com.michaelflisar.dialogs.negativeButton
 import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.positiveButton
+import com.michaelflisar.dialogs.setups.DialogNumber
 import com.michaelflisar.dialogs.setups.DialogNumberPicker
-import java.util.*
+import com.michaelflisar.text.Text
 
-open class DialogNumberPickerFragment : MaterialDialogFragment<DialogNumberPicker>(), View.OnClickListener {
+open class DialogNumberPickerFragment : MaterialDialogFragment<DialogNumberPicker>(),
+    View.OnClickListener {
 
     companion object {
 
@@ -58,29 +60,29 @@ open class DialogNumberPickerFragment : MaterialDialogFragment<DialogNumberPicke
         }
 
         // create dialog with correct style, title and cancelable flags
-        val dialog = setup.createMaterialDialog(activity!!, this)
+        val dialog = setup.createMaterialDialog(requireActivity(), this)
 
         dialog.customView(layout, scrollable = values.size > 1)
-                .positiveButton {
-                    sendEvent(
-                            com.michaelflisar.dialogs.events.DialogNumberEvent(
-                                    setup,
-                                    WhichButton.POSITIVE.ordinal,
-                                    com.michaelflisar.dialogs.events.DialogNumberEvent.Data(getEventValues(viewDatas))
-                            )
+            .positiveButton {
+                sendEvent(
+                    DialogNumber.Event.Data(
+                        setup,
+                        MaterialDialogButton.Positive,
+                        getEventValues(viewDatas)
                     )
-                    dismiss()
-                }
+                )
+                dismiss()
+            }
 
         dialog
-                .positiveButton(setup)
-                .negativeButton(setup) {
-                    sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEGATIVE.ordinal, null))
-                    dismiss()
-                }
-                .neutralButton(setup) {
-                    sendEvent(com.michaelflisar.dialogs.events.DialogNumberEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-                }
+            .positiveButton(setup)
+            .negativeButton(setup) {
+                sendEvent(DialogNumber.Event.Empty(setup, MaterialDialogButton.Negative))
+                dismiss()
+            }
+            .neutralButton(setup) {
+                sendEvent(DialogNumber.Event.Empty(setup, MaterialDialogButton.Neutral))
+            }
 
         val view = dialog.getCustomView()
         updateView(view)
@@ -94,7 +96,7 @@ open class DialogNumberPickerFragment : MaterialDialogFragment<DialogNumberPicke
                 (view as ViewGroup).addView(v)
             }
             val text = if (i == 1) setup.text else setup.additonalValues[i - 2].label
-            viewDatas[i - 1].initViews(activity!!, text, i - 1, v, repeatListener)
+            viewDatas[i - 1].initViews(requireActivity(), text, i - 1, v, repeatListener)
             updateRowView(i - 1, v)
         }
 
@@ -151,7 +153,13 @@ open class DialogNumberPickerFragment : MaterialDialogFragment<DialogNumberPicke
 
         internal var value: Int = 0
 
-        fun initViews(context: Context, text: Text?, index: Int, view: View, repeatListener: RepeatListener) {
+        fun initViews(
+            context: Context,
+            text: Text?,
+            index: Int,
+            view: View,
+            repeatListener: RepeatListener
+        ) {
             tvAdd = view.findViewById<View>(R.id.tvAdd) as TextView
             tvSubtract = view.findViewById<View>(R.id.tvSubtract) as TextView
             tvNumber = view.findViewById<View>(R.id.tvNumber) as TextView

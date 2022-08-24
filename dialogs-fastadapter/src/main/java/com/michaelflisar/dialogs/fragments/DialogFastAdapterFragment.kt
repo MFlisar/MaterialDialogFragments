@@ -17,7 +17,7 @@ import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
-import com.michaelflisar.dialogs.events.DialogFastAdapterEvent
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
 import com.michaelflisar.dialogs.fastadapter.R
 import com.michaelflisar.dialogs.negativeButton
 import com.michaelflisar.dialogs.neutralButton
@@ -64,7 +64,7 @@ class DialogFastAdapterFragment<Item : IItem<*>> : MaterialDialogFragment<Dialog
     override fun onHandleCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         // create dialog with correct style, title and cancelable flags
-        val dialog = setup.createMaterialDialog(activity!!, this, !setup.withToolbar)
+        val dialog = setup.createMaterialDialog(requireActivity(), this, !setup.withToolbar)
 
         dialog.customView(
                 if (setup.withToolbar) R.layout.dialog_recyclerview_toolbar else R.layout.dialog_recyclerview,
@@ -77,23 +77,23 @@ class DialogFastAdapterFragment<Item : IItem<*>> : MaterialDialogFragment<Dialog
                         DialogFastAdapter.SelectionMode.SingleSelect,
                         DialogFastAdapter.SelectionMode.MultiSelect -> getData()
                     }
-                    onHandleClick(WhichButton.POSITIVE.ordinal, selectionData)
+                    onHandleClick(MaterialDialogButton.Positive, selectionData)
                     dismiss()
                 }
                 .noAutoDismiss()
                 .negativeButton(setup) {
-                    sendEvent(DialogFastAdapterEvent(setup, WhichButton.NEGATIVE.ordinal, null))
+                    sendEvent(DialogFastAdapter.Event.Empty(setup, MaterialDialogButton.Negative))
                     dismiss()
                 }
                 .neutralButton(setup) {
-                    sendEvent(DialogFastAdapterEvent(setup, WhichButton.NEUTRAL.ordinal, null))
+                    sendEvent(DialogFastAdapter.Event.Empty(setup, MaterialDialogButton.Neutral))
                 }
 
         val view = dialog.getCustomView()
         viewData = ViewData(view, setup)
 
         if (setup.withToolbar) {
-            viewData.toolbar?.title = setup.title?.get(activity!!)
+            viewData.toolbar?.title = setup.title?.get(requireActivity())
         }
 
         viewData.rvData.layoutManager = getLayoutManager()
@@ -105,8 +105,8 @@ class DialogFastAdapterFragment<Item : IItem<*>> : MaterialDialogFragment<Dialog
                 fastAdapter.onClickListener = { _, _, item, position ->
                     val originalPosition = if (setup.filterPredicate != null) itemAdapter.itemList.items.indexOf(item) else position
                     if (isClickable(item, originalPosition)) {
-                        val data = DialogFastAdapterEvent.Data(originalPosition, item)
-                        onHandleClick(null, data)
+                        val data = Pair(originalPosition, item)
+                        onHandleClickSingle(null, data)
                         dismiss()
                     }
                     true
@@ -196,16 +196,23 @@ class DialogFastAdapterFragment<Item : IItem<*>> : MaterialDialogFragment<Dialog
         }
     }
 
-    private fun getData(): DialogFastAdapterEvent.Data<Item> {
+    private fun getData(): Pair<List<Int>, List<IItem<*>>> {
         val selectExtension = fastAdapter.getSelectExtension()
         val allItems = itemAdapter.itemList.items
         val items = selectExtension.selectedItems.toList()
         val indizes = items.map { allItems.indexOf(it) }
-        return DialogFastAdapterEvent.Data(indizes, items)
+        return Pair(indizes, items)
     }
 
-    private fun onHandleClick(buttonIndex: Int?, data: DialogFastAdapterEvent.Data<Item>?) {
-        sendEvent(DialogFastAdapterEvent(setup, buttonIndex, data))
+    private fun onHandleClickSingle(button: MaterialDialogButton?, data: Pair<Int, IItem<*>>?) {
+        onHandleClick(button, data?.let { Pair(listOf(it.first), listOf(it.second)) })
+    }
+
+    private fun onHandleClick(button: MaterialDialogButton?, data: Pair<List<Int>, List<IItem<*>>>?) {
+        if (data == null)
+            sendEvent(DialogFastAdapter.Event.Empty(setup, button))
+        else
+            sendEvent(DialogFastAdapter.Event.Data(setup, button, data.first, data.second))
     }
 
     private fun getLayoutManager(): RecyclerView.LayoutManager {
@@ -249,7 +256,7 @@ class DialogFastAdapterFragment<Item : IItem<*>> : MaterialDialogFragment<Dialog
         }
         if (setup.selectionMode != DialogFastAdapter.SelectionMode.SingleClick) {
             val data = getData()
-            outState.putIntegerArrayList("selectedIndizes", ArrayList(data.indizes))
+            outState.putIntegerArrayList("selectedIndizes", ArrayList(data.first))
         }
         super.onSaveInstanceState(outState)
     }

@@ -3,18 +3,17 @@ package com.michaelflisar.dialogs.fragments
 import android.app.Dialog
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.customview.customView
 import com.michaelflisar.dialogs.base.MaterialDialogFragment
-import com.michaelflisar.text.Text
 import com.michaelflisar.dialogs.core.R
-import com.michaelflisar.dialogs.events.DialogProgressEvent
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
 import com.michaelflisar.dialogs.helper.EventQueue
 import com.michaelflisar.dialogs.interfaces.IProgressDialogFragment
 import com.michaelflisar.dialogs.negativeButton
 import com.michaelflisar.dialogs.neutralButton
 import com.michaelflisar.dialogs.setups.DialogProgress
 import com.michaelflisar.dialogs.textView
+import com.michaelflisar.text.Text
 
 class DialogProgressFragment : MaterialDialogFragment<DialogProgress>(), IProgressDialogFragment {
 
@@ -41,9 +40,9 @@ class DialogProgressFragment : MaterialDialogFragment<DialogProgress>(), IProgre
                         }
                         is Event.Close -> {
                             if (event.forcedByNewDialog) {
-                                sendEvent(DialogProgressEvent(setup, null, DialogProgressEvent.Data(true, true)))
+                                sendEvent(DialogProgress.Event.Data(setup, null, true, true))
                             } else {
-                                sendEvent(DialogProgressEvent(setup, null, DialogProgressEvent.Data(true, false)))
+                                sendEvent(DialogProgress.Event.Data(setup, null, true, false))
                             }
                             dismissAllowingStateLoss()
                         }
@@ -94,27 +93,34 @@ class DialogProgressFragment : MaterialDialogFragment<DialogProgress>(), IProgre
         text = if (savedInstanceState != null && savedInstanceState.containsKey("text")) {
             savedInstanceState.getString("text")
         } else {
-            setup.text?.get(activity!!)
+            setup.text?.get(requireActivity())
         }
 
         // create dialog with correct style, title and cancelable flags
-        val dialog = setup.createMaterialDialog(activity!!, this)
+        val dialog = setup.createMaterialDialog(requireActivity(), this)
 
         if (text != null)
             dialog.message(text = text.toString())
 
         dialog.customView(if (setup.horizontal) R.layout.dialog_progress_horizontal else R.layout.dialog_progress)
-                .cancelable(false)
-                .noAutoDismiss()
-                .negativeButton(setup) {
-                    sendEvent(DialogProgressEvent(setup, WhichButton.NEGATIVE.ordinal, DialogProgressEvent.Data(setup.dismissOnNegative, false)))
-                    if (setup.dismissOnNegative) {
-                        dismissAllowingStateLoss()
-                    }
+            .cancelable(false)
+            .noAutoDismiss()
+            .negativeButton(setup) {
+                sendEvent(
+                    DialogProgress.Event.Data(
+                        setup,
+                        MaterialDialogButton.Negative,
+                        setup.dismissOnNegative,
+                        false
+                    )
+                )
+                if (setup.dismissOnNegative) {
+                    dismissAllowingStateLoss()
                 }
-                .neutralButton(setup) {
-                    sendEvent(DialogProgressEvent(setup, WhichButton.NEUTRAL.ordinal, null))
-                }
+            }
+            .neutralButton(setup) {
+                sendEvent(DialogProgress.Event.Empty(setup, MaterialDialogButton.Neutral))
+            }
 
         return dialog
     }

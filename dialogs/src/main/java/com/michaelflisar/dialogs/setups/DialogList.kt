@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import com.michaelflisar.dialogs.DialogSetup
+import com.michaelflisar.dialogs.classes.MaterialDialogEventImpl
 import com.michaelflisar.dialogs.classes.BaseDialogSetup
 import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.enums.IconSize
+import com.michaelflisar.dialogs.enums.MaterialDialogButton
+import com.michaelflisar.dialogs.events.MaterialDialogEvent
 import com.michaelflisar.dialogs.fragments.DialogListFragment
 import com.michaelflisar.dialogs.interfaces.IParcelableTextImageProvider
 import com.michaelflisar.text.Text
@@ -15,35 +18,47 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class DialogList(
-        // base setup
-        override val id: Int,
-        override val title: Text?,
-        val items: List<Item>,
-        val text: Text? = null,
-        val selectionMode: SelectionMode = SelectionMode.None,
-        override val posButton: Text = Text.Resource(android.R.string.ok),
-        override val negButton: Text? = null,
-        override val neutrButton: Text? = null,
-        override val cancelable: Boolean = true,
-        override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
-        override val extra: Bundle? = null,
-        override val style: DialogStyle = DialogStyle.Dialog,
+    // base setup
+    override val id: Int,
+    override val title: Text?,
+    val items: List<Item>,
+    val text: Text? = null,
+    val selectionMode: SelectionMode = SelectionMode.None,
+    override val posButton: Text = Text.Resource(android.R.string.ok),
+    override val negButton: Text? = null,
+    override val neutrButton: Text? = null,
+    override val cancelable: Boolean = true,
+    override val sendCancelEvent: Boolean = DialogSetup.SEND_CANCEL_EVENT_BY_DEFAULT,
+    override val extra: Bundle? = null,
+    override val style: DialogStyle = DialogStyle.Dialog,
 
-        // special setup
-        val multiClick: Boolean = false,
-        val initialSingleSelection: Int? = null,
-        val initialMultiSelection: IntArray = IntArray(0),
-        val iconSize: IconSize = IconSize.Small,
-        val onlyShowIconIfItemIsSelected: Boolean = false,
-        val hideDefaultCheckMarkIcon: Boolean = false, // hide default check mark if item itself is able to display checked state
-        val noImageVisibility: Int = View.INVISIBLE,
-        val iconColorTint: Int? = null,
-        val iconColorTintMode: PorterDuff.Mode = PorterDuff.Mode.SRC_ATOP,
-        val checkMark: Int? = null
+    // special setup
+    val multiClick: Boolean = false,
+    val initialSingleSelection: Int? = null,
+    val initialMultiSelection: IntArray = IntArray(0),
+    val iconSize: IconSize = IconSize.Small,
+    val onlyShowIconIfItemIsSelected: Boolean = false,
+    val hideDefaultCheckMarkIcon: Boolean = false, // hide default check mark if item itself is able to display checked state
+    val noImageVisibility: Int = View.INVISIBLE,
+    val iconColorTint: Int? = null,
+    val iconColorTintMode: PorterDuff.Mode = PorterDuff.Mode.SRC_ATOP,
+    val checkMark: Int? = null
 
 ) : BaseDialogSetup {
 
     override fun create() = DialogListFragment.create(this)
+
+    sealed class Event {
+        class Empty(setup: BaseDialogSetup, button: MaterialDialogButton?) : Event(), MaterialDialogEvent by MaterialDialogEventImpl(setup, button)
+        class Data(setup: BaseDialogSetup, button: MaterialDialogButton?, val indizes: List<Int>, val items: List<Any>) : Event(), MaterialDialogEvent by MaterialDialogEventImpl(setup, button) {
+            constructor(setup: BaseDialogSetup, button: MaterialDialogButton?, index: Int, item:Any): this(setup, button, listOf(index), listOf(item))
+            val count = indizes.size
+            val index: Int
+                get() = getIndex()
+            fun getIndex(i: Int = 0) = indizes[i]
+            fun <T> getItem(i: Int = 0) = items[i] as T
+        }
+    }
 
     enum class SelectionMode {
         None,
@@ -72,12 +87,13 @@ data class DialogList(
             if (items.size != icons.size)
                 throw RuntimeException("items and icons must contain identical number of items!")
             val list = arrayListOf<Item>()
-            for (i in 0 until items.size) {
+            for (i in items.indices) {
                 list.add(Item.SimpleWithIcon(items[i], icons[i]))
             }
             return list
         }
 
-        fun itemsParcelable(items: List<IParcelableTextImageProvider>): List<Item> = items.map { Item.Custom(it) }
+        fun itemsParcelable(items: List<IParcelableTextImageProvider>): List<Item> =
+            items.map { Item.Custom(it) }
     }
 }
