@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.michaelflisar.dialogs.app.BuildConfig
 import com.michaelflisar.dialogs.app.R
 import com.michaelflisar.dialogs.app.databinding.ActivityMainBinding
@@ -188,7 +189,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentCallback {
 
     private fun getStyleFromCheckbox(): DialogStyle {
         if (binding.cbUseBottomSheetDialog.isChecked) {
-            return DialogStyle.BottomSheet()
+            return DialogStyle.BottomSheet(initialState = BottomSheetBehavior.STATE_EXPANDED)
         } else
             return DialogStyle.Dialog
     }

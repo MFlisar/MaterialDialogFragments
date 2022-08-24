@@ -129,7 +129,7 @@ class DialogInputFragment : MaterialDialogFragment<DialogInput>() {
             textViews.add(dialog.textView())
 
             setup.textSize?.let {
-                dialog.textView()!!.setTextSize(it)
+                dialog.textView()!!.textSize = it
             }
             if (setup.selectText) {
                 editText.post {
@@ -205,6 +205,8 @@ class DialogInputFragment : MaterialDialogFragment<DialogInput>() {
                 }
             }
         }
+
+
 
         return dialog
     }

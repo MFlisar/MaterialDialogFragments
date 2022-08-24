@@ -163,8 +163,12 @@ fun <T : SimpleBaseDialogSetup> MaterialDialogFragment<T>.show(
     tag: String,
     allowStateLoss: Boolean
 ) {
-    val ft = parent.supportFragmentManager.beginTransaction().add(this, tag)
-    if (allowStateLoss) ft.commitAllowingStateLoss() else ft.commit()
+    if (allowStateLoss) {
+        val ft = parent.supportFragmentManager.beginTransaction().add(this, tag)
+        ft.commitAllowingStateLoss()
+    } else {
+        show(parent.supportFragmentManager, tag)
+    }
 }
 
 fun <T : SimpleBaseDialogSetup> MaterialDialogFragment<T>.show(
@@ -172,6 +176,10 @@ fun <T : SimpleBaseDialogSetup> MaterialDialogFragment<T>.show(
     tag: String,
     allowStateLoss: Boolean
 ) {
-    val ft = parent.childFragmentManager.beginTransaction().add(this, tag)
-    if (allowStateLoss) ft.commitAllowingStateLoss() else ft.commit()
+    if (allowStateLoss) {
+        val ft = parent.childFragmentManager.beginTransaction().add(this, tag)
+        ft.commitAllowingStateLoss()
+    } else {
+        show(parent.childFragmentManager, tag)
+    }
 }
