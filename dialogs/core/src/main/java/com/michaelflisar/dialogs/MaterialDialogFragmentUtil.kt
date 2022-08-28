@@ -2,6 +2,7 @@ package com.michaelflisar.dialogs
 
 import android.content.Context
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
@@ -42,14 +43,8 @@ object MaterialDialogFragmentUtil {
         }
     }
 
-    fun dpToPx(context: Context, dp: Float): Int {
-        val px = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp,
-            context.resources.displayMetrics
-        )
-        return px.toInt()
-    }
+    fun pxToDp(px: Int ): Int = (px / Resources.getSystem().displayMetrics.density).toInt()
+    fun dpToPx(dp: Int): Int = (dp * Resources.getSystem().displayMetrics.density).toInt()
 
     fun isCurrentThemeDark(context: Context): Boolean {
         val color = resolve(context, android.R.attr.colorBackground)

@@ -52,7 +52,7 @@ class DialogInputFragment : MaterialDialogFragment<DialogInputFragment, DialogIn
     // lifecycle
     // -------------
 
-    var state: State? = null
+    private var state: State? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

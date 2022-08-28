@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         val itemAdapter = initRecyclerView()
         addInfoDialogItems(itemAdapter)
         addInputDialogItems(itemAdapter)
-        //addListDialogItems(itemAdapter)
+        addListDialogItems(itemAdapter)
         //addNumberDialogItems(itemAdapter)
         //addProgressDialogItems(itemAdapter)
         //addFastAdapterDialogItems(itemAdapter)
@@ -59,7 +59,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun addListeners() {
         // listen to ALL events - listener will always be called for events that are of the provided class OR any sub class
         //onMaterialDialogEvent<MaterialDialogEvent> { event ->
@@ -70,6 +69,9 @@ class MainActivity : AppCompatActivity() {
             showToast(event)
         }
         onMaterialDialogEvent<DialogInput.Event> { event ->
+            showToast(event)
+        }
+        onMaterialDialogEvent<DialogList.Event> { event ->
             showToast(event)
         }
     }
@@ -100,11 +102,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
-        outState.putParcelable("viewState", State(
-            binding.mbTheme.checkedButtonId,
-            binding.mbStyle.checkedButtonId,
-            binding.cbShowAsDialogFragment.isChecked
-        ))
+        outState.putParcelable(
+            "viewState", State(
+                binding.mbTheme.checkedButtonId,
+                binding.mbStyle.checkedButtonId,
+                binding.cbShowAsDialogFragment.isChecked
+            )
+        )
     }
 
     // -------------------
@@ -116,7 +120,7 @@ class MainActivity : AppCompatActivity() {
             R.id.btStyleDialog -> DialogStyle.Dialog
             R.id.btStyleBottomSheet -> DialogStyle.BottomSheet()
             R.id.btStyleFullscreen -> DialogStyle.FullScreen
-            else -> throw RuntimeException()
+            else -> DialogStyle.Dialog
         }
     }
 
@@ -155,7 +159,12 @@ class MainActivity : AppCompatActivity() {
                     id = 11,
                     title = "Info Title".toText(),
                     text = SpannableString("Here is some important information:\n\nSpannable strings are supported as well!").also {
-                        it.setSpan(ForegroundColorSpan(Color.RED), 13, 22, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
+                        it.setSpan(
+                            ForegroundColorSpan(Color.RED),
+                            13,
+                            22,
+                            Spanned.SPAN_INCLUSIVE_INCLUSIVE
+                        )
                     }.toText(),
                     style = getStyleFromCheckbox()
                 )
@@ -224,19 +233,68 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-/*
+
     private fun addListDialogItems(adapter: ItemAdapter<IItem<*>>) {
+        val listItemsProvider = DialogList.ItemProvider.List(
+            ArrayList(
+                List(50) { "Item ${it + 1}" }
+                    .map {
+                        DialogList.SimpleListItem(
+                            it.toText(),
+                            resIcon = R.mipmap.ic_launcher
+                        )
+                    }
+            ),
+            //iconSize = MaterialDialogFragmentUtil.dpToPx(16)
+        )
+
         adapter.add(
             HeaderItem("LIST demos"),
-            DemoItem("List demo 1", "Show a dialog with a list of items - single select") {
+            DemoItem("List demo 1", "Show a dialog with a list of items - SINGLE SELECT") {
                 DialogList(
                     30,
-                    "Simple list".toText(),
-                    DialogList.itemsString(List(50) { "Item ${it + 1}" }),
+                    "Single Select".toText(),
+                    listItemsProvider = listItemsProvider,
+                    listDescription = "Select a single item...".toText(),
+                    listSelectionMode = DialogList.SelectionMode.SingleSelect,
                     style = getStyleFromCheckbox()
                 )
                     .show(this)
             },
+            DemoItem("List demo 2", "Show a dialog with a list of items - MULTI SELECT") {
+                DialogList(
+                    31,
+                    "Multi Select".toText(),
+                    listItemsProvider = listItemsProvider,
+                    listDescription = "Select multiple items...".toText(),
+                    listSelectionMode = DialogList.SelectionMode.MultiSelect,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem("List demo 3", "Show a dialog with a list of items - SINGLE CLICK") {
+                DialogList(
+                    32,
+                    "Single Click".toText(),
+                    listItemsProvider = listItemsProvider,
+                    listDescription = "Select multiple items - the first click will emit a single event and close this dialog directly...".toText(),
+                    listSelectionMode = DialogList.SelectionMode.SingleClick,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            DemoItem("List demo 3", "Show a dialog with a list of items - MULTI CLICK") {
+                DialogList(
+                    33,
+                    "Multi Click".toText(),
+                    listItemsProvider = listItemsProvider,
+                    listDescription = "Select multiple items, each click will emit a single event...".toText(),
+                    listSelectionMode = DialogList.SelectionMode.MultiClick,
+                    style = getStyleFromCheckbox()
+                )
+                    .show(this)
+            },
+            /*
             DemoItem("List demo 2", "Show a dialog with a list of items and icons - multi select") {
                 DialogList(
                     31,
@@ -284,10 +342,10 @@ class MainActivity : AppCompatActivity() {
                     style = getStyleFromCheckbox()
                 )
                     .show(this)
-            }
+            }*/
         )
     }
-
+/*
     private fun addNumberDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
             HeaderItem("NUMBER demos"),
@@ -598,7 +656,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun showToast(event: MaterialDialogEvent) {
         toastCounter++
-        val dialogClass = event.javaClass.name.replace("com.michaelflisar.dialogs.", "").substringBefore("$")
+        val dialogClass =
+            event.javaClass.name.replace("com.michaelflisar.dialogs.", "").substringBefore("$")
         val msg = "Event #$toastCounter - $dialogClass\n$event"
         toast?.cancel()
         toast = LongToast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG)

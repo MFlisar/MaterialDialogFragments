@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/dev/11 - libs (mine)/MaterialDialogFragments/dialogs/list/src/main/res/layout/mdf_content_list.xml" value="0.18541666666666667" />
+        <entry key="..\:/dev/11 - libs (mine)/MaterialDialogFragments/dialogs/list/src/main/res/layout/mdf_default_list_item.xml" value="0.24954710144927536" />
+      </map>
+    </option>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

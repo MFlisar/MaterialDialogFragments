@@ -65,7 +65,7 @@ internal class ManagerDialog<S : MaterialDialogSetup<S, F>, F: MaterialDialogFra
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                val dp = MaterialDialogFragmentUtil.dpToPx(content.root.context, 1f)
+                val dp = MaterialDialogFragmentUtil.dpToPx(1)
                 topMargin = dp * 16
                 marginStart = dp * 24
                 marginEnd = dp * 24

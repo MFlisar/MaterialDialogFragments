@@ -20,13 +20,13 @@ It supports 3 stylings, namely **Dialog**, **BottomSheet** and **FullscreenDialo
 - [ ] Dialogs
 	- [x] Info
 	- [x] Input
-	- [ ] List
+	- [x] List
 	- [ ] DateTime
 	- [ ] Color
 	- [ ] Ads
 	- [ ] Frequency
 
-# Example
+# Introduction
 
 It works as simply as following: From within an `Activity`/`Fragment` create a dialog like following:
 
