@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="FrequencyToggleButton">
-        <item name="android:background">@drawable/frequency_toggle_button_background</item>
-        <item name="android:textColor">@drawable/freqeuncy_toggle_button_text_color</item>
-    </style>
-
-</resources>

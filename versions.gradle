@@ -4,7 +4,7 @@ ext {
             compileSdk       : 32,
             enableDataBinding: false,
             enableViewBinding: true,
-            minSdk           : 16,
+            minSdk           : 21,
             targetSdk        : 30
     ]
 
@@ -25,7 +25,7 @@ ext {
             gradlePlugin       : "7.2.1",
             mavenVersion       : "2.1",
 
-            androidText        : "0.6",
+            androidText        : "1.1.5",
 
             //materialDialogs        : "3.3.0",
             materialDialogsFork: "3.3.0-1", // own copy of 3.3.0 with small adjustment to fix a bottomsheet crash

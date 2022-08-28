@@ -1,13 +1,23 @@
-include ':app'
-include 'dialogs'
-include 'dialogs-input'
-include 'dialogs-datetime'
-include 'dialogs-color'
-include 'dialogs-fastadapter'
-include 'dialogs-frequency'
-include 'dialogs-ads'
+include ':Demo'
+project(':Demo').projectDir = new File(settingsDir, "demo")
 
-//include ':md:core'
-//project(':md:core').projectDir = new File("M:\\dev\\12 - libs (foreign)\\material-dialogs\\core")
-//include ':md:bottomsheets'
-//project(':md:bottomsheets').projectDir = new File("M:\\dev\\12 - libs (foreign)\\material-dialogs\\bottomsheets")
+// Core
+include ':Dialogs:Core'
+project(':Dialogs:Core').projectDir = new File(settingsDir, "dialogs/core")
+
+// UI
+include ':Dialogs:Info'
+project(':Dialogs:Info').projectDir = new File(settingsDir, "dialogs/info")
+include ':Dialogs:Input'
+project(':Dialogs:Input').projectDir = new File(settingsDir, "dialogs/input")
+include ':Dialogs:List'
+project(':Dialogs:List').projectDir = new File(settingsDir, "dialogs/list")
+
+// UIs - OLD
+//include ':dialogs:dialogs'
+//include 'dialogs-input'
+//include 'dialogs-datetime'
+//include 'dialogs-color'
+//include 'dialogs-fastadapter'
+//include 'dialogs-frequency'
+//include 'dialogs-ads'
