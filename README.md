@@ -24,6 +24,8 @@ It supports 3 stylings, namely **Dialog**, **BottomSheet** and **FullscreenDialo
 	- [x] Input
 	- [x] List
 	- [ ] NumberInput
+		- min/max/step size
+		- show as value + buttons or as 
 	- [ ] DateTime
 	- [ ] Color
 	- [ ] Ads
