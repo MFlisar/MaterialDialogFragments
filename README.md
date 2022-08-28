@@ -55,10 +55,10 @@ That's it, the library will take care to unregister the listener if the `Activit
 
 # Modules
 
-* [Core] (#-Core)
-* [Info] (#-Info)
-* [Input] (#-Input)
-* [List] (#-List)
+* [Core](#-Core)
+* [Info](#-Info)
+* [Input](#-Input)
+* [List](#-List)
 
 ## Core
 
