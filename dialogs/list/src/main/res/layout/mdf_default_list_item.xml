@@ -32,6 +32,7 @@
             app:tint="?attr/colorSecondary" />
 
         <CheckBox
+            android:background="@null"
             android:id="@+id/mdf_checkbox_right"
             android:layout_width="32dp"
             android:layout_height="32dp"

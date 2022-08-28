@@ -39,6 +39,7 @@ class DialogInputFragment : MaterialDialogFragment<DialogInputFragment, DialogIn
         setup.inputHint.display(binding.mdfTextInputLayout) { view, text ->
             view.hint = text
         }
+        binding.mdfTextInputEditText.inputType = setup.inputType
         binding.mdfTextInputEditText.setText(input)
         binding.mdfTextInputEditText.doAfterTextChanged {
             setError("")

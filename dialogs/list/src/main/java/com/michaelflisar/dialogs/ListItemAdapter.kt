@@ -1,5 +1,6 @@
 package com.michaelflisar.dialogs
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +29,7 @@ class ListItemAdapter(
         return items.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateItems(items: List<DialogList.ListItem>) {
         this.items = items
         notifyDataSetChanged()
@@ -41,7 +43,7 @@ class ListItemAdapter(
         notifyItemChanged(index)
     }
 
-    fun getCheckedIndizes(): List<Int> = selectedIndices.toList()
+    fun getCheckedIndizes(): Set<Int> = selectedIndices
 
     fun getCheckedItems(): List<DialogList.ListItem> {
         return selectedIndices
@@ -88,11 +90,10 @@ class ListItemAdapter(
         }
 
         fun bind(item: DialogList.ListItem) {
-            if (item.icon == null) {
-                binding.mdfIconLeft.visibility = View.GONE
+            if (item.displayIcon(binding.mdfIconLeft)) {
+                binding.mdfIconLeft.visibility = View.VISIBLE
             } else {
                 binding.mdfIconLeft.visibility = View.GONE
-                item.icon?.invoke(binding.mdfIconLeft)
             }
             item.text.display(binding.mdfText)
             binding.root.setOnClickListener {

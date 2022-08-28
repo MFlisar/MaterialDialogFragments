@@ -12,6 +12,8 @@ include ':Dialogs:Input'
 project(':Dialogs:Input').projectDir = new File(settingsDir, "dialogs/input")
 include ':Dialogs:List'
 project(':Dialogs:List').projectDir = new File(settingsDir, "dialogs/list")
+include ':Dialogs:Number'
+project(':Dialogs:Number').projectDir = new File(settingsDir, "dialogs/number")
 
 // UIs - OLD
 //include ':dialogs:dialogs'

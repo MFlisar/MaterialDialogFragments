@@ -3,6 +3,7 @@ package com.michaelflisar.dialogs
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.InputType
 import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.classes.MaterialDialogButton
 import com.michaelflisar.dialogs.input.R
@@ -20,6 +21,7 @@ class DialogInput(
     // Title
     override val title: Text,
     // specific fields
+    val inputType: Int = InputType.TYPE_CLASS_TEXT,
     val inputInitialValue: Text = Text.Empty,
     val inputHint: Text = Text.Empty,
     val inputDescription: Text = Text.Empty,

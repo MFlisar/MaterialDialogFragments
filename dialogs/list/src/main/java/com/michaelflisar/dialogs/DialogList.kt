@@ -1,5 +1,6 @@
 package com.michaelflisar.dialogs
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.widget.ImageView
@@ -76,9 +77,20 @@ class DialogList(
     // Interfaces/Classes
     // -----------
 
+    enum class SelectionMode {
+        SingleSelect,
+        MultiSelect,
+        SingleClick,
+        MultiClick
+    }
+
     interface ListItem : Parcelable {
         val text: Text
-        val icon: ((imageView: ImageView) -> Unit)?
+        fun displayIcon(imageView: ImageView): Boolean
+    }
+
+    interface Loader : Parcelable {
+        suspend fun load(context: Context): List<ListItem>
     }
 
     @Parcelize
@@ -86,13 +98,10 @@ class DialogList(
         override val text: Text,
         val resIcon: Int? = null
     ) : ListItem {
-        override val icon: ((imageView: ImageView) -> Unit) = { iv ->
-            resIcon?.let { iv.setImageResource(it) }
+        override fun displayIcon(imageView: ImageView): Boolean {
+            resIcon?.let { imageView.setImageResource(it) }
+            return resIcon != null
         }
-    }
-
-    interface ListItemLoader : Parcelable {
-        suspend fun load(): List<ListItem>
     }
 
     sealed class ItemProvider : Parcelable {
@@ -107,15 +116,10 @@ class DialogList(
 
         @Parcelize
         class ItemLoader(
-            val loader: ListItemLoader,
+            val loader: Loader,
             override val iconSize: Int = MaterialDialogFragmentUtil.dpToPx(32)
         ) : ItemProvider()
     }
 
-    enum class SelectionMode {
-        SingleSelect,
-        MultiSelect,
-        SingleClick,
-        MultiClick
-    }
+
 }

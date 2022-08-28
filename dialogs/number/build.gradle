@@ -57,24 +57,14 @@ dependencies {
     // AndroidX
     // ------------------------
 
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${androidx.lifecycle}"
-    implementation "androidx.core:core-ktx:${androidx.core}"
-
     implementation "com.google.android.material:material:${androidx.material}"
-
-    // ------------------------
-    // Text Class
-    // ------------------------
-
-    api "com.github.MFlisar:AndroidText:${versions.androidText}"
+    implementation "androidx.core:core-ktx:${androidx.core}"
 
     // ------------------------
     // Library
     // ------------------------
 
-    // --
-
-    //implementation 'com.r0adkll:slidableactivity:2.1.0'
+    api project(":Dialogs:Core")
 }
 
 project.afterEvaluate {

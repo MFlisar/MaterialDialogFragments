@@ -3,6 +3,7 @@ package com.michaelflisar.dialogs
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
+import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -40,6 +41,24 @@ class DialogListFragment :
     override fun initContentBinding(binding: MdfContentListBinding, savedInstanceState: Bundle?) {
         setup.listDescription.display(binding.mdfDescription)
 
+        val itemsProvider = setup.listItemsProvider
+        when (itemsProvider) {
+            is DialogList.ItemProvider.ItemLoader -> {
+                // load items
+                lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        val items = itemsProvider.loader.load(requireContext())
+                        withContext(Dispatchers.Main) {
+                            updateItems(items)
+                        }
+                    }
+                }
+            }
+            is DialogList.ItemProvider.List -> {
+                updateItems(itemsProvider.items)
+            }
+        }
+
         binding.mdfRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = this@DialogListFragment.adapter
@@ -65,7 +84,7 @@ class DialogListFragment :
             setup.listItemsProvider.iconSize,
             setup.listSelectionMode,
             emptyList(),
-            HashSet()
+            state?.selectedIndizes?.toMutableSet() ?: HashSet()
         ) { index, item ->
             when (setup.listSelectionMode) {
                 DialogList.SelectionMode.SingleSelect -> {
@@ -91,35 +110,25 @@ class DialogListFragment :
                 }
             }
         }
-
-        val itemsProvider = setup.listItemsProvider
-        when (itemsProvider) {
-            is DialogList.ItemProvider.ItemLoader -> {
-                // load items
-                lifecycleScope.launch(Dispatchers.IO) {
-                    repeatOnLifecycle(Lifecycle.State.STARTED) {
-                        val items = itemsProvider.loader.load()
-                        withContext(Dispatchers.Main) {
-                            adapter.updateItems(items)
-                        }
-                    }
-                }
-            }
-            is DialogList.ItemProvider.List -> {
-                adapter.updateItems(itemsProvider.items)
-            }
-        }
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(KEY_VIEW_STATE, State())
+        outState.putParcelable(KEY_VIEW_STATE, State(getSelectedIndizes()))
     }
 
     // -------------
     // functions
     // -------------
+
+    private fun updateItems(items: List<DialogList.ListItem>) {
+        binding.mdfLoading.visibility = View.GONE
+        adapter.updateItems(items)
+    }
+
+    internal fun getSelectedIndizes(): Set<Int> {
+        return adapter.getCheckedIndizes()
+    }
 
     internal fun getSelectedItems(): List<DialogList.ListItem> {
         return adapter.getCheckedItems()
@@ -131,10 +140,6 @@ class DialogListFragment :
 
     @Parcelize
     class State(
-        val selectedIndizes: List<Int>
-    ) : Parcelable {
-        constructor() : this(
-            emptyList()
-        )
-    }
+        val selectedIndizes: Set<Int>
+    ) : Parcelable
 }

@@ -23,10 +23,16 @@ It supports 3 stylings, namely **Dialog**, **BottomSheet** and **FullscreenDialo
 	- [x] Info
 	- [x] Input
 	- [x] List
+	- [ ] NumberInput
 	- [ ] DateTime
 	- [ ] Color
 	- [ ] Ads
 	- [ ] Frequency
+- [ ] Optional Features
+	- [ ] List - Filtering
+	- [ ] List - Providing a full custom adapter??? eventually...
+	- [ ] List - Custom Icon??? via style??? or ListDialog class?
+	- [ ] Better default value handling? e.g. ListDialog default icon size? would need to be some extensible solution so that each dialog can register its defaults in there...
 
 # Introduction
 

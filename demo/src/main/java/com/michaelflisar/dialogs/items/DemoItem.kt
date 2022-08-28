@@ -1,4 +1,4 @@
-package com.michaelflisar.dialogs
+package com.michaelflisar.dialogs.items
 
 import android.view.View
 import com.michaelflisar.dialogs.app.R

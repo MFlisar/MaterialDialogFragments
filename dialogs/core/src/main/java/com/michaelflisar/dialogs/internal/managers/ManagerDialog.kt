@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ScrollView
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.LifecycleOwner
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.michaelflisar.dialogs.MaterialDialogFragment
@@ -15,11 +14,6 @@ import com.michaelflisar.dialogs.MaterialDialogFragmentUtil
 import com.michaelflisar.dialogs.MaterialDialogSetup
 import com.michaelflisar.dialogs.classes.MaterialDialogButton
 import com.michaelflisar.dialogs.core.R
-import com.r0adkll.slidr.Slidr
-import com.r0adkll.slidr.model.SlidrConfig
-import com.r0adkll.slidr.model.SlidrInterface
-import com.r0adkll.slidr.model.SlidrPosition
-
 
 internal class ManagerDialog<S : MaterialDialogSetup<S, F>, F: MaterialDialogFragment<F, S, B>, B : ViewBinding>(fragment: F) :
     BaseDialogManager<S, F>(fragment), BaseDialogManager.IDialog {

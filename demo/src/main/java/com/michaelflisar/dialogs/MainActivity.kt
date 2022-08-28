@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
 import android.os.PersistableBundle
+import android.text.InputType
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -14,9 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.michaelflisar.dialogs.app.R
 import com.michaelflisar.dialogs.app.databinding.ActivityMainBinding
+import com.michaelflisar.dialogs.apps.AppsManager
 import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.classes.LongToast
 import com.michaelflisar.dialogs.interfaces.MaterialDialogEvent
+import com.michaelflisar.dialogs.items.DemoItem
+import com.michaelflisar.dialogs.items.HeaderItem
 import com.michaelflisar.text.Text
 import com.michaelflisar.text.toText
 import com.mikepenz.fastadapter.FastAdapter
@@ -142,12 +146,16 @@ class MainActivity : AppCompatActivity() {
         return itemAdapter
     }
 
+    // -------------------
+    // helper functions for demo
+    // -------------------
+
     private fun addInfoDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
             HeaderItem("INFO demos"),
             DemoItem("Short Info", "Show a simple short info dialog") {
                 DialogInfo(
-                    id = 10,
+                    id = 101,
                     title = "Info Title".toText(),
                     text = "Some info text...".toText(),
                     style = getStyleFromCheckbox()
@@ -156,7 +164,7 @@ class MainActivity : AppCompatActivity() {
             },
             DemoItem("Short Info", "Show a simple short info dialog with a spannable text") {
                 DialogInfo(
-                    id = 11,
+                    id = 102,
                     title = "Info Title".toText(),
                     text = SpannableString("Here is some important information:\n\nSpannable strings are supported as well!").also {
                         it.setSpan(
@@ -172,11 +180,12 @@ class MainActivity : AppCompatActivity() {
             },
             DemoItem("Long Info", "Show a simple long info dialog") {
                 DialogInfo(
-                    id = 12,
+                    id = 103,
                     title = "Info Title".toText(),
-                    text = "Text... ".repeat(500).toText(),
+                    text = R.string.lorem_ipsum_long.toText(),
                     style = getStyleFromCheckbox(),
-                    buttonNegative = "Return".toText()
+                    buttonPositive = "Accept".toText(),
+                    buttonNegative = "Decline".toText()
                 )
                     .showInCorrectMode(this)
             },
@@ -207,7 +216,7 @@ class MainActivity : AppCompatActivity() {
                 "Show a dialog with an input field and a hint and allow an empty input"
             ) {
                 DialogInput(
-                    id = 20,
+                    id = 201,
                     title = "Insert your name".toText(),
                     inputHint = "E.g. Max Musterman".toText(),
                     inputInitialValue = Text.Empty,
@@ -220,7 +229,7 @@ class MainActivity : AppCompatActivity() {
                 "Show a dialog with an input field and a hint AND some description AND disallow an empty input"
             ) {
                 DialogInput(
-                    id = 20,
+                    id = 202,
                     title = "Insert your name".toText(),
                     inputDescription = "Please insert your full name here.".toText(),
                     inputHint = "E.g. Max Musterman".toText(),
@@ -229,10 +238,24 @@ class MainActivity : AppCompatActivity() {
                     style = getStyleFromCheckbox()
                 )
                     .showInCorrectMode(this)
+            },
+            DemoItem(
+                "Input Demo 3",
+                "Show a dialog with an input field and a hint AND input type is positive number - result will still be a STRING in this case!"
+            ) {
+                DialogInput(
+                    id = 203,
+                    title = "Number".toText(),
+                    inputDescription = "Please insert a number".toText(),
+                    inputType = InputType.TYPE_CLASS_NUMBER,
+                    inputInitialValue = Text.Empty,
+                    inputValidator = DialogInput.InputValidatorNotEmpty,
+                    style = getStyleFromCheckbox()
+                )
+                    .showInCorrectMode(this)
             }
         )
     }
-
 
     private fun addListDialogItems(adapter: ItemAdapter<IItem<*>>) {
         val listItemsProvider1 = DialogList.ItemProvider.List(
@@ -243,8 +266,7 @@ class MainActivity : AppCompatActivity() {
                             it.toText()
                         )
                     }
-            ),
-            //iconSize = MaterialDialogFragmentUtil.dpToPx(16)
+            )
         )
         val listItemsProvider2 = DialogList.ItemProvider.List(
             ArrayList(
@@ -256,14 +278,15 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
             ),
-            //iconSize = MaterialDialogFragmentUtil.dpToPx(16)
+            iconSize = MaterialDialogFragmentUtil.dpToPx(24) // optional, 32dp would be the default value
         )
+        val listItemsProvider3 = DialogList.ItemProvider.ItemLoader(AppsManager)
 
         adapter.add(
             HeaderItem("LIST demos"),
             DemoItem("List demo 1", "Show a dialog with a list of items - SINGLE SELECT") {
                 DialogList(
-                    30,
+                    301,
                     "Single Select".toText(),
                     listItemsProvider = listItemsProvider1,
                     listDescription = "Select a single item...".toText(),
@@ -274,7 +297,7 @@ class MainActivity : AppCompatActivity() {
             },
             DemoItem("List demo 2", "Show a dialog with a list of items - MULTI SELECT") {
                 DialogList(
-                    31,
+                    302,
                     "Multi Select".toText(),
                     listItemsProvider = listItemsProvider1,
                     listDescription = "Select multiple items...".toText(),
@@ -285,7 +308,7 @@ class MainActivity : AppCompatActivity() {
             },
             DemoItem("List demo 3", "Show a dialog with a list of items - SINGLE CLICK + Icons") {
                 DialogList(
-                    32,
+                    303,
                     "Single Click".toText(),
                     listItemsProvider = listItemsProvider2,
                     listDescription = "Select multiple items - the first click will emit a single event and close this dialog directly...".toText(),
@@ -296,7 +319,7 @@ class MainActivity : AppCompatActivity() {
             },
             DemoItem("List demo 4", "Show a dialog with a list of items - MULTI CLICK + Icons") {
                 DialogList(
-                    33,
+                    304,
                     "Multi Click".toText(),
                     listItemsProvider = listItemsProvider2,
                     listDescription = "Select multiple items, each click will emit a single event...".toText(),
@@ -305,55 +328,16 @@ class MainActivity : AppCompatActivity() {
                 )
                     .show(this)
             },
-            /*
-            DemoItem("List demo 2", "Show a dialog with a list of items and icons - multi select") {
+            DemoItem("List demo 5", "Show a dialog with a custom async item provider (installed apps)") {
                 DialogList(
-                    31,
-                    "Multi select".toText(),
-                    DialogList.itemsString(
-                        List(50) { "Item ${it + 1}" },
-                        List(50) { R.mipmap.ic_launcher }),
-                    selectionMode = DialogList.SelectionMode.Multi,
-                    iconSize = IconSize.Medium,
+                    305,
+                    "Multi Select".toText(),
+                    listItemsProvider = listItemsProvider3,
+                    listSelectionMode = DialogList.SelectionMode.MultiSelect,
                     style = getStyleFromCheckbox()
                 )
                     .show(this)
-            },
-            DemoItem(
-                "List demo 3",
-                "Show a dialog with a list of items and icons, without default checkbox and custom checkbox icon"
-            ) {
-                DialogList(
-                    32,
-                    "Multi select".toText(),
-                    DialogList.itemsString(
-                        List(50) { "Item ${it + 1}" },
-                        List(50) { R.mipmap.ic_launcher }),
-                    selectionMode = DialogList.SelectionMode.Multi,
-                    hideDefaultCheckMarkIcon = true,
-                    checkMark = R.drawable.custom_check_mark,
-                    style = getStyleFromCheckbox()
-                )
-                    .show(this)
-            },
-            DemoItem(
-                "List demo 4",
-                "Show a dialog with a list of items, icons, icon tint and some text - no selection but with multi click enabled - each click creates a event"
-            ) {
-                DialogList(
-                    33,
-                    "Multi click".toText(),
-                    DialogList.itemsString(
-                        List(50) { "Item ${it + 1}" },
-                        List(50) { R.drawable.arrow_forward }),
-                    text = "Some information about this dialog".toText(),
-                    multiClick = true,
-                    iconColorTint = Color.RED,
-                    iconColorTintMode = PorterDuff.Mode.SRC_ATOP,
-                    style = getStyleFromCheckbox()
-                )
-                    .show(this)
-            }*/
+            }
         )
     }
 /*

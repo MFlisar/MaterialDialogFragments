@@ -55,6 +55,7 @@ dependencies {
     implementation project(":Dialogs:Info")
     implementation project(":Dialogs:Input")
     implementation project(":Dialogs:List")
+    implementation project(":Dialogs:Number")
 
     // TODO: entfernen?
     implementation "com.mikepenz:fastadapter:${versions.fastAdapter}"
