@@ -6,25 +6,25 @@ It supports 3 stylings, namely **Dialog**, **BottomSheet** and **FullscreenDialo
 
 # State
 
-[ ] General
-	[x] Dialog Style
-	[ ] BottomSheet Style
-		[ ] sticky footer
-		[x] position bug on screen rotation (also in combination with show/hide keyboard)
-		[ ] elevate header/footer on scroll
-		[ ] keyboard should push up the whole layout (e.g. for InputDialog)
-	[x] Fullscreen Style
-[ ] Features
-	[ ] Swipe Dismiss + support of nested scrolling containers
-	[ ] BottomSheet - flag to support "expand to fullscreen style" (pos button in toolbar is enabled, pos button in footer is removed, toolbar replaces the title)
-[ ] Dialogs
-	[x] Info
-	[x] Input
-	[ ] List
-	[ ] DateTime
-	[ ] Color
-	[ ] Ads
-	[ ] Frequency
+- [ ] General
+	- [x] Dialog Style
+	- [ ] BottomSheet Style
+		- [ ] sticky footer
+		- [x] position bug on screen rotation (also in combination with show/hide keyboard)
+		- [ ] elevate header/footer on scroll
+		- [ ] keyboard should push up the whole layout (e.g. for InputDialog)
+	- [x] Fullscreen Style
+- [ ] Features
+	- [ ] Swipe Dismiss + support of nested scrolling containers
+	- [ ] BottomSheet - flag to support "expand to fullscreen style" (pos button in toolbar is enabled, pos button in footer is removed, toolbar replaces the title)
+- [ ] Dialogs
+	- [x] Info
+	- [x] Input
+	- [ ] List
+	- [ ] DateTime
+	- [ ] Color
+	- [ ] Ads
+	- [ ] Frequency
 
 # Example
 
