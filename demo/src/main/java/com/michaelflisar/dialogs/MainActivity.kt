@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
     private fun addInfoDialogItems(adapter: ItemAdapter<IItem<*>>) {
         adapter.add(
             HeaderItem("INFO demos"),
-            DemoItem("Short info", "Show a simple short info dialog") {
+            DemoItem("Short Info", "Show a simple short info dialog") {
                 DialogInfo(
                     id = 10,
                     title = "Info Title".toText(),
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
                 )
                     .showInCorrectMode(this)
             },
-            DemoItem("Short info", "Show a simple short info dialog with a spannable text") {
+            DemoItem("Short Info", "Show a simple short info dialog with a spannable text") {
                 DialogInfo(
                     id = 11,
                     title = "Info Title".toText(),
@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
                 )
                     .showInCorrectMode(this)
             },
-            DemoItem("Long info", "Show a simple long info dialog") {
+            DemoItem("Long Info", "Show a simple long info dialog") {
                 DialogInfo(
                     id = 12,
                     title = "Info Title".toText(),
@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity() {
         adapter.add(
             HeaderItem("INPUT demos"),
             DemoItem(
-                "Input demo 1",
+                "Input Demo 1",
                 "Show a dialog with an input field and a hint and allow an empty input"
             ) {
                 DialogInput(
@@ -216,7 +216,7 @@ class MainActivity : AppCompatActivity() {
                     .showInCorrectMode(this)
             },
             DemoItem(
-                "Input demo 2",
+                "Input Demo 2",
                 "Show a dialog with an input field and a hint AND some description AND disallow an empty input"
             ) {
                 DialogInput(
@@ -235,7 +235,18 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun addListDialogItems(adapter: ItemAdapter<IItem<*>>) {
-        val listItemsProvider = DialogList.ItemProvider.List(
+        val listItemsProvider1 = DialogList.ItemProvider.List(
+            ArrayList(
+                List(50) { "Item ${it + 1}" }
+                    .map {
+                        DialogList.SimpleListItem(
+                            it.toText()
+                        )
+                    }
+            ),
+            //iconSize = MaterialDialogFragmentUtil.dpToPx(16)
+        )
+        val listItemsProvider2 = DialogList.ItemProvider.List(
             ArrayList(
                 List(50) { "Item ${it + 1}" }
                     .map {
@@ -254,7 +265,7 @@ class MainActivity : AppCompatActivity() {
                 DialogList(
                     30,
                     "Single Select".toText(),
-                    listItemsProvider = listItemsProvider,
+                    listItemsProvider = listItemsProvider1,
                     listDescription = "Select a single item...".toText(),
                     listSelectionMode = DialogList.SelectionMode.SingleSelect,
                     style = getStyleFromCheckbox()
@@ -265,29 +276,29 @@ class MainActivity : AppCompatActivity() {
                 DialogList(
                     31,
                     "Multi Select".toText(),
-                    listItemsProvider = listItemsProvider,
+                    listItemsProvider = listItemsProvider1,
                     listDescription = "Select multiple items...".toText(),
                     listSelectionMode = DialogList.SelectionMode.MultiSelect,
                     style = getStyleFromCheckbox()
                 )
                     .show(this)
             },
-            DemoItem("List demo 3", "Show a dialog with a list of items - SINGLE CLICK") {
+            DemoItem("List demo 3", "Show a dialog with a list of items - SINGLE CLICK + Icons") {
                 DialogList(
                     32,
                     "Single Click".toText(),
-                    listItemsProvider = listItemsProvider,
+                    listItemsProvider = listItemsProvider2,
                     listDescription = "Select multiple items - the first click will emit a single event and close this dialog directly...".toText(),
                     listSelectionMode = DialogList.SelectionMode.SingleClick,
                     style = getStyleFromCheckbox()
                 )
                     .show(this)
             },
-            DemoItem("List demo 3", "Show a dialog with a list of items - MULTI CLICK") {
+            DemoItem("List demo 4", "Show a dialog with a list of items - MULTI CLICK + Icons") {
                 DialogList(
                     33,
                     "Multi Click".toText(),
-                    listItemsProvider = listItemsProvider,
+                    listItemsProvider = listItemsProvider2,
                     listDescription = "Select multiple items, each click will emit a single event...".toText(),
                     listSelectionMode = DialogList.SelectionMode.MultiClick,
                     style = getStyleFromCheckbox()

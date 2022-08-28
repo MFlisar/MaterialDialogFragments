@@ -1,5 +1,7 @@
 # MaterialDialogFragments  [![Release](https://jitpack.io/v/MFlisar/material-dialogfragments.svg)](https://jitpack.io/#MFlisar/MaterialDialogFragments)
 
+**WORK IN PROGRESS - WILL BE FINISHED NEXT WEEK (Calendar Week 35)**
+
 This library helps to show a `Dialog` - actually a `DialogFragment` - and takes care of sending events to parent `Activity`/`Fragment` without leaking and with a very easy mechanism. It's made for the `Theme.Material3` theme and tries to follow styling that's described here on [M3 Material Dialogs](https://m3.material.io/components/dialogs/implementation/android) and uses the [MaterialAlertDialogBuilder](https://developer.android.com/reference/com/google/android/material/dialog/MaterialAlertDialogBuilder) if possible.
 
 It supports 3 stylings, namely **Dialog**, **BottomSheet** and **FullscreenDialog** and it allows to change the style decision at any point easily without the need of any code adjustments.

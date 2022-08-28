@@ -88,7 +88,12 @@ class ListItemAdapter(
         }
 
         fun bind(item: DialogList.ListItem) {
-            item.icon?.invoke(binding.mdfIconLeft)
+            if (item.icon == null) {
+                binding.mdfIconLeft.visibility = View.GONE
+            } else {
+                binding.mdfIconLeft.visibility = View.GONE
+                item.icon?.invoke(binding.mdfIconLeft)
+            }
             item.text.display(binding.mdfText)
             binding.root.setOnClickListener {
                 adapter.onClickListener(bindingAdapterPosition, item)
