@@ -1,10 +1,16 @@
 # MaterialDialogFragments  [![Release](https://jitpack.io/v/MFlisar/material-dialogfragments.svg)](https://jitpack.io/#MFlisar/MaterialDialogFragments)
 
-**WORK IN PROGRESS - WILL BE FINISHED NEXT WEEK (Calendar Week 35)**
+**V2 - WORK IN PROGRESS - WILL BE FINISHED NEXT WEEK (Calendar Week 35)**
 
-This library helps to show a `Dialog` - actually a `DialogFragment` - and takes care of sending events to parent `Activity`/`Fragment` without leaking and with a very easy mechanism. It's made for the `Theme.Material3` theme and tries to follow styling that's described here on [M3 Material Dialogs](https://m3.material.io/components/dialogs/implementation/android) and uses the [MaterialAlertDialogBuilder](https://developer.android.com/reference/com/google/android/material/dialog/MaterialAlertDialogBuilder) if possible.
+This library helps to show a `Dialog` - actually a `DialogFragment` - and takes care of sending events to the parent `Activity`/`Fragment` without leaking it. It's made for the `Theme.Material3` theme and tries to follow styling that's described here:
 
-It supports 3 stylings, namely **Dialog**, **BottomSheet** and **FullscreenDialog** and it allows to change the style decision at any point easily without the need of any code adjustments.
+[M3 Material Dialogs](https://m3.material.io/components/dialogs/implementation/android)
+
+It supports following 3 styling "types" and changing between styles is as simple as defining a flag to inidcate which style to use:
+
+* **Dialog**
+* **BottomSheet**
+* **FullscreenDialog** 
 
 # State
 
@@ -23,17 +29,14 @@ It supports 3 stylings, namely **Dialog**, **BottomSheet** and **FullscreenDialo
 	- [x] Info
 	- [x] Input
 	- [x] List
-	- [ ] NumberInput
-		- min/max/step size
-		- show as value + buttons or as 
+	- [x] NumberInput
 	- [ ] DateTime
 	- [ ] Color
 	- [ ] Ads
 	- [ ] Frequency
 - [ ] Optional Features
-	- [ ] List - Filtering
+	- [x] List - Filtering
 	- [ ] List - Providing a full custom adapter??? eventually...
-	- [ ] List - Custom Icon??? via style??? or ListDialog class?
 	- [ ] Better default value handling? e.g. ListDialog default icon size? would need to be some extensible solution so that each dialog can register its defaults in there...
 
 # Introduction
@@ -43,9 +46,10 @@ It works as simply as following: From within an `Activity`/`Fragment` create a d
 ```kotlin
 DialogInfo(
   id = 1,
-  title = "Info Title".toText(), // int, string and CharSequence are supported, simply call 'toText()' on an instance of this type
-  text = "Some info text...".toText()
-).show(parent) // parent is a fragment or an activity
+  title = "Info Title".asText(), // Int, String and any CharSequence are supported (e.g. SpannableString)
+  text = "Some info text...".asText()
+)
+  .show(parent) // parent is a fragment or an activity
 ```
 
 From any lifecycle aware component (like e.g. an `Activity`/`Fragment`) you can do then following:

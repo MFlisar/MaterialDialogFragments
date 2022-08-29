@@ -7,12 +7,9 @@ import android.text.InputType
 import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.classes.MaterialDialogButton
 import com.michaelflisar.dialogs.input.R
-import com.michaelflisar.dialogs.input.databinding.MdfContentInputBinding
 import com.michaelflisar.dialogs.interfaces.MaterialDialogEvent
 import com.michaelflisar.text.Text
-import com.michaelflisar.text.toText
 import kotlinx.parcelize.Parcelize
-import javax.xml.validation.Validator
 
 @Parcelize
 class DialogInput(
@@ -22,10 +19,10 @@ class DialogInput(
     override val title: Text,
     // specific fields
     val inputType: Int = InputType.TYPE_CLASS_TEXT,
-    val inputInitialValue: Text = Text.Empty,
-    val inputHint: Text = Text.Empty,
-    val inputDescription: Text = Text.Empty,
-    val inputValidator: InputValidator = InputValidatorNone,
+    val initialValue: Text = Text.Empty,
+    val hint: Text = Text.Empty,
+    val description: Text = Text.Empty,
+    val validator: InputValidator = InputValidatorNone,
     // Buttons
     override val buttonPositive: Text = MaterialDialog.defaults.buttonPositive,
     override val buttonNegative: Text = MaterialDialog.defaults.buttonNegative,
@@ -67,11 +64,11 @@ class DialogInput(
         button: MaterialDialogButton
     ) : Boolean {
         val input = fragment.getCurrentInput()
-        return if (fragment.setup.inputValidator.isValid(input)) {
+        return if (fragment.setup.validator.isValid(input)) {
             MaterialDialog.sendEvent(Event.Result(this.id, this.extras, input, button))
             true
         } else {
-            fragment.setError(fragment.setup.inputValidator.getError(fragment.requireContext(), input))
+            fragment.setError(fragment.setup.validator.getError(fragment.requireContext(), input))
             false
         }
     }

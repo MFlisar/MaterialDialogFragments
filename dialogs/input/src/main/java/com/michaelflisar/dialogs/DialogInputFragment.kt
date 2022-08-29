@@ -31,12 +31,12 @@ class DialogInputFragment : MaterialDialogFragment<DialogInputFragment, DialogIn
     }
 
     override fun initContentBinding(binding: MdfContentInputBinding, savedInstanceState: Bundle?) {
-        val input = state?.input ?: setup.inputInitialValue.getString(requireContext())
-        setup.inputDescription.display(binding.mdfDescription)
+        val input = state?.input ?: setup.initialValue.getString(requireContext())
+        setup.description.display(binding.mdfDescription)
         if (binding.mdfDescription.text.isEmpty()) {
             binding.mdfDescription.visibility = View.GONE
         }
-        setup.inputHint.display(binding.mdfTextInputLayout) { view, text ->
+        setup.hint.display(binding.mdfTextInputLayout) { view, text ->
             view.hint = text
         }
         binding.mdfTextInputEditText.inputType = setup.inputType

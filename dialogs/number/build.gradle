@@ -64,7 +64,7 @@ dependencies {
     // Library
     // ------------------------
 
-    api project(":Dialogs:Core")
+    api project(":Core")
 }
 
 project.afterEvaluate {

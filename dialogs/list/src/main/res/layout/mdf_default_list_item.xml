@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:backgroundTint="@android:color/transparent"
     android:minHeight="?listPreferredItemHeightSmall"
-    app:contentPadding="4dp">
+    app:contentPadding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,25 +19,40 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="16dp" />
 
-        <TextView
-            android:id="@+id/mdf_text"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            app:tint="?attr/colorSecondary" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/mdf_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorOnSurface"
+                app:tint="?attr/colorSecondary" />
+
+            <TextView
+                android:id="@+id/mdf_sub_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                app:tint="?attr/colorSecondary" />
+
+        </LinearLayout>
 
         <CheckBox
-            android:background="@null"
             android:id="@+id/mdf_checkbox_right"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
+            android:background="@null"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false" />

@@ -57,15 +57,16 @@ dependencies {
     // AndroidX
     // ------------------------
 
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${androidx.lifecycle}"
+    implementation "androidx.core:core-ktx:${androidx.core}"
     implementation "com.google.android.material:material:${androidx.material}"
     implementation "androidx.recyclerview:recyclerview:${androidx.recyclerview}"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${androidx.lifecycle}"
 
     // ------------------------
     // Library
     // ------------------------
 
-    api project(":Dialogs:Core")
+    api project(":Core")
 }
 
 project.afterEvaluate {

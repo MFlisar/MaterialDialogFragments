@@ -1,9 +1,9 @@
-include ':Demo'
-project(':Demo').projectDir = new File(settingsDir, "demo")
+include ':App'
+project(':App').projectDir = new File(settingsDir, "app")
 
 // Core
-include ':Dialogs:Core'
-project(':Dialogs:Core').projectDir = new File(settingsDir, "dialogs/core")
+include ':Core'
+project(':Core').projectDir = new File(settingsDir, "core")
 
 // UI
 include ':Dialogs:Info'
@@ -14,12 +14,11 @@ include ':Dialogs:List'
 project(':Dialogs:List').projectDir = new File(settingsDir, "dialogs/list")
 include ':Dialogs:Number'
 project(':Dialogs:Number').projectDir = new File(settingsDir, "dialogs/number")
-
-// UIs - OLD
-//include ':dialogs:dialogs'
-//include 'dialogs-input'
-//include 'dialogs-datetime'
-//include 'dialogs-color'
-//include 'dialogs-fastadapter'
-//include 'dialogs-frequency'
-//include 'dialogs-ads'
+include ':Dialogs:DateTime'
+project(':Dialogs:DateTime').projectDir = new File(settingsDir, "dialogs/datetime")
+include ':Dialogs:Color'
+project(':Dialogs:Color').projectDir = new File(settingsDir, "dialogs/color")
+include ':Dialogs:Ads'
+project(':Dialogs:Ads').projectDir = new File(settingsDir, "dialogs/ads")
+include ':Dialogs:Frequency'
+project(':Dialogs:Frequency').projectDir = new File(settingsDir, "dialogs/frequency")

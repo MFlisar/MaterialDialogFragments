@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.widget.ImageView
+import android.widget.TextView
 import com.michaelflisar.dialogs.classes.DialogStyle
 import com.michaelflisar.dialogs.classes.MaterialDialogButton
 import com.michaelflisar.dialogs.interfaces.MaterialDialogEvent
@@ -17,11 +18,10 @@ class DialogList(
     // Title
     override val title: Text,
     // specific fields
-    val listItemsProvider: ItemProvider,
-    val listDescription: Text = Text.Empty,
-    val listSelectionMode: SelectionMode = SelectionMode.SingleSelect,
-    // TODO
-    // ...
+    val itemsProvider: ItemProvider,
+    val description: Text = Text.Empty,
+    val selectionMode: SelectionMode = SelectionMode.SingleSelect,
+    val filter: Filter? = null,
     // Buttons
     override val buttonPositive: Text = MaterialDialog.defaults.buttonPositive,
     override val buttonNegative: Text = MaterialDialog.defaults.buttonNegative,
@@ -62,7 +62,7 @@ class DialogList(
         fragment: DialogListFragment,
         button: MaterialDialogButton
     ): Boolean {
-        val selectedItems = fragment.getSelectedItems()
+        val selectedItems = fragment.getSelectedItemsForResult()
         MaterialDialog.sendEvent(Event.Result(this.id, this.extras, selectedItems, button))
         return true
     }
@@ -85,8 +85,11 @@ class DialogList(
     }
 
     interface ListItem : Parcelable {
+        val id: Int
         val text: Text
+        val subText: Text
         fun displayIcon(imageView: ImageView): Boolean
+        override fun equals(other: Any?): Boolean
     }
 
     interface Loader : Parcelable {
@@ -94,8 +97,10 @@ class DialogList(
     }
 
     @Parcelize
-    class SimpleListItem(
+    data class SimpleListItem(
+        override val id: Int,
         override val text: Text,
+        override val subText: Text = Text.Empty,
         val resIcon: Int? = null
     ) : ListItem {
         override fun displayIcon(imageView: ImageView): Boolean {
@@ -111,15 +116,20 @@ class DialogList(
         @Parcelize
         class List(
             val items: ArrayList<ListItem>,
-            override val iconSize: Int = MaterialDialogFragmentUtil.dpToPx(32)
+            override val iconSize: Int = MaterialDialogFragmentUtil.dpToPx(40)
         ) : ItemProvider()
 
         @Parcelize
         class ItemLoader(
             val loader: Loader,
-            override val iconSize: Int = MaterialDialogFragmentUtil.dpToPx(32)
+            override val iconSize: Int = MaterialDialogFragmentUtil.dpToPx(40)
         ) : ItemProvider()
     }
 
-
+    interface Filter : Parcelable {
+        val unselectInvisibleItems: Boolean
+        fun matches(context: Context, item: ListItem, filter: String): Boolean
+        fun displayText(tv: TextView, item: ListItem, filter: String): CharSequence
+        fun displaySubText(tv: TextView, item: ListItem, filter: String): CharSequence
+    }
 }

@@ -14,16 +14,51 @@
         android:textColor="?attr/colorOnSurfaceVariant"
         app:tint="?attr/colorSecondary" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/mdf_container_filter"
+        style="?textInputOutlinedStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/mdf_label_filter"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        app:endIconMode="clear_text"
+        app:tint="?attr/colorSecondary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/mdf_textInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            app:tint="?attr/colorSecondary" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <ProgressBar
         android:id="@+id/mdf_loading"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:indeterminate="true" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/mdf_divider_top"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="8dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mdf_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/mdf_divider_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="8dp" />
 
 </LinearLayout>

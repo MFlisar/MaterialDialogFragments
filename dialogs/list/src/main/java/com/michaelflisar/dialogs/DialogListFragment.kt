@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.michaelflisar.dialogs.classes.ListItemAdapter
 import com.michaelflisar.dialogs.list.databinding.MdfContentListBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,10 +41,14 @@ class DialogListFragment :
     }
 
     override fun initContentBinding(binding: MdfContentListBinding, savedInstanceState: Bundle?) {
-        setup.listDescription.display(binding.mdfDescription)
 
-        val itemsProvider = setup.listItemsProvider
-        when (itemsProvider) {
+        val hasDescription = setup.description.display(binding.mdfDescription).isNotEmpty()
+        binding.mdfDescription.visibility = if (hasDescription) View.VISIBLE else View.GONE
+
+        binding.mdfDividerTop.alpha = 0f
+        binding.mdfDividerBottom.alpha = 0f
+
+        when (val itemsProvider = setup.itemsProvider) {
             is DialogList.ItemProvider.ItemLoader -> {
                 // load items
                 lifecycleScope.launch {
@@ -62,9 +68,20 @@ class DialogListFragment :
         binding.mdfRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = this@DialogListFragment.adapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    checkDividers()
+                }
+            })
         }
-        state?.let {
-            // TODO...
+
+        binding.mdfContainerFilter.visibility =
+            if (setup.filter == null) View.GONE else View.VISIBLE
+
+        binding.mdfTextInputEditText.setText(state?.filter ?: "")
+        binding.mdfTextInputEditText.doOnTextChanged { text, start, before, count ->
+            adapter.updateFilter(text?.toString() ?: "")
         }
     }
 
@@ -81,25 +98,24 @@ class DialogListFragment :
             state = savedInstanceState.getParcelable(KEY_VIEW_STATE)
 
         adapter = ListItemAdapter(
-            setup.listItemsProvider.iconSize,
-            setup.listSelectionMode,
-            emptyList(),
-            state?.selectedIndizes?.toMutableSet() ?: HashSet()
-        ) { index, item ->
-            when (setup.listSelectionMode) {
+            requireContext(),
+            ListItemAdapter.Setup(setup),
+            state?.filter ?: "",
+            state?.selectedIds?.toMutableSet() ?: HashSet()
+        ) { _, item ->
+            when (setup.selectionMode) {
                 DialogList.SelectionMode.SingleSelect -> {
-                    val selectedIndex = adapter.getCheckedIndizes().firstOrNull()
-                    if (selectedIndex == null)
-                        adapter.setItemChecked(index, true)
-                    else
-                    {
-                        if (selectedIndex != index)
-                            adapter.setItemChecked(selectedIndex, false)
-                        adapter.toggleItemChecked(index)
+                    val selectedId = adapter.getCheckedIds().firstOrNull()
+                    if (selectedId == null)
+                        adapter.setItemChecked(item, true)
+                    else {
+                        if (selectedId != item.id)
+                            adapter.setItemChecked(item, false)
+                        adapter.toggleItemChecked(item)
                     }
                 }
                 DialogList.SelectionMode.MultiSelect -> {
-                    adapter.toggleItemChecked(index)
+                    adapter.toggleItemChecked(item)
                 }
                 DialogList.SelectionMode.SingleClick -> {
                     setup.sendEvent(item)
@@ -114,7 +130,10 @@ class DialogListFragment :
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(KEY_VIEW_STATE, State(getSelectedIndizes()))
+        outState.putParcelable(
+            KEY_VIEW_STATE,
+            State(getSelectedIds(), binding.mdfTextInputEditText.text?.toString() ?: "")
+        )
     }
 
     // -------------
@@ -124,14 +143,26 @@ class DialogListFragment :
     private fun updateItems(items: List<DialogList.ListItem>) {
         binding.mdfLoading.visibility = View.GONE
         adapter.updateItems(items)
+        binding.mdfRecyclerView.post {
+            checkDividers()
+        }
     }
 
-    internal fun getSelectedIndizes(): Set<Int> {
-        return adapter.getCheckedIndizes()
+    private fun getSelectedIds(): Set<Int> {
+        return adapter.getCheckedIds()
     }
 
-    internal fun getSelectedItems(): List<DialogList.ListItem> {
-        return adapter.getCheckedItems()
+    internal fun getSelectedItemsForResult(): List<DialogList.ListItem> {
+        return adapter.getCheckedItemsForResult()
+    }
+
+    private fun checkDividers() {
+        val alphaTop = if (!binding.mdfRecyclerView.canScrollVertically(-1)) 0f else 1f
+        val alphaBottom = if (!binding.mdfRecyclerView.canScrollVertically(1)) 0f else 1f
+        binding.mdfDividerTop.animate().cancel()
+        binding.mdfDividerTop.animate().alpha(alphaTop).start()
+        binding.mdfDividerBottom.animate().cancel()
+        binding.mdfDividerBottom.animate().alpha(alphaBottom).start()
     }
 
     // -------------
@@ -140,6 +171,7 @@ class DialogListFragment :
 
     @Parcelize
     class State(
-        val selectedIndizes: Set<Int>
+        val selectedIds: Set<Int>,
+        val filter: String
     ) : Parcelable
 }

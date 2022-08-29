@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MaterialDialogFragments.iml" filepath="$PROJECT_DIR$/.idea/modules/MaterialDialogFragments.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MaterialDialogFragments.App.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MaterialDialogFragments.App.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MaterialDialogFragments.App.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MaterialDialogFragments.App.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MaterialDialogFragments.App.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MaterialDialogFragments.App.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/MaterialDialogFragments.App.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/MaterialDialogFragments.App.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/MaterialDialogFragments.Core.iml" filepath="$PROJECT_DIR$/.idea/modules/core/MaterialDialogFragments.Core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/MaterialDialogFragments.Core.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/MaterialDialogFragments.Core.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/MaterialDialogFragments.Core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/core/MaterialDialogFragments.Core.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/MaterialDialogFragments.Core.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/core/MaterialDialogFragments.Core.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Dialogs/MaterialDialogFragments.Dialogs.iml" filepath="$PROJECT_DIR$/.idea/modules/Dialogs/MaterialDialogFragments.Dialogs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/ads/MaterialDialogFragments.Dialogs.Ads.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/ads/MaterialDialogFragments.Dialogs.Ads.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/ads/MaterialDialogFragments.Dialogs.Ads.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/ads/MaterialDialogFragments.Dialogs.Ads.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/ads/MaterialDialogFragments.Dialogs.Ads.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/ads/MaterialDialogFragments.Dialogs.Ads.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/ads/MaterialDialogFragments.Dialogs.Ads.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/ads/MaterialDialogFragments.Dialogs.Ads.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/color/MaterialDialogFragments.Dialogs.Color.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/color/MaterialDialogFragments.Dialogs.Color.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/color/MaterialDialogFragments.Dialogs.Color.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/color/MaterialDialogFragments.Dialogs.Color.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/color/MaterialDialogFragments.Dialogs.Color.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/color/MaterialDialogFragments.Dialogs.Color.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/color/MaterialDialogFragments.Dialogs.Color.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/color/MaterialDialogFragments.Dialogs.Color.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/datetime/MaterialDialogFragments.Dialogs.DateTime.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/datetime/MaterialDialogFragments.Dialogs.DateTime.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/datetime/MaterialDialogFragments.Dialogs.DateTime.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/datetime/MaterialDialogFragments.Dialogs.DateTime.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/datetime/MaterialDialogFragments.Dialogs.DateTime.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/datetime/MaterialDialogFragments.Dialogs.DateTime.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/datetime/MaterialDialogFragments.Dialogs.DateTime.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/datetime/MaterialDialogFragments.Dialogs.DateTime.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/frequency/MaterialDialogFragments.Dialogs.Frequency.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/frequency/MaterialDialogFragments.Dialogs.Frequency.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/frequency/MaterialDialogFragments.Dialogs.Frequency.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/frequency/MaterialDialogFragments.Dialogs.Frequency.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/frequency/MaterialDialogFragments.Dialogs.Frequency.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/frequency/MaterialDialogFragments.Dialogs.Frequency.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/frequency/MaterialDialogFragments.Dialogs.Frequency.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/frequency/MaterialDialogFragments.Dialogs.Frequency.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/info/MaterialDialogFragments.Dialogs.Info.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/info/MaterialDialogFragments.Dialogs.Info.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/info/MaterialDialogFragments.Dialogs.Info.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/info/MaterialDialogFragments.Dialogs.Info.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/info/MaterialDialogFragments.Dialogs.Info.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/info/MaterialDialogFragments.Dialogs.Info.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/info/MaterialDialogFragments.Dialogs.Info.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/info/MaterialDialogFragments.Dialogs.Info.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/input/MaterialDialogFragments.Dialogs.Input.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/input/MaterialDialogFragments.Dialogs.Input.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/input/MaterialDialogFragments.Dialogs.Input.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/input/MaterialDialogFragments.Dialogs.Input.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/input/MaterialDialogFragments.Dialogs.Input.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/input/MaterialDialogFragments.Dialogs.Input.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/input/MaterialDialogFragments.Dialogs.Input.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/input/MaterialDialogFragments.Dialogs.Input.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/list/MaterialDialogFragments.Dialogs.List.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/list/MaterialDialogFragments.Dialogs.List.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/list/MaterialDialogFragments.Dialogs.List.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/list/MaterialDialogFragments.Dialogs.List.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/list/MaterialDialogFragments.Dialogs.List.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/list/MaterialDialogFragments.Dialogs.List.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/list/MaterialDialogFragments.Dialogs.List.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/list/MaterialDialogFragments.Dialogs.List.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/number/MaterialDialogFragments.Dialogs.Number.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/number/MaterialDialogFragments.Dialogs.Number.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/number/MaterialDialogFragments.Dialogs.Number.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/number/MaterialDialogFragments.Dialogs.Number.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/number/MaterialDialogFragments.Dialogs.Number.main.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/number/MaterialDialogFragments.Dialogs.Number.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/dialogs/number/MaterialDialogFragments.Dialogs.Number.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/dialogs/number/MaterialDialogFragments.Dialogs.Number.unitTest.iml" />
+    </modules>
+  </component>
+</project>
