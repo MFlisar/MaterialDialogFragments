@@ -74,7 +74,7 @@ That's it, the library will take care to unregister the listener if the `Activit
 * [Input](#input)
 * [Number](#number)
 * [DateTime](#datetime)
-* [color](#color)
+* [Color](#color)
 
 ## Core
 
@@ -134,4 +134,4 @@ dependencies {
 
 DEMO APP
 
-Check the [demo app](blob/master/app/src/main/java/com/michaelflisar/dialogs/MainActivity.kt) for more informations.
+Check the [demo app](app/src/main/java/com/michaelflisar/dialogs/MainActivity.kt) for more informations.
