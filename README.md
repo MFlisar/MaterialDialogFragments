@@ -12,33 +12,6 @@ It supports following 3 styling "types" and changing between styles is as simple
 * **BottomSheet**
 * **FullscreenDialog** 
 
-# State
-
-- [ ] General
-	- [x] Dialog Style
-	- [ ] BottomSheet Style
-		- [ ] sticky footer
-		- [x] position bug on screen rotation (also in combination with show/hide keyboard)
-		- [ ] elevate header/footer on scroll
-		- [ ] keyboard should push up the whole layout (e.g. for InputDialog)
-	- [x] Fullscreen Style
-- [ ] Features
-	- [ ] Swipe Dismiss + support of nested scrolling containers
-	- [ ] BottomSheet - flag to support "expand to fullscreen style" (pos button in toolbar is enabled, pos button in footer is removed, toolbar replaces the title)
-- [ ] Dialogs
-	- [x] Info
-	- [x] Input
-	- [x] List
-	- [x] NumberPicker
-	- [ ] DateTime
-	- [ ] Color
-	- [ ] Ads
-	- [ ] Frequency
-- [ ] Optional Features
-	- [x] List - Filtering
-	- [ ] List - Providing a full custom adapter??? eventually...
-	- [ ] Better default value handling? e.g. ListDialog default icon size? would need to be some extensible solution so that each dialog can register its defaults in there...
-
 # Introduction
 
 It works as simply as following: From within an `Activity`/`Fragment` create a dialog like following:
@@ -132,6 +105,33 @@ dependencies {
 }
 ```
 
-DEMO APP
+# DEMO APP
 
 Check the [demo app](app/src/main/java/com/michaelflisar/dialogs/MainActivity.kt) for more informations.
+
+# State
+
+- [ ] General
+	- [x] Dialog Style
+	- [ ] BottomSheet Style
+		- [ ] sticky footer
+		- [x] position bug on screen rotation (also in combination with show/hide keyboard)
+		- [ ] elevate header/footer on scroll
+		- [ ] keyboard should push up the whole layout (e.g. for InputDialog)
+	- [x] Fullscreen Style
+- [ ] Features
+	- [ ] Swipe Dismiss + support of nested scrolling containers
+	- [ ] BottomSheet - flag to support "expand to fullscreen style" (pos button in toolbar is enabled, pos button in footer is removed, toolbar replaces the title)
+- [ ] Dialogs
+	- [x] Info
+	- [x] Input
+	- [x] List
+	- [x] NumberPicker
+	- [ ] DateTime
+	- [ ] Color
+	- [ ] Ads
+	- [ ] Frequency
+- [ ] Optional Features
+	- [x] List - Filtering
+	- [ ] List - Providing a full custom adapter??? eventually...
+	- [ ] Better default value handling? e.g. ListDialog default icon size? would need to be some extensible solution so that each dialog can register its defaults in there...
