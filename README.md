@@ -10,7 +10,7 @@ Check it out here:
 
 https://github.com/mflisar/MaterialDialogs
 
-# OLD README
+# OLD - LAST RELEASE: 0.90
 
 **Features**
 
