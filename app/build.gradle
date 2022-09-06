@@ -39,6 +39,7 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:${androidx.appcompat}"
     implementation "com.google.android.material:material:${androidx.material}"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:${androidx.coordinator}"
 
     implementation "androidx.multidex:multidex:${androidx.multidex}"
 
@@ -46,18 +47,22 @@ dependencies {
     // Library
     // ------------------------
 
-    implementation project(':dialogs')
+    implementation project(":Core")
 
     // -------------------------
-    // all following is optional
+    // following are optional (but you at least want one of them for sure)
     // -------------------------
 
-    implementation project(':dialogs-input') // for the use of input and number dialogs
-    implementation project(':dialogs-datetime') // for the use of date/time/datetime dialogs
-    implementation project(':dialogs-color') // for the use of color dialogs
-    implementation project(':dialogs-fastadapter') // for the use of mike penz's fast adapter (a very functional RecyclerView Adapter library)
-    implementation project(':dialogs-frequency') // for the use of freqeuncy dialogs
-    implementation project(':dialogs-ads') // for the use of ads dialogs
+    implementation project(":Dialogs:Info")
+    implementation project(":Dialogs:Input")
+    implementation project(":Dialogs:List")
+    implementation project(":Dialogs:Number")
+    implementation project(":Dialogs:DateTime")
+    implementation project(":Dialogs:Color")
+    implementation project(":Dialogs:Ads")
+    implementation project(":Dialogs:Frequency")
 
+    // TODO: entfernen?
+    implementation "com.mikepenz:fastadapter:${versions.fastAdapter}"
     implementation "com.mikepenz:fastadapter-extensions-ui:${versions.fastAdapter}"
 }

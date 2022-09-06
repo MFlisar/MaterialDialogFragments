@@ -3,6 +3,8 @@
     package="com.michaelflisar.dialogs.app"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
     <application
         android:name="com.michaelflisar.dialogs.MainApp"
         android:allowBackup="true"
@@ -19,7 +21,8 @@
         <activity
             android:name="com.michaelflisar.dialogs.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

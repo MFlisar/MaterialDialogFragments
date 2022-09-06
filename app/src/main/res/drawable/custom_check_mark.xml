@@ -1,4 +1,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_check_black_24dp" android:state_checked="true"/>
-    <!-- no image if item is not selected -->
+    <!--
+    <item android:drawable="@drawable/check_mark" android:state_checked="true" />
+    -->
 </selector>
