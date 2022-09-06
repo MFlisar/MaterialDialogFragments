@@ -1,7 +1,3 @@
-# MaterialDialogFragments  [![Release](https://jitpack.io/v/MFlisar/material-dialogfragments.svg)](https://jitpack.io/#MFlisar/mMaterialDialogFragments)
-
-Common dialog fragments based on https://github.com/afollestad/material-dialogs
-
 # DEPRECATED
 
 The basic AlertDialogs seem to not be maintained anymore and so I decided to write all of them myself as well. The new library does use M3 Material Design and supports a lifecycle based observation system that's even simpler and it allows to show a dialog as an AlertDialog, DialogFragment, BottomSheetDialogFragment and a FullscreenFragment.
@@ -10,7 +6,15 @@ Check it out here:
 
 https://github.com/mflisar/MaterialDialogs
 
-# OLD - LAST RELEASE: 0.90
+**Latest release of this repo is 0.90**
+
+---
+
+# OLD
+
+## MaterialDialogFragments  [![Release](https://jitpack.io/v/MFlisar/material-dialogfragments.svg)](https://jitpack.io/#MFlisar/mMaterialDialogFragments)
+
+Common dialog fragments based on https://github.com/afollestad/material-dialogs
 
 **Features**
 
